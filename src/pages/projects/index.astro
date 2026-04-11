@@ -1,0 +1,19 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("projects"))
+  .filter(p => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<SiteLayout title="Projects · Xyfos Code">
+  <h1 class="text-3xl font-semibold">Projects</h1>
+  <ul class="mt-6 space-y-3">
+    {posts.map((p) => (
+      <li>
+        <a class="text-slate-900 underline" href={`/projects/${p.slug}/`}>{p.data.title}</a>
+        <div class="text-sm text-slate-600">{p.data.date.toISOString().slice(0,10)}</div>
+      </li>
+    ))}
+  </ul>
+</SiteLayout>
