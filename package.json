@@ -10,9 +10,11 @@
     "check": "astro check"
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.12",
     "astro": "^5.0.0"
   },
   "devDependencies": {
+    "@astrojs/sitemap": "^3.2.1",
     "@astrojs/tailwind": "^6.0.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",

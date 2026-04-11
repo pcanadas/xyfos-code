@@ -2,18 +2,42 @@
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
 
-const posts = (await getCollection("roadmap"))
-  .filter(p => !p.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const items = (await getCollection("roadmap")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const planned = items.filter((i) => i.data.status === "planned");
+const inProgress = items.filter((i) => i.data.status === "in-progress");
+const done = items.filter((i) => i.data.status === "done");
+
+const sections = [
+  { title: "In progress", items: inProgress },
+  { title: "Planned", items: planned },
+  { title: "Done", items: done },
+];
 ---
-<SiteLayout title="Roadmap · Xyfos Code">
+<SiteLayout title="Roadmap · Xyfos Code" description="What I'm building next">
   <h1 class="text-3xl font-semibold">Roadmap</h1>
-  <ul class="mt-6 space-y-3">
-    {posts.map((p) => (
-      <li>
-        <a class="text-slate-900 underline" href={`/roadmap/${p.slug}/`}>{p.data.title}</a>
-        <div class="text-sm text-slate-600">{p.data.date.toISOString().slice(0,10)}</div>
-      </li>
+  <p class="mt-2 text-slate-700">High-level direction and milestones.</p>
+
+  <div class="mt-8 grid gap-8 md:grid-cols-3">
+    {sections.map((s) => (
+      <section>
+        <h2 class="text-base font-semibold text-slate-900">{s.title}</h2>
+        <ul class="mt-4 space-y-3">
+          {s.items.map((i) => (
+            <li class="rounded-xl border border-slate-200 p-4 hover:bg-slate-50">
+              <a class="font-medium underline" href={`/roadmap/${i.slug}/`}>{i.data.title}</a>
+              <div class="mt-1 text-sm text-slate-600">
+                {i.data.date.toISOString().slice(0, 10)}
+              </div>
+            </li>
+          ))}
+          {s.items.length === 0 && (
+            <li class="text-sm text-slate-500">No items yet.</li>
+          )}
+        </ul>
+      </section>
     ))}
-  </ul>
+  </div>
 </SiteLayout>

@@ -3,17 +3,21 @@ import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("changelog");
-  return posts.map((p) => ({ params: { slug: p.slug }, props: { post: p } }));
+  const items = await getCollection("changelog");
+  return items.map((e) => ({ params: { slug: e.slug }, props: { entry: e } }));
 }
 
-const { post } = Astro.props;
-const { Content } = await post.render();
+const { entry } = Astro.props;
+const { Content } = await entry.render();
 ---
-<SiteLayout title={`${post.data.title} · Xyfos Code`} description={post.data.description}>
-  <article class="prose prose-slate max-w-none">
-    <h1>{post.data.title}</h1>
-    <p class="text-sm text-slate-600">{post.data.date.toISOString().slice(0,10)}</p>
+<SiteLayout title={`${entry.data.title} · Changelog · Xyfos Code`} description={`Release ${entry.data.version}`}>
+  <h1 class="text-3xl font-semibold">{entry.data.title}</h1>
+  <p class="mt-2 text-slate-700">
+    <span class="font-medium">{entry.data.version}</span> ·{" "}
+    {entry.data.date.toISOString().slice(0, 10)}
+  </p>
+
+  <article class="prose prose-slate mt-8 max-w-none">
     <Content />
   </article>
 </SiteLayout>

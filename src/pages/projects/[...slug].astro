@@ -3,17 +3,36 @@ import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("projects");
-  return posts.map((p) => ({ params: { slug: p.slug }, props: { post: p } }));
+  const items = await getCollection("projects");
+  return items.map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
 }
 
-const { post } = Astro.props;
-const { Content } = await post.render();
+const { project } = Astro.props;
+const { Content } = await project.render();
 ---
-<SiteLayout title={`${post.data.title} · Xyfos Code`} description={post.data.description}>
-  <article class="prose prose-slate max-w-none">
-    <h1>{post.data.title}</h1>
-    <p class="text-sm text-slate-600">{post.data.date.toISOString().slice(0,10)}</p>
+<SiteLayout title={`${project.data.title} · Projects · Xyfos Code`} description={project.data.description}>
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <h1 class="text-3xl font-semibold">{project.data.title}</h1>
+      <p class="mt-2 text-slate-700">{project.data.description}</p>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm text-slate-700">
+        {project.data.status}
+      </span>
+      <a
+        class="rounded-md bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800"
+        href={project.data.url}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Open
+      </a>
+    </div>
+  </div>
+
+  <article class="prose prose-slate mt-8 max-w-none">
     <Content />
   </article>
 </SiteLayout>

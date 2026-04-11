@@ -3,17 +3,26 @@ import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("roadmap");
-  return posts.map((p) => ({ params: { slug: p.slug }, props: { post: p } }));
+  const items = await getCollection("roadmap");
+  return items.map((r) => ({ params: { slug: r.slug }, props: { item: r } }));
 }
 
-const { post } = Astro.props;
-const { Content } = await post.render();
+const { item } = Astro.props;
+const { Content } = await item.render();
 ---
-<SiteLayout title={`${post.data.title} · Xyfos Code`} description={post.data.description}>
-  <article class="prose prose-slate max-w-none">
-    <h1>{post.data.title}</h1>
-    <p class="text-sm text-slate-600">{post.data.date.toISOString().slice(0,10)}</p>
+<SiteLayout title={`${item.data.title} · Roadmap · Xyfos Code`}>
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <h1 class="text-3xl font-semibold">{item.data.title}</h1>
+      <p class="mt-2 text-slate-700">{item.data.date.toISOString().slice(0, 10)}</p>
+    </div>
+
+    <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm text-slate-700">
+      {item.data.status}
+    </span>
+  </div>
+
+  <article class="prose prose-slate mt-8 max-w-none">
     <Content />
   </article>
 </SiteLayout>

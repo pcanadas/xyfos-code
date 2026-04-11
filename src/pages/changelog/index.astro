@@ -2,18 +2,36 @@
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
 
-const posts = (await getCollection("changelog"))
-  .filter(p => !p.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const entries = (await getCollection("changelog")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
 ---
-<SiteLayout title="Changelog · Xyfos Code">
+<SiteLayout title="Changelog · Xyfos Code" description="Product changes and releases">
   <h1 class="text-3xl font-semibold">Changelog</h1>
-  <ul class="mt-6 space-y-3">
-    {posts.map((p) => (
-      <li>
-        <a class="text-slate-900 underline" href={`/changelog/${p.slug}/`}>{p.data.title}</a>
-        <div class="text-sm text-slate-600">{p.data.date.toISOString().slice(0,10)}</div>
-      </li>
+  <p class="mt-2 text-slate-700">Releases, fixes, and updates.</p>
+
+  <div class="mt-8 space-y-6">
+    {entries.map((e) => (
+      <div class="relative rounded-xl border border-slate-200 p-5">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <a class="text-lg font-semibold underline" href={`/changelog/${e.slug}/`}>
+              {e.data.title}
+            </a>
+            <div class="mt-1 text-sm text-slate-600">
+              <span class="font-medium">{e.data.version}</span> ·{" "}
+              {e.data.date.toISOString().slice(0, 10)}
+            </div>
+          </div>
+
+          <a
+            class="text-sm text-slate-600 hover:text-slate-900"
+            href={`/changelog/${e.slug}/`}
+          >
+            Details →
+          </a>
+        </div>
+      </div>
     ))}
-  </ul>
+  </div>
 </SiteLayout>
