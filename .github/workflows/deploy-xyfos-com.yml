@@ -42,6 +42,6 @@ jobs:
             --exclude "salesops-app/" \
             --exclude "ftp.xyfos.com/" \
             --exclude "pub/" \
-            -e "ssh -p ${{ secrets.SSH_PORT }}" \
+            -e "ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.SSH_PORT }}" \
             dist/ \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_REMOTE_PATH }}
+            ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_REMOTE_PATH }}
