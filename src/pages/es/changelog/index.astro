@@ -1,10 +1,10 @@
 ---
-import SiteLayout from "../../layouts/SiteLayout.astro";
+import SiteLayout from "../../../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
-import { useTranslations, getLocalePath } from "../../i18n/utils";
-import type { Lang } from "../../i18n/utils";
+import { useTranslations, getLocalePath } from "../../../i18n/utils";
+import type { Lang } from "../../../i18n/utils";
 
-const lang = (Astro.currentLocale ?? "en") as Lang;
+const lang = (Astro.currentLocale ?? "es") as Lang;
 const t = useTranslations(lang);
 const changelogPath = getLocalePath(lang, "/changelog");
 
@@ -29,7 +29,6 @@ const entries = (await getCollection("changelog")).sort(
               {e.data.date.toISOString().slice(0, 10)}
             </div>
           </div>
-
           <a
             class="text-sm text-slate-600 hover:text-slate-900"
             href={`${changelogPath}/${e.slug}/`}

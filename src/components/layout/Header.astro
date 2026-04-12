@@ -1,15 +1,26 @@
 ---
+import { useTranslations, getLocalePath, getAlternatePath } from "../../i18n/utils";
+import type { Lang } from "../../i18n/utils";
+
+const lang = (Astro.currentLocale ?? "en") as Lang;
+const t = useTranslations(lang);
+
 const nav = [
-  { href: "/projects", label: "Projects" },
-  { href: "/blog", label: "Blog" },
-  { href: "/changelog", label: "Changelog" },
-  { href: "/roadmap", label: "Roadmap" },
+  { href: getLocalePath(lang, "/projects"), label: t("nav.projects") },
+  { href: getLocalePath(lang, "/blog"), label: t("nav.blog") },
+  { href: getLocalePath(lang, "/changelog"), label: t("nav.changelog") },
+  { href: getLocalePath(lang, "/roadmap"), label: t("nav.roadmap") },
   { href: "/rss.xml", label: "RSS" },
 ];
+
+const altLang: Lang = lang === "en" ? "es" : "en";
+const altPath = getAlternatePath(Astro.url.pathname, lang, altLang);
+const altLabel = altLang === "es" ? "ES" : "EN";
+const altTitle = altLang === "es" ? "Ver en español" : "View in English";
 ---
 <header class="border-b border-slate-200 bg-white">
   <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4">
-    <a href="/" class="flex items-center gap-3">
+    <a href={getLocalePath(lang, "/")} class="flex items-center gap-3">
       <img
         src="/brand/logo-mark.svg"
         alt="Xyfos"
@@ -32,23 +43,38 @@ const nav = [
         </a>
       ))}
       <a
+        class="text-slate-400 hover:text-slate-700"
+        href={altPath}
+        title={altTitle}
+        aria-label={altTitle}
+      >
+        {altLabel}
+      </a>
+      <a
         class="rounded-md bg-slate-900 px-3 py-1.5 text-white hover:bg-slate-800"
         href="https://app.xyfos.com"
         target="_blank"
         rel="noopener noreferrer"
       >
-        Sign in
+        {t("nav.signin")}
       </a>
     </nav>
 
-    <div class="md:hidden">
+    <div class="flex items-center gap-3 md:hidden">
+      <a
+        class="text-sm text-slate-400 hover:text-slate-700"
+        href={altPath}
+        aria-label={altTitle}
+      >
+        {altLabel}
+      </a>
       <a
         class="rounded-md bg-slate-900 px-3 py-1.5 text-sm text-white hover:bg-slate-800"
         href="https://app.xyfos.com"
         target="_blank"
         rel="noopener noreferrer"
       >
-        Sign in
+        {t("nav.signin")}
       </a>
     </div>
   </div>

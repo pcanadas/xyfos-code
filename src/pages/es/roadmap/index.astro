@@ -1,10 +1,10 @@
 ---
-import SiteLayout from "../../layouts/SiteLayout.astro";
+import SiteLayout from "../../../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
-import { useTranslations, getLocalePath } from "../../i18n/utils";
-import type { Lang } from "../../i18n/utils";
+import { useTranslations, getLocalePath } from "../../../i18n/utils";
+import type { Lang } from "../../../i18n/utils";
 
-const lang = (Astro.currentLocale ?? "en") as Lang;
+const lang = (Astro.currentLocale ?? "es") as Lang;
 const t = useTranslations(lang);
 const roadmapPath = getLocalePath(lang, "/roadmap");
 
