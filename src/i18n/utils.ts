@@ -11,11 +11,9 @@ export function getLangFromUrl(url: URL): Lang {
 
 export function useTranslations(lang: Lang) {
   return function t(key: UIKey): string {
-    return (
-      (ui[lang] as Record<string, string>)[key] ??
-      (ui[defaultLang] as Record<string, string>)[key] ??
-      key
-    );
+    const dict = ui[lang] as Record<string, string>;
+    const fallback = ui[defaultLang] as Record<string, string>;
+    return dict[key] ?? fallback[key] ?? key;
   };
 }
 
