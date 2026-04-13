@@ -1,5 +1,5 @@
 ---
-title: "Xyfos Sales MVP"
+title: "QuoteDesk MVP"
 date: 2026-04-11
 status: "in-progress"
 ---
