@@ -1,0 +1,35 @@
+# Force HTTPS and www
+RewriteEngine On
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteCond %{HTTP_HOST} ^(www\.)?xyfos\.com$ [NC]
+RewriteRule ^ https://www.xyfos.com%{REQUEST_URI} [L,R=301]
+
+# --------------------------------------------------
+# Legacy store redirects (osCommerce → new site)
+# All old store URLs → homepage with 301
+# --------------------------------------------------
+
+# PHP files (index.php, product_info.php, stock.php, specials.php, etc.)
+RewriteRule ^(.+)\.php(/.*)?$ / [L,R=301]
+
+# Old PDF articles
+RewriteRule ^articulos/ / [L,R=301]
+
+# Old forum
+RewriteRule ^foro/ / [L,R=301]
+
+# Old subsite
+RewriteRule ^athenea/ / [L,R=301]
+
+# Old Poland subsite
+RewriteRule ^poland_first_to_fight/ / [L,R=301]
+
+# Old PaymentStatus (likely spam/phishing attempt)
+RewriteRule ^PaymentStatus/ / [L,R=301]
+
+# Old .html product pages
+RewriteRule ^(.+)\.html$ / [L,R=301]
+
+# Custom error page
+ErrorDocument 404 /404.html
