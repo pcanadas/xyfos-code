@@ -2,6 +2,7 @@
 title: "QuoteDesk Alpha"
 date: 2026-04-11
 status: "done"
+project: "QuoteDesk"
 ---
 
 - Multi-tenant por ruta + BelongsToTenant en todos los modelos

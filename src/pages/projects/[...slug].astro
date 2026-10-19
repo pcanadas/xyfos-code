@@ -9,8 +9,16 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await project.render();
+
+const statusColors: Record<string, string> = {
+  alpha: "bg-amber-100 text-amber-800 ring-amber-200",
+  beta:  "bg-sky-100 text-sky-800 ring-sky-200",
+  live:  "bg-emerald-100 text-emerald-800 ring-emerald-200",
+  public: "bg-slate-100 text-slate-700 ring-slate-200",
+  private: "bg-slate-100 text-slate-500 ring-slate-200",
+};
 ---
-<SiteLayout title={`${project.data.title} · Projects · Xyfos Code`} description={project.data.description}>
+<SiteLayout title={`${project.data.title} · Proyectos · Xyfos Code`} description={project.data.description}>
   <div class="flex flex-wrap items-center justify-between gap-3">
     <div>
       <h1 class="text-3xl font-semibold">{project.data.title}</h1>
@@ -18,7 +26,7 @@ const { Content } = await project.render();
     </div>
 
     <div class="flex items-center gap-2">
-      <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm text-slate-700">
+      <span class={`rounded-full px-3 py-1 text-sm font-medium ring-1 ring-inset ${statusColors[project.data.status] || "bg-slate-100 text-slate-700 ring-slate-200"}`}>
         {project.data.status}
       </span>
       <a
@@ -27,7 +35,7 @@ const { Content } = await project.render();
         target="_blank"
         rel="noopener noreferrer"
       >
-        Open
+        Abrir →
       </a>
     </div>
   </div>

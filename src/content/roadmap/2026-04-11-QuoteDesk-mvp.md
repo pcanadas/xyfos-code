@@ -2,6 +2,7 @@
 title: "QuoteDesk MVP"
 date: 2026-04-11
 status: "in-progress"
+project: "QuoteDesk"
 ---
 
 - Actividades independientes (visita/llamada/email con calendario)

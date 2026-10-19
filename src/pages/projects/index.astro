@@ -5,28 +5,36 @@ import { getCollection } from "astro:content";
 const projects = (await getCollection("projects")).sort((a, b) =>
   a.data.title.localeCompare(b.data.title)
 );
+
+const statusColors: Record<string, string> = {
+  alpha: "bg-amber-100 text-amber-800 ring-amber-200",
+  beta:  "bg-sky-100 text-sky-800 ring-sky-200",
+  live:  "bg-emerald-100 text-emerald-800 ring-emerald-200",
+  public: "bg-slate-100 text-slate-700 ring-slate-200",
+  private: "bg-slate-100 text-slate-500 ring-slate-200",
+};
 ---
-<SiteLayout title="Projects · Xyfos Code" description="Products built under Xyfos Code">
-  <h1 class="text-3xl font-semibold">Projects</h1>
+<SiteLayout title="Proyectos · Xyfos Code" description="Proyectos desarrollados en Xyfos Code">
+  <h1 class="text-3xl font-semibold">Proyectos</h1>
   <p class="mt-2 text-slate-700">
-    Products and experiments shipped under Xyfos Code.
+    Herramientas y productos desarrollados en Xyfos Code.
   </p>
 
   <div class="mt-8 grid gap-4 sm:grid-cols-2">
     {projects.map((p) => (
       <a
         href={`/projects/${p.slug}/`}
-        class="group rounded-xl border border-slate-200 p-5 hover:border-slate-300 hover:bg-slate-50"
+        class="group flex flex-col rounded-xl border border-slate-200 p-5 hover:border-slate-300 hover:bg-slate-50 transition-colors"
       >
         <div class="flex items-start justify-between gap-4">
           <div>
-            <div class="text-lg font-semibold text-slate-900 group-hover:underline">
+            <div class="text-lg font-semibold text-slate-900 group-hover:underline decoration-brand-500/50 underline-offset-4">
               {p.data.title}
             </div>
             <div class="mt-1 text-sm text-slate-600">{p.data.description}</div>
           </div>
 
-          <span class="shrink-0 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs text-slate-700">
+          <span class={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${statusColors[p.data.status] || "bg-slate-100 text-slate-700 ring-slate-200"}`}>
             {p.data.status}
           </span>
         </div>

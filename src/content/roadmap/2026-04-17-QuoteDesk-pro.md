@@ -2,6 +2,7 @@
 title: "QuoteDesk Pro"
 date: 2026-04-17
 status: "planned"
+project: "QuoteDesk"
 ---
 
 - Billing con Stripe + Laravel Cashier

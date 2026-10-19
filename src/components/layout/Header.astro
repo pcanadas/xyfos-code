@@ -1,55 +1,31 @@
 ---
 const nav = [
-  { href: "/projects", label: "Projects" },
-  { href: "/blog", label: "Blog" },
-  { href: "/changelog", label: "Changelog" },
-  { href: "/roadmap", label: "Roadmap" },
-  { href: "/rss.xml", label: "RSS" },
+  { href: "/projects",  label: "Proyectos"  },
+  { href: "/blog",      label: "Blog"       },
+  { href: "/changelog", label: "Changelog"  },
+  { href: "/roadmap",   label: "Roadmap"    },
 ];
 ---
 <header class="border-b border-slate-200 bg-white">
   <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4">
     <a href="/" class="flex items-center gap-3">
-      <img
-        src="/brand/logo-mark.svg"
-        alt="Xyfos"
-        width="34"
-        height="34"
-        class="h-8 w-8"
-        loading="eager"
-        decoding="async"
-      />
+      <img src="/brand/logo-mark.svg" alt="Xyfos" width="34" height="34" class="h-8 w-8" loading="eager" decoding="async" />
       <img src="/brand/logo-wordmark.svg" alt="Xyfos Code" height="26" class="h-7 w-auto" />
-      <span class="hidden items-center rounded-full border border-brand-200 bg-brand-50 px-2 py-0.5 text-xs font-medium text-slate-700 sm:inline-flex">
-        QuoteDesk
-      </span>
     </a>
 
-    <nav class="hidden items-center gap-4 text-sm md:flex">
+    <nav class="hidden items-center gap-5 text-sm md:flex">
       {nav.map((item) => (
-        <a class="text-slate-600 hover:text-slate-900" href={item.href}>
-          {item.label}
-        </a>
+        <a class="text-slate-600 hover:text-slate-900" href={item.href}>{item.label}</a>
       ))}
-      <a
-        class="rounded-md bg-slate-900 px-3 py-1.5 text-white hover:bg-slate-800"
-        href="https://quotedesk.xyfos.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Sign in
+      <a class="text-slate-400 hover:text-brand-500" href="/rss.xml" title="RSS">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
       </a>
     </nav>
 
-    <div class="md:hidden">
-      <a
-        class="rounded-md bg-slate-900 px-3 py-1.5 text-sm text-white hover:bg-slate-800"
-        href="https://quotedesk.xyfos.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Sign in
-      </a>
-    </div>
+    <!-- Mobile nav -->
+    <nav class="flex items-center gap-3 text-sm md:hidden">
+      <a class="text-slate-600" href="/projects">Proyectos</a>
+      <a class="text-slate-600" href="/blog">Blog</a>
+    </nav>
   </div>
 </header>

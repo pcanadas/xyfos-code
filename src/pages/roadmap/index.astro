@@ -11,14 +11,14 @@ const inProgress = items.filter((i) => i.data.status === "in-progress");
 const done = items.filter((i) => i.data.status === "done");
 
 const sections = [
-  { title: "In progress", items: inProgress },
-  { title: "Planned", items: planned },
-  { title: "Done", items: done },
+  { title: "En progreso", items: inProgress },
+  { title: "Planificado", items: planned },
+  { title: "Completado", items: done },
 ];
 ---
-<SiteLayout title="Roadmap · Xyfos Code" description="What I'm building next">
+<SiteLayout title="Roadmap · Xyfos Code" description="Dirección y próximos hitos de todos los proyectos">
   <h1 class="text-3xl font-semibold">Roadmap</h1>
-  <p class="mt-2 text-slate-700">High-level direction and milestones.</p>
+  <p class="mt-2 text-slate-700">Dirección y próximos hitos.</p>
 
   <div class="mt-8 grid gap-8 md:grid-cols-3">
     {sections.map((s) => (
@@ -28,13 +28,16 @@ const sections = [
           {s.items.map((i) => (
             <li class="rounded-xl border border-slate-200 p-4 hover:bg-slate-50">
               <a class="font-medium underline" href={`/roadmap/${i.slug}/`}>{i.data.title}</a>
-              <div class="mt-1 text-sm text-slate-600">
-                {i.data.date.toISOString().slice(0, 10)}
+              <div class="mt-1 flex flex-wrap items-center gap-2 text-sm text-slate-600">
+                <span>{i.data.date.toISOString().slice(0, 10)}</span>
+                {i.data.project && (
+                  <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs">{i.data.project}</span>
+                )}
               </div>
             </li>
           ))}
           {s.items.length === 0 && (
-            <li class="text-sm text-slate-500">No items yet.</li>
+            <li class="text-sm text-slate-500">Sin elementos aún.</li>
           )}
         </ul>
       </section>

@@ -17,6 +17,7 @@ const changelog = defineCollection({
     title: z.string(),
     date: z.date(),
     version: z.string(),
+    project: z.string().optional(),
   }),
 });
 
@@ -26,6 +27,7 @@ const roadmap = defineCollection({
     title: z.string(),
     date: z.date(),
     status: z.enum(["planned", "in-progress", "done"]).default("planned"),
+    project: z.string().optional(),
   }),
 });
 
