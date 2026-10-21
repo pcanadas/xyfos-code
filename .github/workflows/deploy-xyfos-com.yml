@@ -37,7 +37,10 @@ jobs:
 
       - name: Deploy dist/ -> xyfos.com/public_html (preserving existing folders)
         run: |
+          # Every folder deployed by another project into public_html MUST be excluded here,
+          # otherwise --delete wipes it on each deploy of this site.
           rsync -az --delete \
+            --exclude "quotedesk/" \
             --exclude "salesops/" \
             --exclude "salesops-app/" \
             --exclude "ftp.xyfos.com/" \

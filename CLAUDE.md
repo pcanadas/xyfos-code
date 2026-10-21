@@ -32,7 +32,9 @@ No test framework is configured.
 
 ## Deploy
 
-GitHub Actions deploys `dist/` to Hostinger via SSH (`.github/workflows/deploy-hostinger.yml`). Site URL: `https://xyfos.com`.
+GitHub Actions deploys `dist/` to Hostinger via SSH (`.github/workflows/deploy-xyfos-com.yml`). Site URL: `https://xyfos.com`.
+
+The deploy uses `rsync --delete` into `public_html`, which is shared with other projects (e.g. QuoteDesk deploys to `public_html/quotedesk/`, served at quotedesk.xyfos.com). Any folder another project deploys there must be listed in the rsync `--exclude`s, or it gets wiped on every deploy of this site.
 
 ## License
 
