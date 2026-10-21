@@ -16,6 +16,12 @@ export const statusColors: Record<string, string> = {
   private: "bg-slate-100 text-slate-500 ring-slate-200",
 };
 
+export const roadmapStatusLabels: Record<string, string> = {
+  planned:       "Planificado",
+  "in-progress": "En progreso",
+  done:          "Completado",
+};
+
 export function sortProjects(projects: CollectionEntry<"projects">[]) {
   return [...projects].sort(
     (a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title)
@@ -53,4 +59,9 @@ const dateFormat = new Intl.DateTimeFormat("es-ES", { dateStyle: "medium", timeZ
 
 export function formatDate(date: Date) {
   return dateFormat.format(date);
+}
+
+/** Machine-readable value for <time datetime>. */
+export function isoDate(date: Date) {
+  return date.toISOString().slice(0, 10);
 }

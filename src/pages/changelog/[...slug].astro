@@ -1,6 +1,7 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
+import { formatDate, isoDate } from "../../lib/content";
 
 export async function getStaticPaths() {
   const items = await getCollection("changelog");
@@ -10,11 +11,11 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
-<SiteLayout title={`${entry.data.title} · Changelog · Xyfos Code`} description={`Release ${entry.data.version}`}>
+<SiteLayout title={`${entry.data.title} · Changelog · Xyfos Code`} description={`Versión ${entry.data.version}${entry.data.project ? ` de ${entry.data.project}` : ""}: ${entry.data.title}`}>
   <h1 class="text-3xl font-semibold">{entry.data.title}</h1>
   <p class="mt-2 text-slate-700">
     <span class="font-medium">{entry.data.version}</span> ·{" "}
-    {entry.data.date.toISOString().slice(0, 10)}
+    <time datetime={isoDate(entry.data.date)}>{formatDate(entry.data.date)}</time>
   </p>
 
   <article class="prose prose-slate mt-8 max-w-none">

@@ -1,6 +1,7 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
+import { formatDate, isoDate } from "../../lib/content";
 
 const items = (await getCollection("roadmap")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -29,7 +30,7 @@ const sections = [
             <li class="rounded-xl border border-slate-200 p-4 hover:bg-slate-50">
               <a class="font-medium underline" href={`/roadmap/${i.slug}/`}>{i.data.title}</a>
               <div class="mt-1 flex flex-wrap items-center gap-2 text-sm text-slate-600">
-                <span>{i.data.date.toISOString().slice(0, 10)}</span>
+                <time datetime={isoDate(i.data.date)}>{formatDate(i.data.date)}</time>
                 {i.data.project && (
                   <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs">{i.data.project}</span>
                 )}

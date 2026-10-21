@@ -8,7 +8,8 @@ export async function GET(context: { site: URL }) {
 
   return rss({
     title: "Xyfos Code — Blog",
-    description: "Updates and writing from Xyfos Code.",
+    description: "Notas sobre desarrollo de software, datos y los proyectos de Xyfos Code.",
+    customData: "<language>es-es</language>",
     site: context.site,
     items: posts.map((p) => ({
       title: p.data.title,

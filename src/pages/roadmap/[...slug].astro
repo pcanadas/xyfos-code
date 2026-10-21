@@ -1,6 +1,7 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
+import { formatDate, isoDate, roadmapStatusLabels } from "../../lib/content";
 
 export async function getStaticPaths() {
   const items = await getCollection("roadmap");
@@ -10,15 +11,15 @@ export async function getStaticPaths() {
 const { item } = Astro.props;
 const { Content } = await item.render();
 ---
-<SiteLayout title={`${item.data.title} · Roadmap · Xyfos Code`}>
+<SiteLayout title={`${item.data.title} · Roadmap · Xyfos Code`} description={`Roadmap${item.data.project ? ` de ${item.data.project}` : ""}: ${item.data.title}`}>
   <div class="flex flex-wrap items-center justify-between gap-3">
     <div>
       <h1 class="text-3xl font-semibold">{item.data.title}</h1>
-      <p class="mt-2 text-slate-700">{item.data.date.toISOString().slice(0, 10)}</p>
+      <p class="mt-2 text-slate-700"><time datetime={isoDate(item.data.date)}>{formatDate(item.data.date)}</time></p>
     </div>
 
     <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm text-slate-700">
-      {item.data.status}
+      {roadmapStatusLabels[item.data.status]}
     </span>
   </div>
 

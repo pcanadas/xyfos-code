@@ -1,13 +1,13 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
-import { sortChangelog } from "../../lib/content";
+import { sortChangelog, formatDate, isoDate } from "../../lib/content";
 
 const entries = sortChangelog(await getCollection("changelog"));
 ---
 <SiteLayout title="Changelog · Xyfos Code" description="Cambios y releases de todos los proyectos">
   <h1 class="text-3xl font-semibold">Changelog</h1>
-  <p class="mt-2 text-slate-700">Releases, fixes y actualizaciones de todos los proyectos.</p>
+  <p class="mt-2 text-slate-700">Nuevas versiones, correcciones y mejoras de todos los proyectos.</p>
 
   <div class="mt-8 space-y-6">
     {entries.map((e) => (
@@ -20,7 +20,7 @@ const entries = sortChangelog(await getCollection("changelog"));
             <div class="mt-1 flex flex-wrap items-center gap-2 text-sm text-slate-600">
               <span class="font-medium">{e.data.version}</span>
               <span>·</span>
-              <span>{e.data.date.toISOString().slice(0, 10)}</span>
+              <time datetime={isoDate(e.data.date)}>{formatDate(e.data.date)}</time>
               {e.data.project && (
                 <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs">{e.data.project}</span>
               )}

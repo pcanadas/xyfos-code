@@ -1,6 +1,7 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
+import { formatDate, isoDate } from "../../lib/content";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -10,10 +11,10 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await post.render();
 ---
-<SiteLayout title={`${post.data.title} · Xyfos Code`} description={post.data.description}>
+<SiteLayout title={`${post.data.title} · Xyfos Code`} description={post.data.description} type="article">
   <article class="prose prose-slate max-w-none">
     <h1>{post.data.title}</h1>
-    <p class="text-sm text-slate-600">{post.data.date.toISOString().slice(0,10)}</p>
+    <p class="text-sm text-slate-600"><time datetime={isoDate(post.data.date)}>{formatDate(post.data.date)}</time></p>
     <Content />
   </article>
 </SiteLayout>
