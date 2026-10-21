@@ -43,6 +43,25 @@ const services = [
     icon: '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/>',
   },
 ];
+
+const steps = [
+  {
+    title: "Conversación",
+    text: "Me cuentas el problema, cómo trabajáis hoy y qué resultado necesitas. Sin tecnicismos.",
+  },
+  {
+    title: "Propuesta",
+    text: "Te envío un alcance claro: qué se construye, en qué fases, con qué tecnología y en qué plazos.",
+  },
+  {
+    title: "Desarrollo iterativo",
+    text: "Entregas pequeñas y frecuentes que puedes probar desde el principio y ajustar sobre la marcha.",
+  },
+  {
+    title: "Entrega y soporte",
+    text: "Puesta en producción, documentación y acompañamiento para que la herramienta siga funcionando.",
+  },
+];
 ---
 
 <SiteLayout
@@ -162,6 +181,34 @@ const services = [
         <ProjectCard project={p} release={latestRelease.get(p.data.title)} />
       ))}
     </div>
+  </section>
+
+  <!-- Process -->
+  <section class="mt-20 rounded-2xl bg-slate-50 p-6 sm:p-10" aria-labelledby="como-trabajo">
+    <p class="text-sm font-semibold uppercase tracking-wider text-brand-700">Cómo trabajo</p>
+    <h2 id="como-trabajo" class="mt-2 max-w-2xl text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
+      Del problema a la herramienta, paso a paso
+    </h2>
+
+    <ol class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {steps.map((step, i) => (
+        <li class="rounded-xl border border-slate-200 bg-white p-6">
+          <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold tabular-nums text-white" aria-hidden="true">
+            {i + 1}
+          </span>
+          <h3 class="mt-4 font-semibold text-slate-900">{step.title}</h3>
+          <p class="mt-2 text-sm text-slate-600">{step.text}</p>
+        </li>
+      ))}
+    </ol>
+
+    <p class="mt-8 max-w-2xl text-sm text-slate-600">
+      <span class="font-medium text-slate-900">Desarrollo en abierto.</span>
+      Así trabajo también en mis propios proyectos: cada versión y cada decisión quedan documentadas en el
+      <a class={`rounded-sm font-medium text-slate-900 underline decoration-brand-500/60 underline-offset-4 hover:decoration-brand-500 ${focus}`} href="/changelog">changelog</a>
+      y el
+      <a class={`rounded-sm font-medium text-slate-900 underline decoration-brand-500/60 underline-offset-4 hover:decoration-brand-500 ${focus}`} href="/roadmap">roadmap</a>.
+    </p>
   </section>
 
   <!-- Latest updates -->
