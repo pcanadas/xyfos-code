@@ -1,10 +1,9 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
+import { sortChangelog } from "../../lib/content";
 
-const entries = (await getCollection("changelog")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
-);
+const entries = sortChangelog(await getCollection("changelog"));
 ---
 <SiteLayout title="Changelog · Xyfos Code" description="Cambios y releases de todos los proyectos">
   <h1 class="text-3xl font-semibold">Changelog</h1>

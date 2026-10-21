@@ -1,6 +1,7 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
+import { statusColors, statusLabels } from "../../lib/content";
 
 export async function getStaticPaths() {
   const items = await getCollection("projects");
@@ -9,14 +10,7 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await project.render();
-
-const statusColors: Record<string, string> = {
-  alpha: "bg-amber-100 text-amber-800 ring-amber-200",
-  beta:  "bg-sky-100 text-sky-800 ring-sky-200",
-  live:  "bg-emerald-100 text-emerald-800 ring-emerald-200",
-  public: "bg-slate-100 text-slate-700 ring-slate-200",
-  private: "bg-slate-100 text-slate-500 ring-slate-200",
-};
+const isGithub = project.data.url.includes("github.com");
 ---
 <SiteLayout title={`${project.data.title} · Proyectos · Xyfos Code`} description={project.data.description}>
   <div class="flex flex-wrap items-center justify-between gap-3">
@@ -26,16 +20,16 @@ const statusColors: Record<string, string> = {
     </div>
 
     <div class="flex items-center gap-2">
-      <span class={`rounded-full px-3 py-1 text-sm font-medium ring-1 ring-inset ${statusColors[project.data.status] || "bg-slate-100 text-slate-700 ring-slate-200"}`}>
-        {project.data.status}
+      <span class={`rounded-full px-3 py-1 text-sm font-medium ring-1 ring-inset ${statusColors[project.data.status]}`}>
+        {statusLabels[project.data.status]}
       </span>
       <a
-        class="rounded-md bg-slate-900 px-4 py-2 text-sm text-white hover:bg-slate-800"
+        class="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
         href={project.data.url}
         target="_blank"
         rel="noopener noreferrer"
       >
-        Abrir →
+        {isGithub ? "Ver en GitHub ↗" : "Abrir aplicación ↗"}
       </a>
     </div>
   </div>

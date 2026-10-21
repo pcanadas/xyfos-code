@@ -2,27 +2,47 @@
 import SiteLayout from "../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
 import { site } from "../config/site";
+import ProjectCard from "../components/ui/ProjectCard.astro";
+import { sortProjects, sortChangelog, latestReleaseByProject, formatDate } from "../lib/content";
 
 const focus = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2";
 
-const projects = (await getCollection("projects")).sort((a, b) =>
-  a.data.title.localeCompare(b.data.title)
-);
+const projects = sortProjects(await getCollection("projects"));
 
 const posts = (await getCollection("blog"))
   .filter((p) => !p.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
 
-const changelog = (await getCollection("changelog"))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 4);
+const allReleases = await getCollection("changelog");
+const latestRelease = latestReleaseByProject(allReleases);
+const changelog = sortChangelog(allReleases).slice(0, 4);
 
-const statusColors: Record<string, string> = {
-  alpha: "bg-amber-100 text-amber-800 ring-amber-200",
-  beta:  "bg-sky-100 text-sky-800 ring-sky-200",
-  live:  "bg-emerald-100 text-emerald-800 ring-emerald-200",
-};
+// Icon paths: 24x24 stroke icons
+const services = [
+  {
+    title: "Apps de escritorio",
+    text: "Aplicaciones para Windows rápidas, fiables y con los datos en tu equipo.",
+    example: { label: "Cuadra", href: "/projects/cuadra/" },
+    icon: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
+  },
+  {
+    title: "SaaS y aplicaciones web",
+    text: "Plataformas multiusuario, paneles de gestión y CRMs adaptados a cómo trabaja tu equipo.",
+    example: { label: "QuoteDesk", href: "/projects/quotedesk/" },
+    icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>',
+  },
+  {
+    title: "Automatización e integraciones",
+    text: "Python, Selenium y Google APIs (Calendar, Meet, Drive) para eliminar tareas repetitivas.",
+    icon: '<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',
+  },
+  {
+    title: "Infraestructura cloud",
+    text: "Despliegue y operación en AWS: EC2, Auto Scaling, EFS y SSM, con bases de datos MySQL.",
+    icon: '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/>',
+  },
+];
 ---
 
 <SiteLayout
@@ -101,35 +121,51 @@ const statusColors: Record<string, string> = {
       Cuadra</a>, app de escritorio para finanzas del hogar (beta).
   </p>
 
+  <!-- Services -->
+  <section class="mt-20" aria-labelledby="servicios">
+    <p class="text-sm font-semibold uppercase tracking-wider text-brand-700">Servicios</p>
+    <h2 id="servicios" class="mt-2 max-w-2xl text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
+      Qué puedo construir para ti
+    </h2>
+
+    <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {services.map((s) => (
+        <li class="flex flex-col rounded-2xl border border-slate-200 bg-white p-6">
+          <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={s.icon} />
+          </span>
+          <h3 class="mt-4 font-semibold text-slate-900">{s.title}</h3>
+          <p class="mt-2 flex-1 text-sm text-slate-600">{s.text}</p>
+          {s.example && (
+            <p class="mt-4 text-sm text-slate-600">
+              Ejemplo:
+              <a class={`rounded-sm font-medium text-slate-900 underline decoration-brand-500/60 underline-offset-4 hover:decoration-brand-500 ${focus}`} href={s.example.href}>{s.example.label}</a>
+            </p>
+          )}
+        </li>
+      ))}
+    </ul>
+  </section>
+
   <!-- Projects -->
-  <section class="mt-12">
-    <div class="flex items-baseline justify-between gap-3">
-      <h2 class="text-xl font-semibold">Proyectos</h2>
-      <a class="text-sm text-slate-600 hover:text-slate-900" href="/projects">Ver todos →</a>
+  <section class="mt-20" aria-labelledby="proyectos">
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-wider text-brand-700">Proyectos</p>
+        <h2 id="proyectos" class="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Lo que ya he construido</h2>
+      </div>
+      <a class={`rounded-sm text-sm font-medium text-slate-600 hover:text-slate-900 ${focus}`} href="/projects">Ver todos los proyectos →</a>
     </div>
 
-    <div class="mt-5 grid gap-4 sm:grid-cols-2">
+    <div class="mt-8 grid gap-6 md:grid-cols-2">
       {projects.map((p) => (
-        <a
-          href={`/projects/${p.slug}/`}
-          class="group flex flex-col rounded-2xl border border-slate-200 p-6 hover:border-slate-300 hover:bg-slate-50 transition-colors"
-        >
-          <div class="flex items-start justify-between gap-3">
-            <div class="text-lg font-semibold text-slate-900 group-hover:underline decoration-brand-500/50 underline-offset-4">
-              {p.data.title}
-            </div>
-            <span class={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${statusColors[p.data.status] || "bg-slate-100 text-slate-700 ring-slate-200"}`}>
-              {p.data.status}
-            </span>
-          </div>
-          <p class="mt-2 text-sm text-slate-600 flex-1">{p.data.description}</p>
-        </a>
+        <ProjectCard project={p} release={latestRelease.get(p.data.title)} />
       ))}
     </div>
   </section>
 
   <!-- Latest updates -->
-  <section class="mt-12 grid gap-6 md:grid-cols-2">
+  <section class="mt-20 grid gap-6 md:grid-cols-2">
     <div class="rounded-2xl border border-slate-200 p-6">
       <div class="flex items-baseline justify-between gap-3">
         <h2 class="text-xl font-semibold">Blog</h2>
@@ -143,7 +179,7 @@ const statusColors: Record<string, string> = {
               {p.data.title}
             </a>
             <div class="mt-1 text-sm text-slate-600">
-              {p.data.date.toISOString().slice(0, 10)}
+              {formatDate(p.data.date)}
               {p.data.description ? ` · ${p.data.description}` : ""}
             </div>
           </li>
@@ -165,7 +201,7 @@ const statusColors: Record<string, string> = {
               {e.data.version} — {e.data.title}
             </a>
             <div class="mt-1 flex items-center gap-2 text-sm text-slate-600">
-              {e.data.date.toISOString().slice(0, 10)}
+              {formatDate(e.data.date)}
               {e.data.project && (
                 <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs">{e.data.project}</span>
               )}

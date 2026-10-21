@@ -3,6 +3,12 @@ title: "Cuadra"
 description: "App de escritorio para gestión de finanzas personales del hogar."
 url: "https://github.com/pcanadas/cuadra-finances"
 status: "beta"
+order: 1
+problem: "Controlar los gastos del hogar a partir de los extractos del banco, sin hojas de cálculo y sin entregar tus datos a terceros."
+platform: "Escritorio · Windows"
+stack: ["Tauri", "React", "Rust", "IndexedDB"]
+cover: "/images/cuadra/dashboard_light.png"
+coverAlt: "Dashboard de Cuadra con resumen anual, previsión del mes y presupuestos"
 ---
 
 Cuadra es una app de escritorio para Windows que permite importar extractos bancarios, categorizar movimientos automáticamente y visualizar la evolución de gastos e ingresos. Toda la información se guarda localmente en IndexedDB — sin servidores, sin cuentas, sin compartir datos con nadie.

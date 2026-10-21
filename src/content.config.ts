@@ -38,6 +38,12 @@ const projects = defineCollection({
     description: z.string(),
     url: z.string().url(),
     status: z.enum(["private", "public", "alpha", "beta", "live"]).default("alpha"),
+    order: z.number().default(99),
+    problem: z.string().optional(),
+    platform: z.string().optional(),
+    stack: z.array(z.string()).default([]),
+    cover: z.string().optional(),
+    coverAlt: z.string().optional(),
   }),
 });
 

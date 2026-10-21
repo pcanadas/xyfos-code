@@ -3,6 +3,10 @@ title: "QuoteDesk"
 description: "CRM oferta-céntrico para equipos de ventas técnicas."
 url: "https://quotedesk.xyfos.com/"
 status: "alpha"
+order: 2
+problem: "Los CRM genéricos giran en torno al contacto o al deal, pero los equipos de venta técnica trabajan alrededor de la oferta."
+platform: "SaaS · Web multi-tenant"
+stack: ["Laravel", "Vue", "Inertia", "MySQL"]
 ---
 
 QuoteDesk es el primer producto de Xyfos Code. Un CRM diseñado alrededor de la oferta/presupuesto como entidad central — no del contacto ni del deal genérico — porque así trabajan realmente los equipos de venta técnica.
