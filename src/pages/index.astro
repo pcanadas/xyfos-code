@@ -1,6 +1,9 @@
 ---
 import SiteLayout from "../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
+import { site } from "../config/site";
+
+const focus = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2";
 
 const projects = (await getCollection("projects")).sort((a, b) =>
   a.data.title.localeCompare(b.data.title)
@@ -23,8 +26,8 @@ const statusColors: Record<string, string> = {
 ---
 
 <SiteLayout
-  title="Xyfos Code"
-  description="Software propio: herramientas prácticas que resuelven problemas reales."
+  title="Xyfos Code · Software a medida"
+  description="Diseño y desarrollo de software a medida: apps de escritorio, SaaS y automatizaciones que resuelven problemas reales."
 >
   <!-- Hero -->
   <section class="relative overflow-hidden rounded-2xl border border-slate-200 bg-white">
@@ -33,46 +36,70 @@ const statusColors: Record<string, string> = {
       <div class="absolute -right-24 -bottom-24 h-72 w-72 rounded-full bg-brand-300/40 blur-3xl"></div>
     </div>
 
-    <div class="relative p-8 sm:p-12">
+    <div class="relative px-6 pt-10 sm:px-12 sm:pt-14">
       <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-700">
-        <span class="h-2 w-2 rounded-full bg-brand-500"></span>
-        Xyfos Code
+        <span class="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true"></span>
+        Disponible para nuevos proyectos
       </div>
 
-      <h1 class="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">
-        Software que
-        <span class="underline decoration-brand-500/70 decoration-4 underline-offset-4">
+      <h1 class="mt-6 max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+        Software a medida que
+        <span class="underline decoration-brand-500 decoration-4 underline-offset-[6px]">
           resuelve problemas reales
         </span>.
       </h1>
 
-      <p class="mt-5 max-w-2xl text-lg text-slate-700">
-        Desarrollo herramientas propias — desde apps de escritorio hasta SaaS — con foco en
-        simplicidad, utilidad y buen diseño. Cada proyecto nace de una necesidad concreta.
+      <p class="mt-6 max-w-2xl text-lg text-slate-700">
+        Diseño y desarrollo apps de escritorio, SaaS y automatizaciones para negocios que necesitan
+        una herramienta simple, útil y bien hecha.
       </p>
 
-      <div class="mt-8 flex flex-wrap gap-3">
+      <div class="mt-8 flex flex-wrap items-center gap-3">
         <a
-          class="rounded-md bg-slate-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-slate-800"
+          class={`rounded-md bg-brand-500 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-brand-400 ${focus}`}
+          href="#contacto"
+        >
+          Hablemos de tu proyecto
+        </a>
+        <a
+          class={`rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-900 hover:bg-slate-50 ${focus}`}
           href="/projects"
         >
           Ver proyectos
         </a>
-        <a
-          class="rounded-md border border-slate-300 px-5 py-2.5 text-sm font-medium hover:bg-slate-50"
-          href="/roadmap"
-        >
-          Roadmap
-        </a>
-        <a
-          class="rounded-md border border-slate-300 px-5 py-2.5 text-sm font-medium hover:bg-slate-50"
-          href="/blog"
-        >
-          Blog
-        </a>
       </div>
+
+      <!-- Product preview -->
+      <figure class="mt-12">
+        <div class="overflow-hidden rounded-t-xl border border-b-0 border-slate-200 bg-white shadow-2xl shadow-slate-900/10">
+          <div class="flex items-center gap-1.5 border-b border-slate-200 bg-slate-50 px-4 py-2.5" aria-hidden="true">
+            <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
+          </div>
+          <div class="relative max-h-[22rem] overflow-hidden sm:max-h-[28rem]">
+            <img
+              src="/images/cuadra/dashboard_light.png"
+              alt="Dashboard de Cuadra con resumen anual de gastos, ingresos, previsión del mes y presupuestos por categoría"
+              width="1293"
+              height="879"
+              class="block w-full"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+            />
+            <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption class="sr-only">Cuadra, app de escritorio de finanzas personales desarrollada por Xyfos Code.</figcaption>
+      </figure>
     </div>
   </section>
+  <p class="mt-3 text-center text-sm text-slate-600">
+    Proyecto propio:
+    <a class={`font-medium text-slate-900 underline decoration-brand-500/60 underline-offset-4 hover:decoration-brand-500 ${focus}`} href="/projects/cuadra/">
+      Cuadra</a>, app de escritorio para finanzas del hogar (beta).
+  </p>
 
   <!-- Projects -->
   <section class="mt-12">
@@ -150,29 +177,27 @@ const statusColors: Record<string, string> = {
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="mt-12 rounded-2xl border border-slate-200 bg-slate-900 p-8 text-white">
-    <div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-      <div>
-        <h2 class="text-2xl font-semibold">Desarrollo en abierto</h2>
-        <p class="mt-2 text-white/80">
-          Progreso transparente: cada release, cada decisión, documentada en el changelog y el roadmap.
+  <!-- Contact -->
+  <section id="contacto" class="mt-16 scroll-mt-6 rounded-2xl bg-slate-900 p-8 text-white sm:p-12">
+    <div class="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+      <div class="max-w-xl">
+        <h2 class="text-2xl font-semibold sm:text-3xl">¿Tienes un problema que el software podría resolver?</h2>
+        <p class="mt-3 text-white/80">
+          Cuéntamelo por email y te digo cómo lo abordaría. Sin compromiso.
         </p>
       </div>
 
-      <div class="flex flex-wrap gap-3">
+      <div class="flex flex-col gap-4 md:items-end">
         <a
-          class="rounded-md bg-white px-5 py-2.5 text-sm font-medium text-slate-900 hover:bg-brand-50"
-          href="/projects"
+          class={`rounded-md bg-brand-500 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-brand-400 focus-visible:ring-offset-slate-900 ${focus}`}
+          href={`mailto:${site.email}?subject=${encodeURIComponent("Proyecto desde xyfos.com")}`}
         >
-          Proyectos
+          Escríbeme a {site.email}
         </a>
-        <a
-          class="rounded-md border border-white/20 px-5 py-2.5 text-sm font-medium hover:bg-white/10"
-          href="/roadmap"
-        >
-          Roadmap
-        </a>
+        <div class="flex gap-5 text-sm">
+          <a class={`rounded-sm text-white/80 hover:text-white focus-visible:ring-offset-slate-900 ${focus}`} href={site.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          <a class={`rounded-sm text-white/80 hover:text-white focus-visible:ring-offset-slate-900 ${focus}`} href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+        </div>
       </div>
     </div>
   </section>
