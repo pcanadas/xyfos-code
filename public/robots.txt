@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://xyfos.com/sitemap-index.xml
+Sitemap: https://www.xyfos.com/sitemap-index.xml

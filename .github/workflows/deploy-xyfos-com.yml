@@ -43,8 +43,10 @@ jobs:
           # --itemize-changes logs every "*deleting" line so deletions show up in the Actions log.
           rsync -az --delete --itemize-changes \
             --filter "P /*/" \
+            --exclude "/apps" \
             --exclude "/quotedesk" \
             --exclude "/zentask" \
+            --exclude "/zentask-app" \
             --exclude "/salesops" \
             --exclude "salesops-app/" \
             --exclude "ftp.xyfos.com/" \

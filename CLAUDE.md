@@ -32,9 +32,9 @@ No test framework is configured.
 
 ## Deploy
 
-GitHub Actions deploys `dist/` to Hostinger via SSH (`.github/workflows/deploy-xyfos-com.yml`). Site URL: `https://xyfos.com`.
+GitHub Actions deploys `dist/` to Hostinger via SSH (`.github/workflows/deploy-xyfos-com.yml`). Site URL: `https://www.xyfos.com` (`public/.htaccess` redirects the bare domain to www).
 
-The deploy uses `rsync --delete` into `public_html`, which is shared with other projects (`quotedesk/`, `zentask/`, `salesops/` are subdomain docroots). Any folder another project deploys there must be listed in the rsync `--exclude`s; the `--filter "P /*/"` rule is a safety net that protects any top-level folder not in `dist/`. Never remove it.
+The deploy uses `rsync --delete` into `public_html`, which is shared with the subdomain apps. Their web roots live in `public_html/apps/` (`apps/zentask`, `apps/quotedesk`); their Laravel code lives outside `public_html`, in `domains/xyfos.com/<app>-app`. `salesops/` + `salesops-app/` (a client's production app) still sit directly in `public_html`. Any folder another project deploys into `public_html` must be listed in the rsync `--exclude`s; the `--filter "P /*/"` rule is a safety net that protects any top-level folder not in `dist/`. Never remove it.
 
 ## License
 
