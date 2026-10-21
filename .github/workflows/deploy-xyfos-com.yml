@@ -37,11 +37,15 @@ jobs:
 
       - name: Deploy dist/ -> xyfos.com/public_html (preserving existing folders)
         run: |
-          # Every folder deployed by another project into public_html MUST be excluded here,
-          # otherwise --delete wipes it on each deploy of this site.
-          rsync -az --delete \
-            --exclude "quotedesk/" \
-            --exclude "salesops/" \
+          # public_html is shared with the subdomains (quotedesk, zentask, salesops...).
+          # Known folders are excluded explicitly, and the "P /*/" rule protects any other
+          # top-level folder that is not part of dist/, so a new subdomain is never wiped.
+          # --itemize-changes logs every "*deleting" line so deletions show up in the Actions log.
+          rsync -az --delete --itemize-changes \
+            --filter "P /*/" \
+            --exclude "/quotedesk" \
+            --exclude "/zentask" \
+            --exclude "/salesops" \
             --exclude "salesops-app/" \
             --exclude "ftp.xyfos.com/" \
             --exclude "pub/" \

@@ -34,7 +34,7 @@ No test framework is configured.
 
 GitHub Actions deploys `dist/` to Hostinger via SSH (`.github/workflows/deploy-xyfos-com.yml`). Site URL: `https://xyfos.com`.
 
-The deploy uses `rsync --delete` into `public_html`, which is shared with other projects (e.g. QuoteDesk deploys to `public_html/quotedesk/`, served at quotedesk.xyfos.com). Any folder another project deploys there must be listed in the rsync `--exclude`s, or it gets wiped on every deploy of this site.
+The deploy uses `rsync --delete` into `public_html`, which is shared with other projects (`quotedesk/`, `zentask/`, `salesops/` are subdomain docroots). Any folder another project deploys there must be listed in the rsync `--exclude`s; the `--filter "P /*/"` rule is a safety net that protects any top-level folder not in `dist/`. Never remove it.
 
 ## License
 
