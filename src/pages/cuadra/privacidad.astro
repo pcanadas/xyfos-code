@@ -1,0 +1,51 @@
+---
+// Mismo texto que la pantalla de la app (cuadra-finances: src/pages/Privacidad.jsx).
+// Si cambia uno, actualizar el otro y la fecha. URL estable: la usa Google Play.
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import PageHeader from "../../components/ui/PageHeader.astro";
+
+const email = "cuadra@xyfos.com";
+---
+<SiteLayout title="Política de privacidad · Cuadra" description="Cómo trata Cuadra tus datos: se guardan solo en tu dispositivo.">
+  <div class="py-6 md:py-12">
+    <PageHeader eyebrow="Cuadra" title="Política de privacidad" intro="Última actualización: 22 de octubre de 2026" />
+
+    <article class="prose prose-site max-w-none">
+      <p>Cuadra es una aplicación gratuita para llevar las finanzas personales, diseñada para que tus datos sean solo tuyos.</p>
+
+      <h2>Responsable</h2>
+      <p>Patricia Cañadas (Xyfos Code). Contacto: <a href={`mailto:${email}`}>{email}</a>.</p>
+
+      <h2>Datos que guarda la app</h2>
+      <p>Los movimientos, cuentas, categorías, presupuestos y ajustes que introduces o importas. Se guardan <strong>únicamente en tu dispositivo</strong> y nunca se envían al responsable ni a terceros.</p>
+
+      <h2>Datos que recogemos</h2>
+      <p><strong>Solo los comentarios que decidas enviarnos</strong> (ver más abajo). Cuadra no tiene cuentas de usuario, no incluye publicidad ni herramientas de analítica y nunca envía tus movimientos ni tus datos financieros.</p>
+
+      <h2>Archivos que importas o exportas</h2>
+      <p>Los extractos bancarios que importas se leen en tu dispositivo y no se envían a ningún sitio. Las copias de seguridad y exportaciones se guardan donde tú elijas; a partir de ahí, su custodia depende de ti.</p>
+
+      <h2>Comentarios y consultas</h2>
+      <p>Si nos envías un comentario desde la app (Más → Comentarios), recibimos el texto que escribes, tu email solo si decides indicarlo, y la versión de la app y de Android para entender el problema. Se envía cifrado a nuestro servidor (xyfos.com), que nos lo reenvía por correo y <strong>no lo guarda</strong>. Para evitar abusos, el servidor usa tu dirección IP durante una hora, de forma cifrada, para limitar el número de envíos. Si nos escribes directamente por correo, recibimos tu dirección y el contenido del mensaje.</p>
+      <p><strong>Finalidad:</strong> leer tus sugerencias, responderte si nos has dejado tu email y mejorar la app. <strong>Base legal:</strong> tu consentimiento, que das al enviarnos el mensaje.</p>
+      <p><strong>Conservación:</strong> el tiempo necesario para atender tu comentario y, como máximo, 12 meses desde el último contacto.</p>
+      <p><strong>Destinatarios:</strong> no se ceden a terceros. Los mensajes pasan por el proveedor de alojamiento y de correo del responsable, que actúa como encargado del tratamiento.</p>
+
+      <h2>Tus derechos</h2>
+      <p>Puedes pedir el acceso, la rectificación o la supresión de tus datos, oponerte a su tratamiento, solicitar su limitación o portabilidad y retirar tu consentimiento en cualquier momento, escribiendo a <a href={`mailto:${email}`}>{email}</a>.</p>
+      <p>Si consideras que no hemos atendido bien tu solicitud, puedes reclamar ante la Agencia Española de Protección de Datos (<a href="https://www.aepd.es">www.aepd.es</a>).</p>
+
+      <h2>Permisos</h2>
+      <p>La app solo accede a los archivos que eliges expresamente para importar o exportar, y a internet únicamente para enviar los comentarios.</p>
+
+      <h2>Menores</h2>
+      <p>Cuadra no está dirigida a menores de 14 años.</p>
+
+      <h2>Borrar tus datos</h2>
+      <p>Puedes borrarlos en cualquier momento desde Importar extracto → Borrar todos los datos, o desinstalando la app.</p>
+
+      <h2>Cambios</h2>
+      <p>Si esta política cambia, lo indicaremos aquí y en la app con una nueva fecha de actualización.</p>
+    </article>
+  </div>
+</SiteLayout>
