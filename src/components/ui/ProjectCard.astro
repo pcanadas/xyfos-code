@@ -70,9 +70,9 @@ const { title, description, status, problem, platform, stack, cover, coverAlt } 
 
     <div class="flex items-center justify-between gap-3 border-t border-line pt-4 text-sm">
       <span class="text-muted">
-        {release ? <>Última versión <span class="font-mono font-medium text-ink">{release.data.version}</span> · {formatDate(release.data.date)}</> : "En desarrollo"}
+        {release ? <>Última versión <span class="font-mono font-medium text-ink">{release.data.version}</span> · <span class="whitespace-nowrap">{formatDate(release.data.date)}</span></> : "En desarrollo"}
       </span>
-      <span class="font-medium text-ink">Ver proyecto <span aria-hidden="true" class="inline-block transition-transform duration-150 group-hover:translate-x-0.5">→</span></span>
+      <span class="shrink-0 whitespace-nowrap font-medium text-ink">Ver proyecto <span aria-hidden="true" class="inline-block transition-transform duration-150 group-hover:translate-x-0.5">→</span></span>
     </div>
   </div>
 </a>

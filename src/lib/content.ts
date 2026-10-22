@@ -32,7 +32,9 @@ export const roadmapStatusColors: Record<string, string> = {
 export function releaseTitle(entry: CollectionEntry<"changelog">) {
   const { project, title } = entry.data;
   const prefix = `${project} — `;
-  return project && title.startsWith(prefix) ? title.slice(prefix.length) : title;
+  if (!project || !title.startsWith(prefix)) return title;
+  const rest = title.slice(prefix.length);
+  return rest.charAt(0).toLocaleUpperCase("es-ES") + rest.slice(1);
 }
 
 export function sortProjects(projects: CollectionEntry<"projects">[]) {

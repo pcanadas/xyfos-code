@@ -102,8 +102,8 @@ const steps = [
         </p>
 
         <div class="mt-8 flex flex-wrap items-center gap-3">
-          <Button href="#contacto" size="lg">Hablemos de tu proyecto</Button>
-          <Button href="/projects" variant="secondary" size="lg">Ver casos</Button>
+          <Button href="#contacto" size="lg" class="w-full sm:w-auto">Hablemos de tu proyecto</Button>
+          <Button href="/projects" variant="secondary" size="lg" class="w-full sm:w-auto">Ver casos</Button>
         </div>
       </div>
 
@@ -342,7 +342,7 @@ const steps = [
     intro="Cuéntamelo por email y te digo cómo lo abordaría. Sin compromiso."
   >
     <div class="flex flex-wrap items-center gap-3">
-      <Button href={`mailto:${site.email}?subject=${encodeURIComponent("Proyecto desde xyfos.com")}`} size="lg">
+      <Button href={`mailto:${site.email}?subject=${encodeURIComponent("Proyecto desde xyfos.com")}`} size="lg" class="w-full sm:w-auto">
         Escríbeme a {site.email}
       </Button>
       <Button href={site.linkedin} variant="inverse" size="lg" external>LinkedIn ↗</Button>
