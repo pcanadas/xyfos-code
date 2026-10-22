@@ -10,6 +10,9 @@ RewriteRule ^ https://www.xyfos.com%{REQUEST_URI} [L,R=301]
 # All old store URLs → homepage with 301
 # --------------------------------------------------
 
+# Cuadra app API: real PHP endpoints, keep them out of the legacy redirects below
+RewriteRule ^cuadra/api/ - [L]
+
 # PHP files (index.php, product_info.php, stock.php, specials.php, etc.)
 RewriteRule ^(.+)\.php(/.*)?$ / [L,R=301]
 
