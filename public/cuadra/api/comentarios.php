@@ -53,13 +53,11 @@ if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) reply(400, ['ok
 
 // Límite de envíos por IP (hash, sin guardar la IP en claro)
 $ip   = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-$file = sys_get_temp_dir() . '/cuadra-fb-' . hash('sha256', $ip . __FILE__) . '.json';
+$file = sys_get_temp_dir() . '/cuadra-fb2-' . hash('sha256', $ip . __FILE__) . '.json';
 $now  = time();
 $hits = is_file($file) ? (json_decode((string)@file_get_contents($file), true) ?: []) : [];
 $hits = array_values(array_filter($hits, fn($t) => $t > $now - 3600));
 if (count($hits) >= MAX_PER_HOUR) reply(429, ['ok' => false, 'error' => 'rate']);
-$hits[] = $now;
-@file_put_contents($file, json_encode($hits), LOCK_EX);
 
 // Correo
 $subject = '=?UTF-8?B?' . base64_encode('Comentario sobre Cuadra' . ($version ? " $version" : '')) . '?=';
@@ -75,5 +73,12 @@ if ($email !== '') $headers[] = 'Reply-To: ' . $email;
 
 // -f: remitente del sobre; Hostinger rechaza el envío si no es un buzón del dominio
 $sent = mail(FEEDBACK_TO, $subject, $body, implode("\r\n", $headers), '-f' . MAIL_FROM);
-if (!$sent) error_log('Cuadra comentarios: mail() ha fallado: ' . (error_get_last()['message'] ?? 'sin detalle'));
-reply($sent ? 200 : 502, ['ok' => $sent]);
+if (!$sent) {
+    error_log('Cuadra comentarios: mail() ha fallado: ' . (error_get_last()['message'] ?? 'sin detalle'));
+    reply(502, ['ok' => false]);
+}
+
+// Solo cuentan para el límite los envíos que salen bien
+$hits[] = $now;
+@file_put_contents($file, json_encode($hits), LOCK_EX);
+reply(200, ['ok' => true]);
