@@ -1,29 +1,31 @@
 ---
 import { nav, site } from "../../config/site";
 
-const link = "rounded-sm text-slate-600 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2";
+const link = "rounded-sm text-white/70 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-ink";
+const heading = "font-mono text-xs font-medium uppercase tracking-[0.14em] text-white/70";
 ---
-<footer class="border-t border-slate-200 bg-slate-50">
-  <div class="container-site grid gap-8 py-12 text-sm sm:grid-cols-2 md:grid-cols-3">
-    <div>
-      <img src="/brand/logo-lockup.svg" alt="Xyfos Code" width="221" height="28" class="h-7 w-auto" loading="lazy" />
-      <p class="mt-4 max-w-xs text-slate-600">
+<footer class="border-t border-white/10 bg-ink text-white">
+  <div class="container-site grid gap-10 py-14 text-sm sm:grid-cols-2 md:grid-cols-12">
+    <div class="md:col-span-6">
+      <!-- Mono logo turned white: the colour lockup's brown text doesn't read on ink -->
+      <img src="/brand/logo-lockup-mono.svg" alt="Xyfos Code" width="221" height="28" class="h-6 w-auto invert" loading="lazy" />
+      <p class="mt-4 max-w-xs text-white/70">
         Diseño y desarrollo de software a medida: apps de escritorio, SaaS, automatizaciones y datos.
       </p>
     </div>
 
-    <nav aria-label="Sitio">
-      <h2 class="font-semibold text-slate-900">Sitio</h2>
-      <ul class="mt-3 space-y-2">
+    <nav class="md:col-span-3" aria-label="Sitio">
+      <h2 class={heading}>Sitio</h2>
+      <ul class="mt-4 space-y-2">
         {nav.map((item) => (
           <li><a class={link} href={item.href}>{item.label}</a></li>
         ))}
       </ul>
     </nav>
 
-    <div>
-      <h2 class="font-semibold text-slate-900">Contacto</h2>
-      <ul class="mt-3 space-y-2">
+    <div class="md:col-span-3">
+      <h2 class={heading}>Contacto</h2>
+      <ul class="mt-4 space-y-2">
         <li><a class={link} href={`mailto:${site.email}`}>{site.email}</a></li>
         <li><a class={link} href={site.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a></li>
         <li><a class={link} href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></li>
@@ -32,8 +34,8 @@ const link = "rounded-sm text-slate-600 hover:text-slate-900 focus-visible:outli
     </div>
   </div>
 
-  <div class="border-t border-slate-200">
-    <p class="container-site py-5 text-xs text-slate-600">
+  <div class="border-t border-white/10">
+    <p class="container-site py-5 font-mono text-xs text-white/70">
       © {new Date().getFullYear()} {site.author} · {site.name}
     </p>
   </div>

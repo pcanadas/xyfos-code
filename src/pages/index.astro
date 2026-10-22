@@ -7,7 +7,6 @@ import Button from "../components/ui/Button.astro";
 import Section from "../components/ui/Section.astro";
 import { sortProjects, sortChangelog, latestReleaseByProject, formatDate, isoDate } from "../lib/content";
 
-const focus = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2";
 
 const projects = sortProjects(await getCollection("projects"));
 
@@ -19,6 +18,12 @@ const posts = (await getCollection("blog"))
 const allReleases = await getCollection("changelog");
 const latestRelease = latestReleaseByProject(allReleases);
 const changelog = sortChangelog(allReleases).slice(0, 4);
+// "Cuadra — gastos fijos…" -> "gastos fijos…" (the project name is shown separately)
+const releaseTitle = (e: (typeof allReleases)[number]) => {
+  const prefix = `${e.data.project} — `;
+  return e.data.project && e.data.title.startsWith(prefix) ? e.data.title.slice(prefix.length) : e.data.title;
+};
+
 // Most recent release of any product (excludes the website's own entries)
 const heroRelease = sortChangelog(allReleases).find((e) => e.data.project && e.data.project !== "Xyfos Code");
 
@@ -165,205 +170,149 @@ const steps = [
     </div>
   </section>
 
-  <!-- Sections below still use the previous styling; they move to the design system one by one. -->
-  <!-- Services -->
-  <Section
-    id="servicios"
-    eyebrow="Servicios"
-    title="Qué puedo construir para ti"
-    intro="Cinco áreas técnicas en las que trabajo a diario. Cada proyecto combina las que haga falta."
-  >
-    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
-      {services.map((s, i) => (
-        <li class={`flex flex-col rounded-lg border border-line bg-surface p-6 ${s.span}`}>
-          <div class="flex items-start justify-between">
-            <svg class="text-ink" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={s.icon} />
-            <span class="font-mono text-xs text-muted tabular-nums" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
-          </div>
-          <h3 class="mt-6 text-lg font-semibold">{s.title}</h3>
-          <p class="mt-2 flex-1 text-[0.9375rem] leading-relaxed text-muted">{s.text}</p>
-          {s.example && (
-            <p class="mt-5 border-t border-line pt-4 text-sm text-muted">
-              Ejemplo:
-              <a class="font-medium text-ink underline decoration-brand underline-offset-4 hover:text-brand-text" href={s.example.href}>{s.example.label}</a>
-            </p>
-          )}
-        </li>
-      ))}
-    </ul>
-  </Section>
-
-  <!-- Projects -->
-  <Section id="proyectos" eyebrow="Casos" title="Lo que ya he construido" class="border-t border-line">
-    <a slot="actions" class="text-sm font-medium text-ink underline decoration-line-strong underline-offset-4 hover:decoration-brand" href="/projects">
-      Ver todos los proyectos →
-    </a>
-
-    <div class="grid gap-6 md:grid-cols-2">
-      {projects.map((p) => (
-        <ProjectCard project={p} release={latestRelease.get(p.data.title)} />
-      ))}
-    </div>
-  </Section>
-
-  <!-- Sections below still use the previous styling; they move to the design system one by one. -->
-  <div class="container-site pb-16">
-
-  <!-- Process -->
-  <section class="mt-20 rounded-2xl bg-slate-50 p-6 sm:p-10" aria-labelledby="como-trabajo">
-    <p class="text-sm font-semibold uppercase tracking-wider text-brand-text">Cómo trabajo</p>
-    <h2 id="como-trabajo" class="mt-2 max-w-2xl text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
-      Del problema a la herramienta, paso a paso
-    </h2>
-
-    <ol class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  <!-- Process (warm block from direction C) -->
+  <Section id="como-trabajo" tone="warm" eyebrow="Cómo trabajo" title="Del problema a la herramienta, paso a paso">
+    <ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {steps.map((step, i) => (
-        <li class="rounded-xl border border-slate-200 bg-white p-6">
-          <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold tabular-nums text-white" aria-hidden="true">
-            {i + 1}
+        <li class="flex flex-col rounded-lg border border-line bg-surface p-6">
+          <span class="font-mono text-xs font-medium uppercase tracking-[0.14em] text-brand-text">
+            Paso {String(i + 1).padStart(2, "0")}
           </span>
-          <h3 class="mt-4 font-semibold text-slate-900">{step.title}</h3>
-          <p class="mt-2 text-sm text-slate-600">{step.text}</p>
+          <h3 class="mt-4 text-lg font-semibold">{step.title}</h3>
+          <p class="mt-2 text-[0.9375rem] leading-relaxed text-muted">{step.text}</p>
         </li>
       ))}
     </ol>
+  </Section>
 
-    <p class="mt-8 max-w-2xl text-sm text-slate-600">
-      <span class="font-medium text-slate-900">Desarrollo en abierto.</span>
-      Así trabajo también en mis propios proyectos: cada versión y cada decisión quedan documentadas en el
-      <a class={`rounded-sm font-medium text-slate-900 underline decoration-brand-500/60 underline-offset-4 hover:decoration-brand-500 ${focus}`} href="/changelog">changelog</a>
-      y el
-      <a class={`rounded-sm font-medium text-slate-900 underline decoration-brand-500/60 underline-offset-4 hover:decoration-brand-500 ${focus}`} href="/roadmap">roadmap</a>.
-    </p>
-  </section>
+  <!-- Activity -->
+  <Section
+    id="actividad"
+    eyebrow="Desarrollo en abierto"
+    title="Cada versión, documentada"
+    intro="Así trabajo también en mis propios proyectos: cada versión y cada decisión quedan publicadas en el changelog y el roadmap."
+  >
+    <div class="grid gap-6 lg:grid-cols-12">
+      <div class="rounded-lg border border-line bg-surface lg:col-span-7">
+        <div class="flex items-baseline justify-between gap-3 border-b border-line px-6 py-4">
+          <h3 class="text-base font-semibold">Últimos cambios</h3>
+          <a class="text-sm font-medium text-ink underline decoration-line-strong underline-offset-4 hover:decoration-brand" href="/changelog">Changelog completo →</a>
+        </div>
+        <ul class="divide-y divide-line">
+          {changelog.map((e) => (
+            <li>
+              <a class="group grid grid-cols-[5.5rem_1fr] gap-x-4 gap-y-1 px-6 py-4 hover:bg-bg sm:grid-cols-[6.5rem_4.5rem_1fr]" href={`/changelog/${e.slug}/`}>
+                <time class="font-mono text-xs text-muted sm:pt-0.5" datetime={isoDate(e.data.date)}>{formatDate(e.data.date)}</time>
+                <span class="font-mono text-sm font-medium text-ink">{e.data.version}</span>
+                <span class="col-span-2 text-[0.9375rem] text-ink group-hover:underline group-hover:decoration-brand group-hover:underline-offset-4 sm:col-span-1">
+                  {e.data.project && <span class="text-muted">{e.data.project} · </span>}
+                  {releaseTitle(e)}
+                </span>
+              </a>
+            </li>
+          ))}
+          {changelog.length === 0 && <li class="px-6 py-4 text-sm text-muted">Sin versiones publicadas aún.</li>}
+        </ul>
+      </div>
 
-  <!-- About -->
-  <section class="mt-20 grid gap-10 md:grid-cols-[1fr_18rem]" aria-labelledby="sobre-mi">
-    <div>
-      <p class="text-sm font-semibold uppercase tracking-wider text-brand-text">Sobre mí</p>
-      <h2 id="sobre-mi" class="mt-2 max-w-2xl text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
-        Más de 20 años resolviendo problemas con tecnología
-      </h2>
-      <div class="mt-6 max-w-2xl space-y-4 text-slate-700">
-        <p>
-          Soy {site.author}, desarrolladora especializada en backend, integración y análisis de datos.
-          He trabajado en proyectos de eCommerce, análisis de mercado y marketing digital basado en datos.
-        </p>
-        <p>
-          Trabajo sobre todo con Python, PHP y JavaScript: automatizaciones, integraciones de APIs,
-          web scraping, procesos ETL y conectores de datos para herramientas como Power BI.
-        </p>
-        <p>
-          Me gusta resolver problemas complejos con soluciones robustas, eficientes y bien documentadas.
-        </p>
+      <div class="rounded-lg border border-line bg-surface lg:col-span-5">
+        <div class="flex items-baseline justify-between gap-3 border-b border-line px-6 py-4">
+          <h3 class="text-base font-semibold">Blog</h3>
+          <a class="text-sm font-medium text-ink underline decoration-line-strong underline-offset-4 hover:decoration-brand" href="/blog">Todos los posts →</a>
+        </div>
+        <ul class="divide-y divide-line">
+          {posts.map((p) => (
+            <li>
+              <a class="group block px-6 py-4 hover:bg-bg" href={`/blog/${p.slug}/`}>
+                <time class="font-mono text-xs text-muted" datetime={isoDate(p.data.date)}>{formatDate(p.data.date)}</time>
+                <span class="mt-1 block font-medium text-ink group-hover:underline group-hover:decoration-brand group-hover:underline-offset-4">{p.data.title}</span>
+                {p.data.description && <span class="mt-1 block text-sm text-muted">{p.data.description}</span>}
+              </a>
+            </li>
+          ))}
+          {posts.length === 0 && <li class="px-6 py-4 text-sm text-muted">Sin publicaciones aún.</li>}
+        </ul>
       </div>
     </div>
+  </Section>
 
-    <aside class="self-start rounded-2xl border border-slate-200 bg-white p-6">
-      <div class="flex items-center gap-4">
-        {site.photo ? (
-          <img src={site.photo} alt={site.author} width="64" height="64" class="h-16 w-16 rounded-full object-cover" loading="lazy" />
-        ) : (
-          <span class="inline-flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-brand-500 text-xl font-semibold text-slate-950" aria-hidden="true">
-            PC
-          </span>
-        )}
-        <div>
-          <p class="font-semibold text-slate-900">{site.author}</p>
-          <p class="text-sm text-slate-600">Backend y datos</p>
+  <!-- About (warm block + personal presence from direction C) -->
+  <section id="sobre-mi" class="scroll-mt-6 bg-surface-warm py-section-sm md:py-section" aria-labelledby="sobre-mi-title">
+    <div class="container-site grid gap-10 lg:grid-cols-12 lg:gap-12">
+      <div class="lg:col-span-7">
+        <p class="eyebrow">Sobre mí</p>
+        <h2 id="sobre-mi-title" class="mt-3 text-3xl font-semibold sm:text-4xl">
+          Más de 20 años resolviendo problemas con tecnología
+        </h2>
+        <div class="mt-6 max-w-prose space-y-4 text-body">
+          <p>
+            Soy {site.author}, desarrolladora especializada en backend, integración y análisis de datos.
+            He trabajado en proyectos de eCommerce, análisis de mercado y marketing digital basado en datos.
+          </p>
+          <p>
+            Trabajo sobre todo con Python, PHP y JavaScript: automatizaciones, integraciones de APIs,
+            web scraping, procesos ETL y conectores de datos para herramientas como Power BI.
+          </p>
+          <p>
+            Me gusta resolver problemas complejos con soluciones robustas, eficientes y bien documentadas.
+          </p>
         </div>
       </div>
 
-      <dl class="mt-6 border-t border-slate-100 pt-5">
-        <dt class="text-sm text-slate-600">Experiencia</dt>
-        <dd class="mt-0.5 text-2xl font-semibold tabular-nums text-slate-900">20+ años</dd>
-      </dl>
-
-      <ul class="mt-5 flex flex-wrap gap-1.5" aria-label="Tecnologías principales">
-        {["Python", "PHP", "JavaScript", "MySQL", "Pandas", "Selenium", "Power BI", "AWS"].map((tech) => (
-          <li class="rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-700">{tech}</li>
-        ))}
-      </ul>
-
-      <div class="mt-6 flex gap-5 text-sm">
-        <a class={`rounded-sm font-medium text-slate-900 hover:text-brand-text ${focus}`} href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
-        <a class={`rounded-sm font-medium text-slate-900 hover:text-brand-text ${focus}`} href={site.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-      </div>
-    </aside>
-  </section>
-
-  <!-- Latest updates -->
-  <section class="mt-20 grid gap-6 md:grid-cols-2">
-    <div class="rounded-2xl border border-slate-200 p-6">
-      <div class="flex items-baseline justify-between gap-3">
-        <h2 class="text-xl font-semibold">Blog</h2>
-        <a class="text-sm text-slate-600 hover:text-slate-900" href="/blog">Todos →</a>
-      </div>
-
-      <ul class="mt-5 space-y-4">
-        {posts.map((p) => (
-          <li>
-            <a class="font-medium underline decoration-brand-500/50 underline-offset-4" href={`/blog/${p.slug}/`}>
-              {p.data.title}
-            </a>
-            <div class="mt-1 text-sm text-slate-600">
-              {formatDate(p.data.date)}
-              {p.data.description ? ` · ${p.data.description}` : ""}
-            </div>
-          </li>
-        ))}
-        {posts.length === 0 && <li class="text-sm text-slate-600">Sin publicaciones aún.</li>}
-      </ul>
-    </div>
-
-    <div class="rounded-2xl border border-slate-200 p-6">
-      <div class="flex items-baseline justify-between gap-3">
-        <h2 class="text-xl font-semibold">Últimos cambios</h2>
-        <a class="text-sm text-slate-600 hover:text-slate-900" href="/changelog">Changelog →</a>
-      </div>
-
-      <ul class="mt-5 space-y-4">
-        {changelog.map((e) => (
-          <li>
-            <a class="font-medium underline decoration-brand-500/50 underline-offset-4" href={`/changelog/${e.slug}/`}>
-              {e.data.version} — {e.data.title}
-            </a>
-            <div class="mt-1 flex items-center gap-2 text-sm text-slate-600">
-              {formatDate(e.data.date)}
-              {e.data.project && (
-                <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs">{e.data.project}</span>
-              )}
-            </div>
-          </li>
-        ))}
-        {changelog.length === 0 && <li class="text-sm text-slate-600">Sin releases aún.</li>}
-      </ul>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section id="contacto" class="mt-16 scroll-mt-6 rounded-2xl bg-slate-900 p-8 text-white sm:p-12">
-    <div class="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
-      <div class="max-w-xl">
-        <h2 class="text-2xl font-semibold sm:text-3xl">¿Tienes un problema que el software podría resolver?</h2>
-        <p class="mt-3 text-white/80">
-          Cuéntamelo por email y te digo cómo lo abordaría. Sin compromiso.
-        </p>
-      </div>
-
-      <div class="flex flex-col gap-4 md:items-end">
-        <a
-          class={`rounded-md bg-brand-500 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-brand-400 focus-visible:ring-offset-slate-900 ${focus}`}
-          href={`mailto:${site.email}?subject=${encodeURIComponent("Proyecto desde xyfos.com")}`}
-        >
-          Escríbeme a {site.email}
-        </a>
-        <div class="flex gap-5 text-sm">
-          <a class={`rounded-sm text-white/80 hover:text-white focus-visible:ring-offset-slate-900 ${focus}`} href={site.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-          <a class={`rounded-sm text-white/80 hover:text-white focus-visible:ring-offset-slate-900 ${focus}`} href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      <aside class="self-start rounded-lg border border-line bg-surface p-6 lg:col-span-5" aria-label={`Ficha de ${site.author}`}>
+        <div class="flex items-center gap-4">
+          {site.photo ? (
+            <img src={site.photo} alt={site.author} width="80" height="80" class="h-20 w-20 rounded-full object-cover" loading="lazy" />
+          ) : (
+            <span class="inline-flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-brand font-display text-2xl font-semibold text-ink" aria-hidden="true">
+              PC
+            </span>
+          )}
+          <div>
+            <p class="font-display text-lg font-semibold">{site.author}</p>
+            <p class="text-sm text-muted">Backend, integración y datos</p>
+          </div>
         </div>
-      </div>
+
+        <dl class="mt-6 grid grid-cols-2 gap-4 border-t border-line pt-5">
+          <div>
+            <dt class="font-mono text-xs uppercase tracking-[0.14em] text-muted">Experiencia</dt>
+            <dd class="mt-1 font-display text-2xl font-semibold tabular-nums">20+ años</dd>
+          </div>
+          <div>
+            <dt class="font-mono text-xs uppercase tracking-[0.14em] text-muted">Proyectos propios</dt>
+            <dd class="mt-1 font-display text-2xl font-semibold tabular-nums">{projects.length}</dd>
+          </div>
+        </dl>
+
+        <ul class="mt-5 flex flex-wrap gap-1.5" aria-label="Tecnologías principales">
+          {["Python", "PHP", "JavaScript", "MySQL", "Pandas", "Selenium", "Power BI", "AWS"].map((tech) => (
+            <li class="rounded border border-line px-2 py-0.5 font-mono text-xs text-muted">{tech}</li>
+          ))}
+        </ul>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          <Button href={site.linkedin} variant="secondary" external>LinkedIn ↗</Button>
+          <Button href={site.github} variant="secondary" external>GitHub ↗</Button>
+        </div>
+      </aside>
     </div>
   </section>
-  </div>
+
+  <!-- Contact (dark band, continues into the footer) -->
+  <Section
+    id="contacto"
+    tone="dark"
+    eyebrow="Contacto"
+    title="¿Tienes un problema que el software podría resolver?"
+    intro="Cuéntamelo por email y te digo cómo lo abordaría. Sin compromiso."
+  >
+    <div class="flex flex-wrap items-center gap-3">
+      <Button href={`mailto:${site.email}?subject=${encodeURIComponent("Proyecto desde xyfos.com")}`} size="lg">
+        Escríbeme a {site.email}
+      </Button>
+      <Button href={site.linkedin} variant="inverse" size="lg" external>LinkedIn ↗</Button>
+      <Button href={site.github} variant="inverse" size="lg" external>GitHub ↗</Button>
+    </div>
+  </Section>
 </SiteLayout>
