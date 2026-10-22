@@ -73,5 +73,7 @@ $headers = [
 ];
 if ($email !== '') $headers[] = 'Reply-To: ' . $email;
 
-$sent = mail(FEEDBACK_TO, $subject, $body, implode("\r\n", $headers));
+// -f: remitente del sobre; Hostinger rechaza el envío si no es un buzón del dominio
+$sent = mail(FEEDBACK_TO, $subject, $body, implode("\r\n", $headers), '-f' . MAIL_FROM);
+if (!$sent) error_log('Cuadra comentarios: mail() ha fallado: ' . (error_get_last()['message'] ?? 'sin detalle'));
 reply($sent ? 200 : 502, ['ok' => $sent]);
