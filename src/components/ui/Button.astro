@@ -1,0 +1,38 @@
+---
+/**
+ * Link styled as a button. Direction A: rectangular, 6px radius, 44px min height.
+ *  - primary:   brand fill + ink text (6.8:1). One per view.
+ *  - secondary: white with hairline border.
+ *  - inverse:   for the dark band (bg-ink).
+ */
+interface Props {
+  href: string;
+  variant?: "primary" | "secondary" | "inverse";
+  size?: "md" | "lg";
+  external?: boolean;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { href, variant = "primary", size = "md", external = false, class: className = "", ...rest } = Astro.props;
+
+const base =
+  "inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-colors duration-150 " +
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2";
+
+const sizes = {
+  md: "min-h-11 px-5 text-sm",
+  lg: "min-h-12 px-6 text-base",
+};
+
+const variants = {
+  primary: "bg-brand text-ink hover:bg-brand-hover focus-visible:ring-offset-bg",
+  secondary: "border border-line-strong bg-surface text-ink hover:border-ink/40 hover:bg-bg focus-visible:ring-offset-bg",
+  inverse: "border border-white/25 text-white hover:border-white/50 hover:bg-white/10 focus-visible:ring-offset-ink",
+};
+
+const externalAttrs = external ? { target: "_blank", rel: "noopener noreferrer" } : {};
+---
+<a href={href} class={`${base} ${sizes[size]} ${variants[variant]} ${className}`} {...externalAttrs} {...rest}>
+  <slot />
+</a>

@@ -3,8 +3,8 @@ import { nav } from "../../config/site";
 
 const focus = "rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2";
 ---
-<header class="relative border-b border-slate-200 bg-white">
-  <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4">
+<header class="relative border-b border-line bg-bg">
+  <div class="container-site flex items-center justify-between gap-4 py-4">
     <a href="/" class={`flex items-center gap-3 ${focus}`}>
       <img src="/brand/logo-mark.svg" alt="" width="34" height="34" class="h-8 w-8" loading="eager" decoding="async" />
       <img src="/brand/logo-wordmark.svg" alt="Xyfos Code" height="26" class="h-7 w-auto" />
@@ -14,7 +14,7 @@ const focus = "rounded-md focus-visible:outline-none focus-visible:ring-2 focus-
       {nav.map((item) => (
         <a class={`text-slate-600 hover:text-slate-900 ${focus}`} href={item.href}>{item.label}</a>
       ))}
-      <a class={`text-slate-500 hover:text-brand-700 ${focus}`} href="/rss.xml" aria-label="RSS">
+      <a class={`text-slate-500 hover:text-brand-text ${focus}`} href="/rss.xml" aria-label="RSS">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
       </a>
       <a
@@ -40,7 +40,7 @@ const focus = "rounded-md focus-visible:outline-none focus-visible:ring-2 focus-
   </div>
 
   <nav id="mobile-menu" class="hidden border-t border-slate-200 md:hidden" aria-label="Principal móvil">
-    <div class="mx-auto flex max-w-5xl flex-col gap-1 px-4 py-3 text-base">
+    <div class="container-site flex flex-col gap-1 py-3 text-base">
       {nav.map((item) => (
         <a class={`px-2 py-2 text-slate-700 hover:bg-slate-50 ${focus}`} href={item.href}>{item.label}</a>
       ))}

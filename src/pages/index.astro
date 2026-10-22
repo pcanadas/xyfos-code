@@ -3,7 +3,8 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
 import { site } from "../config/site";
 import ProjectCard from "../components/ui/ProjectCard.astro";
-import { sortProjects, sortChangelog, latestReleaseByProject, formatDate } from "../lib/content";
+import Button from "../components/ui/Button.astro";
+import { sortProjects, sortChangelog, latestReleaseByProject, formatDate, isoDate } from "../lib/content";
 
 const focus = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2";
 
@@ -17,6 +18,8 @@ const posts = (await getCollection("blog"))
 const allReleases = await getCollection("changelog");
 const latestRelease = latestReleaseByProject(allReleases);
 const changelog = sortChangelog(allReleases).slice(0, 4);
+// Most recent release of any product (excludes the website's own entries)
+const heroRelease = sortChangelog(allReleases).find((e) => e.data.project && e.data.project !== "Xyfos Code");
 
 // Icon paths: 24x24 stroke icons.
 // Grid: 2 wide cards (with examples) on top, 3 narrower below on desktop.
@@ -78,56 +81,40 @@ const steps = [
 <SiteLayout
   title="Xyfos Code · Software a medida"
   description="Diseño y desarrollo de software a medida: apps de escritorio, SaaS, automatizaciones y soluciones de datos que resuelven problemas reales."
+  bleed
 >
-  <!-- Hero -->
-  <section class="relative overflow-hidden rounded-2xl border border-slate-200 bg-white">
-    <div class="absolute inset-0">
-      <div class="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-brand-200/50 blur-3xl"></div>
-      <div class="absolute -right-24 -bottom-24 h-72 w-72 rounded-full bg-brand-300/40 blur-3xl"></div>
-    </div>
+  <!-- Hero (direction A) -->
+  <section class="border-b border-line" aria-labelledby="hero-title">
+    <div class="container-site grid gap-12 pb-12 pt-12 md:pt-20 lg:grid-cols-12 lg:items-center lg:gap-10 lg:pb-16">
+      <div class="lg:col-span-6">
+        <p class="flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-[0.14em] text-muted">
+          <span class="h-2 w-2 rounded-full bg-emerald-600" aria-hidden="true"></span>
+          Disponible para nuevos proyectos
+        </p>
 
-    <div class="relative px-6 pt-10 sm:px-12 sm:pt-14">
-      <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs text-slate-700">
-        <span class="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true"></span>
-        Disponible para nuevos proyectos
+        <h1 id="hero-title" class="mt-6 text-[2.5rem] font-semibold leading-[1.05] sm:text-5xl lg:text-[3.5rem]">
+          Software a medida, construido con criterio de ingeniería.
+        </h1>
+
+        <p class="mt-6 max-w-prose text-body text-muted sm:text-lg">
+          Diseño y desarrollo aplicaciones, automatizaciones y sistemas de datos para empresas que
+          necesitan herramientas fiables, documentadas y fáciles de mantener.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <Button href="#contacto" size="lg">Hablemos de tu proyecto</Button>
+          <Button href="/projects" variant="secondary" size="lg">Ver casos</Button>
+        </div>
       </div>
 
-      <h1 class="mt-6 max-w-3xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
-        Software a medida que
-        <span class="underline decoration-brand-500 decoration-4 underline-offset-[6px]">
-          resuelve problemas reales
-        </span>.
-      </h1>
-
-      <p class="mt-6 max-w-2xl text-lg text-slate-700">
-        Diseño y desarrollo apps de escritorio, SaaS, automatizaciones y soluciones de datos para
-        negocios que necesitan una herramienta simple, útil y bien hecha.
-      </p>
-
-      <div class="mt-8 flex flex-wrap items-center gap-3">
-        <a
-          class={`rounded-md bg-brand-500 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-brand-400 ${focus}`}
-          href="#contacto"
-        >
-          Hablemos de tu proyecto
-        </a>
-        <a
-          class={`rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-900 hover:bg-slate-50 ${focus}`}
-          href="/projects"
-        >
-          Ver proyectos
-        </a>
-      </div>
-
-      <!-- Product preview -->
-      <figure class="mt-12">
-        <div class="overflow-hidden rounded-t-xl border border-b-0 border-slate-200 bg-white shadow-2xl shadow-slate-900/10">
-          <div class="flex items-center gap-1.5 border-b border-slate-200 bg-slate-50 px-4 py-2.5" aria-hidden="true">
-            <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
-            <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
-            <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
-          </div>
-          <div class="relative max-h-[22rem] overflow-hidden sm:max-h-[28rem]">
+      <figure class="lg:col-span-6">
+        <div class="rounded-lg bg-surface-warm p-3 sm:p-5">
+          <div class="overflow-hidden rounded-md border border-line bg-surface">
+            <div class="flex items-center gap-1.5 border-b border-line px-3 py-2" aria-hidden="true">
+              <span class="h-2 w-2 rounded-full bg-line-strong"></span>
+              <span class="h-2 w-2 rounded-full bg-line-strong"></span>
+              <span class="h-2 w-2 rounded-full bg-line-strong"></span>
+            </div>
             <img
               src="/images/cuadra/dashboard_light.png"
               alt="Dashboard de Cuadra con resumen anual de gastos, ingresos, previsión del mes y presupuestos por categoría"
@@ -138,22 +125,51 @@ const steps = [
               decoding="async"
               fetchpriority="high"
             />
-            <div class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent" aria-hidden="true"></div>
           </div>
         </div>
-        <figcaption class="sr-only">Cuadra, app de escritorio de finanzas personales desarrollada por Xyfos Code.</figcaption>
+        <figcaption class="mt-3 text-sm text-muted">
+          <a class="font-medium text-ink underline decoration-brand underline-offset-4 hover:text-brand-text" href="/projects/cuadra/">Cuadra</a>:
+          app de escritorio para finanzas del hogar. Proyecto propio, en beta.
+        </figcaption>
       </figure>
     </div>
+
+    <!-- Proof strip -->
+    <div class="container-site">
+      <dl class="grid border-t border-line sm:grid-cols-3 sm:divide-x sm:divide-line">
+        <div class="py-5 sm:pr-6">
+          <dt class="font-mono text-xs uppercase tracking-[0.14em] text-muted">Experiencia</dt>
+          <dd class="mt-1 font-display text-2xl font-semibold tabular-nums">20+ años</dd>
+        </div>
+        <div class="border-t border-line py-5 sm:border-t-0 sm:px-6">
+          <dt class="font-mono text-xs uppercase tracking-[0.14em] text-muted">Áreas técnicas</dt>
+          <dd class="mt-1 text-sm text-muted">
+            <span class="block font-display text-2xl font-semibold text-ink tabular-nums">{services.length}</span>
+            Escritorio, SaaS, automatización, datos y cloud
+          </dd>
+        </div>
+        {heroRelease && (
+          <div class="border-t border-line py-5 sm:border-t-0 sm:pl-6">
+            <dt class="font-mono text-xs uppercase tracking-[0.14em] text-muted">Última versión publicada</dt>
+            <dd class="mt-1 text-sm text-muted">
+              <a class="block font-mono text-2xl font-medium text-ink hover:text-brand-text" href={`/changelog/${heroRelease.slug}/`}>
+                {heroRelease.data.version}
+              </a>
+              {heroRelease.data.project} · <time datetime={isoDate(heroRelease.data.date)}>{formatDate(heroRelease.data.date)}</time> ·
+              <a class="font-medium text-brand-text underline underline-offset-4" href="/changelog">changelog</a>
+            </dd>
+          </div>
+        )}
+      </dl>
+    </div>
   </section>
-  <p class="mt-3 text-center text-sm text-slate-600">
-    Proyecto propio:
-    <a class={`font-medium text-slate-900 underline decoration-brand-500/60 underline-offset-4 hover:decoration-brand-500 ${focus}`} href="/projects/cuadra/">
-      Cuadra</a>, app de escritorio para finanzas del hogar (beta).
-  </p>
+
+  <!-- Sections below still use the previous styling; they move to the design system one by one. -->
+  <div class="container-site pb-16 pt-4">
 
   <!-- Services -->
   <section class="mt-20" aria-labelledby="servicios">
-    <p class="text-sm font-semibold uppercase tracking-wider text-brand-700">Servicios</p>
+    <p class="text-sm font-semibold uppercase tracking-wider text-brand-text">Servicios</p>
     <h2 id="servicios" class="mt-2 max-w-2xl text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
       Qué puedo construir para ti
     </h2>
@@ -161,7 +177,7 @@ const steps = [
     <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
       {services.map((s) => (
         <li class={`flex flex-col rounded-2xl border border-slate-200 bg-white p-6 ${s.span}`}>
-          <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700" aria-hidden="true">
+          <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-brand-50 text-brand-text" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={s.icon} />
           </span>
           <h3 class="mt-4 font-semibold text-slate-900">{s.title}</h3>
@@ -181,7 +197,7 @@ const steps = [
   <section class="mt-20" aria-labelledby="proyectos">
     <div class="flex flex-wrap items-end justify-between gap-3">
       <div>
-        <p class="text-sm font-semibold uppercase tracking-wider text-brand-700">Proyectos</p>
+        <p class="text-sm font-semibold uppercase tracking-wider text-brand-text">Proyectos</p>
         <h2 id="proyectos" class="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Lo que ya he construido</h2>
       </div>
       <a class={`rounded-sm text-sm font-medium text-slate-600 hover:text-slate-900 ${focus}`} href="/projects">Ver todos los proyectos →</a>
@@ -196,7 +212,7 @@ const steps = [
 
   <!-- Process -->
   <section class="mt-20 rounded-2xl bg-slate-50 p-6 sm:p-10" aria-labelledby="como-trabajo">
-    <p class="text-sm font-semibold uppercase tracking-wider text-brand-700">Cómo trabajo</p>
+    <p class="text-sm font-semibold uppercase tracking-wider text-brand-text">Cómo trabajo</p>
     <h2 id="como-trabajo" class="mt-2 max-w-2xl text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
       Del problema a la herramienta, paso a paso
     </h2>
@@ -225,7 +241,7 @@ const steps = [
   <!-- About -->
   <section class="mt-20 grid gap-10 md:grid-cols-[1fr_18rem]" aria-labelledby="sobre-mi">
     <div>
-      <p class="text-sm font-semibold uppercase tracking-wider text-brand-700">Sobre mí</p>
+      <p class="text-sm font-semibold uppercase tracking-wider text-brand-text">Sobre mí</p>
       <h2 id="sobre-mi" class="mt-2 max-w-2xl text-2xl font-semibold tracking-tight text-balance sm:text-3xl">
         Más de 20 años resolviendo problemas con tecnología
       </h2>
@@ -271,8 +287,8 @@ const steps = [
       </ul>
 
       <div class="mt-6 flex gap-5 text-sm">
-        <a class={`rounded-sm font-medium text-slate-900 hover:text-brand-700 ${focus}`} href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
-        <a class={`rounded-sm font-medium text-slate-900 hover:text-brand-700 ${focus}`} href={site.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+        <a class={`rounded-sm font-medium text-slate-900 hover:text-brand-text ${focus}`} href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+        <a class={`rounded-sm font-medium text-slate-900 hover:text-brand-text ${focus}`} href={site.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       </div>
     </aside>
   </section>
@@ -350,4 +366,5 @@ const steps = [
       </div>
     </div>
   </section>
+  </div>
 </SiteLayout>
