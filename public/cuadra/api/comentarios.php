@@ -6,7 +6,18 @@
  * Recibe un JSON por POST y lo reenvía por correo a FEEDBACK_TO.
  * No guarda los mensajes: solo un contador temporal por IP (cifrada con hash)
  * para limitar envíos, que se borra solo al pasar una hora.
+ *
+ * Envío por SMTP autenticado. La contraseña NO está en el repositorio: se lee de
+ * domains/xyfos.com/cuadra-config.php (fuera de public_html), que solo existe en el servidor:
+ *
+ *   <?php return ['smtp_password' => '...'];
+ *
+ * Si ese archivo no existe se intenta con mail().
  */
+
+const SMTP_HOST = 'ssl://smtp.hostinger.com';
+const SMTP_PORT = 465;
+const CONFIG_FILE = __DIR__ . '/../../../cuadra-config.php'; // public_html/cuadra/api → domains/xyfos.com
 
 const FEEDBACK_TO   = 'cuadra@xyfos.com';
 const MAIL_FROM     = 'no-reply@xyfos.com';   // debe ser del dominio (SPF/DKIM)
@@ -25,6 +36,53 @@ if (in_array($origin, ALLOWED_ORIGINS, true)) {
     header('Vary: Origin');
     header('Access-Control-Allow-Methods: POST, OPTIONS');
     header('Access-Control-Allow-Headers: Content-Type');
+}
+
+/** Cliente SMTP mínimo (SSL implícito + AUTH LOGIN). Devuelve true si el servidor acepta el mensaje. */
+function smtp_send(string $to, string $subject, string $body, array $headers, string $password): bool {
+    $fp = @stream_socket_client(SMTP_HOST . ':' . SMTP_PORT, $errno, $errstr, 15);
+    if (!$fp) { error_log("Cuadra comentarios: SMTP sin conexión: $errstr"); return false; }
+    stream_set_timeout($fp, 15);
+
+    $read = function () use ($fp) {
+        $out = '';
+        while (($line = fgets($fp, 515)) !== false) {
+            $out .= $line;
+            if (strlen($line) < 4 || $line[3] === ' ') break; // última línea de la respuesta
+        }
+        return $out;
+    };
+    $cmd = function (?string $line, int $expect) use ($fp, $read) {
+        if ($line !== null) fwrite($fp, $line . "\r\n");
+        $res = $read();
+        if ((int)substr($res, 0, 3) !== $expect) throw new RuntimeException(trim($res));
+    };
+
+    try {
+        $cmd(null, 220);
+        $cmd('EHLO xyfos.com', 250);
+        $cmd('AUTH LOGIN', 334);
+        $cmd(base64_encode(MAIL_FROM), 334);
+        $cmd(base64_encode($password), 235);
+        $cmd('MAIL FROM:<' . MAIL_FROM . '>', 250);
+        $cmd("RCPT TO:<$to>", 250);
+        $cmd('DATA', 354);
+        $msg = implode("\r\n", array_merge($headers, [
+            "To: $to",
+            "Subject: $subject",
+            'Date: ' . date('r'),
+            'Message-ID: <' . bin2hex(random_bytes(12)) . '@xyfos.com>',
+            'MIME-Version: 1.0',
+        ])) . "\r\n\r\n" . preg_replace('/^\./m', '..', str_replace(["\r\n", "\n"], "\r\n", $body));
+        $cmd($msg . "\r\n.", 250);
+        fwrite($fp, "QUIT\r\n");
+        return true;
+    } catch (Throwable $e) {
+        error_log('Cuadra comentarios: SMTP ha fallado: ' . $e->getMessage());
+        return false;
+    } finally {
+        fclose($fp);
+    }
 }
 
 function reply(int $status, array $body): void {
@@ -71,12 +129,15 @@ $headers = [
 ];
 if ($email !== '') $headers[] = 'Reply-To: ' . $email;
 
-// -f: remitente del sobre; Hostinger rechaza el envío si no es un buzón del dominio
-$sent = mail(FEEDBACK_TO, $subject, $body, implode("\r\n", $headers), '-f' . MAIL_FROM);
-if (!$sent) {
-    error_log('Cuadra comentarios: mail() ha fallado: ' . (error_get_last()['message'] ?? 'sin detalle'));
-    reply(502, ['ok' => false]);
+$config = is_file(CONFIG_FILE) ? (require CONFIG_FILE) : [];
+if (!empty($config['smtp_password'])) {
+    $sent = smtp_send(FEEDBACK_TO, $subject, $body, $headers, $config['smtp_password']);
+} else {
+    // -f: remitente del sobre; Hostinger rechaza el envío si no es un buzón del dominio
+    $sent = mail(FEEDBACK_TO, $subject, $body, implode("\r\n", $headers), '-f' . MAIL_FROM);
+    if (!$sent) error_log('Cuadra comentarios: mail() ha fallado: ' . (error_get_last()['message'] ?? 'sin detalle'));
 }
+if (!$sent) reply(502, ['ok' => false]);
 
 // Solo cuentan para el límite los envíos que salen bien
 $hits[] = $now;
