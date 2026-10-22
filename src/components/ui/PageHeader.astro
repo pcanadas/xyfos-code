@@ -1,0 +1,22 @@
+---
+/** Header for internal pages: optional back link, eyebrow, H1, intro and an actions slot. */
+interface Props {
+  title: string;
+  eyebrow?: string;
+  intro?: string;
+  back?: { href: string; label: string };
+}
+
+const { title, eyebrow, intro, back } = Astro.props;
+---
+<header class="mb-10 border-b border-line pb-8 md:mb-12 md:pb-10">
+  {back && (
+    <a class="mb-6 inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.14em] text-muted hover:text-ink" href={back.href}>
+      <span aria-hidden="true">←</span> {back.label}
+    </a>
+  )}
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <h1 class={`${eyebrow ? "mt-3" : ""} max-w-3xl text-4xl font-semibold leading-[1.1] sm:text-5xl`}>{title}</h1>
+  {intro && <p class="mt-4 max-w-prose text-body text-muted sm:text-lg">{intro}</p>}
+  {Astro.slots.has("default") && <div class="mt-6"><slot /></div>}
+</header>

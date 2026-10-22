@@ -1,5 +1,6 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import PageHeader from "../../components/ui/PageHeader.astro";
 import { getCollection } from "astro:content";
 import { formatDate, isoDate } from "../../lib/content";
 
@@ -8,13 +9,26 @@ const posts = (await getCollection("blog"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 <SiteLayout title="Blog · Xyfos Code" description="Notas sobre desarrollo de software, datos y los proyectos de Xyfos Code.">
-  <h1 class="text-3xl font-semibold">Blog</h1>
-  <ul class="mt-6 space-y-3">
+  <PageHeader
+    eyebrow="Blog"
+    title="Notas de desarrollo"
+    intro="Lo que aprendo construyendo software: decisiones técnicas, datos y los proyectos de Xyfos Code."
+  >
+    <a class="font-mono text-xs uppercase tracking-[0.14em] text-muted hover:text-ink" href="/rss.xml">Suscribirse por RSS</a>
+  </PageHeader>
+
+  <ul class="max-w-3xl divide-y divide-line border-y border-line">
     {posts.map((p) => (
       <li>
-        <a class="text-slate-900 underline" href={`/blog/${p.slug}/`}>{p.data.title}</a>
-        <div class="text-sm text-slate-600"><time datetime={isoDate(p.data.date)}>{formatDate(p.data.date)}</time></div>
+        <a class="group grid gap-1 py-6 sm:grid-cols-[8rem_1fr] sm:gap-6" href={`/blog/${p.slug}/`}>
+          <time class="font-mono text-xs text-muted sm:pt-1.5" datetime={isoDate(p.data.date)}>{formatDate(p.data.date)}</time>
+          <span>
+            <span class="block font-display text-xl font-semibold group-hover:underline group-hover:decoration-brand group-hover:underline-offset-4">{p.data.title}</span>
+            {p.data.description && <span class="mt-1 block text-muted">{p.data.description}</span>}
+          </span>
+        </a>
       </li>
     ))}
+    {posts.length === 0 && <li class="py-6 text-muted">Sin publicaciones aún.</li>}
   </ul>
 </SiteLayout>

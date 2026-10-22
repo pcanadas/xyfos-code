@@ -22,6 +22,19 @@ export const roadmapStatusLabels: Record<string, string> = {
   done:          "Completado",
 };
 
+export const roadmapStatusColors: Record<string, string> = {
+  planned:       "bg-slate-100 text-slate-700 ring-slate-200",
+  "in-progress": "bg-amber-100 text-amber-800 ring-amber-200",
+  done:          "bg-emerald-100 text-emerald-800 ring-emerald-200",
+};
+
+/** "Cuadra — gastos fijos…" -> "gastos fijos…" when the project name is shown separately. */
+export function releaseTitle(entry: CollectionEntry<"changelog">) {
+  const { project, title } = entry.data;
+  const prefix = `${project} — `;
+  return project && title.startsWith(prefix) ? title.slice(prefix.length) : title;
+}
+
 export function sortProjects(projects: CollectionEntry<"projects">[]) {
   return [...projects].sort(
     (a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title)

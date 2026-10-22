@@ -1,7 +1,10 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import PageHeader from "../../components/ui/PageHeader.astro";
+import Button from "../../components/ui/Button.astro";
 import { getCollection } from "astro:content";
-import { statusColors, statusLabels } from "../../lib/content";
+import { site } from "../../config/site";
+import { statusColors, statusLabels, sortChangelog, releaseTitle, formatDate, isoDate } from "../../lib/content";
 
 export async function getStaticPaths() {
   const items = await getCollection("projects");
@@ -10,31 +13,83 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await project.render();
-const isGithub = project.data.url.includes("github.com");
+const { title, description, status, problem, platform, stack, url } = project.data;
+const isGithub = url.includes("github.com");
+
+const releases = sortChangelog(await getCollection("changelog"))
+  .filter((e) => e.data.project === title)
+  .slice(0, 5);
 ---
-<SiteLayout title={`${project.data.title} · Proyectos · Xyfos Code`} description={project.data.description}>
-  <div class="flex flex-wrap items-center justify-between gap-3">
-    <div>
-      <h1 class="text-3xl font-semibold">{project.data.title}</h1>
-      <p class="mt-2 text-slate-700">{project.data.description}</p>
+<SiteLayout title={`${title} · Proyectos · Xyfos Code`} description={description}>
+  <PageHeader back={{ href: "/projects", label: "Proyectos" }} eyebrow={platform} title={title} intro={description}>
+    <div class="flex flex-wrap items-center gap-3">
+      <Button href={url} external>{isGithub ? "Ver en GitHub ↗" : "Abrir aplicación ↗"}</Button>
+      <span class={`rounded px-2.5 py-1 text-sm font-medium ring-1 ring-inset ${statusColors[status]}`}>
+        {statusLabels[status]}
+      </span>
+    </div>
+  </PageHeader>
+
+  <div class="grid gap-10 lg:grid-cols-12 lg:gap-12">
+    <div class="min-w-0 lg:col-span-8">
+      {problem && (
+        <div class="mb-10 rounded-lg bg-surface-warm p-6">
+          <p class="eyebrow">El problema</p>
+          <p class="mt-2 text-body">{problem}</p>
+        </div>
+      )}
+      <article class="prose prose-site max-w-none">
+        <Content />
+      </article>
     </div>
 
-    <div class="flex items-center gap-2">
-      <span class={`rounded-full px-3 py-1 text-sm font-medium ring-1 ring-inset ${statusColors[project.data.status]}`}>
-        {statusLabels[project.data.status]}
-      </span>
-      <a
-        class="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
-        href={project.data.url}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {isGithub ? "Ver en GitHub ↗" : "Abrir aplicación ↗"}
-      </a>
-    </div>
+    <aside class="space-y-6 lg:col-span-4">
+      <div class="rounded-lg border border-line bg-surface p-6 lg:sticky lg:top-6">
+        <dl class="space-y-4 text-sm">
+          {platform && (
+            <div>
+              <dt class="font-mono text-xs uppercase tracking-[0.14em] text-muted">Plataforma</dt>
+              <dd class="mt-1 font-medium">{platform}</dd>
+            </div>
+          )}
+          {stack.length > 0 && (
+            <div>
+              <dt class="font-mono text-xs uppercase tracking-[0.14em] text-muted">Tecnologías</dt>
+              <dd class="mt-2">
+                <ul class="flex flex-wrap gap-1.5">
+                  {stack.map((tech) => <li class="rounded border border-line px-2 py-0.5 font-mono text-xs text-muted">{tech}</li>)}
+                </ul>
+              </dd>
+            </div>
+          )}
+        </dl>
+
+        {releases.length > 0 && (
+          <div class="mt-6 border-t border-line pt-5">
+            <h2 class="font-mono text-xs font-medium uppercase tracking-[0.14em] text-muted">Últimas versiones</h2>
+            <ul class="mt-3 space-y-3">
+              {releases.map((e) => (
+                <li>
+                  <a class="group block" href={`/changelog/${e.slug}/`}>
+                    <span class="font-mono text-sm font-medium">{e.data.version}</span>
+                    <span class="ml-2 font-mono text-xs text-muted"><time datetime={isoDate(e.data.date)}>{formatDate(e.data.date)}</time></span>
+                    <span class="mt-0.5 block text-sm text-muted group-hover:text-ink group-hover:underline group-hover:decoration-brand group-hover:underline-offset-4">{releaseTitle(e)}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <a class="mt-4 inline-block text-sm font-medium underline decoration-line-strong underline-offset-4 hover:decoration-brand" href="/changelog">Changelog completo →</a>
+          </div>
+        )}
+      </div>
+    </aside>
   </div>
 
-  <article class="prose prose-slate mt-8 max-w-none">
-    <Content />
-  </article>
+  <section class="mt-16 rounded-lg bg-ink p-8 text-white sm:p-10" aria-labelledby="cta-title">
+    <h2 id="cta-title" class="text-2xl font-semibold text-white sm:text-3xl">¿Necesitas una herramienta parecida?</h2>
+    <p class="mt-3 max-w-prose text-white/75">Cuéntame qué problema quieres resolver y te digo cómo lo abordaría.</p>
+    <div class="mt-6">
+      <Button href={`mailto:${site.email}?subject=${encodeURIComponent(`Proyecto similar a ${title}`)}`} size="lg">Escríbeme</Button>
+    </div>
+  </section>
 </SiteLayout>

@@ -1,7 +1,8 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import PageHeader from "../../components/ui/PageHeader.astro";
 import { getCollection } from "astro:content";
-import { formatDate, isoDate } from "../../lib/content";
+import { sortChangelog, releaseTitle, formatDate, isoDate } from "../../lib/content";
 
 export async function getStaticPaths() {
   const items = await getCollection("changelog");
@@ -10,15 +11,47 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
----
-<SiteLayout title={`${entry.data.title} · Changelog · Xyfos Code`} description={`Versión ${entry.data.version}${entry.data.project ? ` de ${entry.data.project}` : ""}: ${entry.data.title}`}>
-  <h1 class="text-3xl font-semibold">{entry.data.title}</h1>
-  <p class="mt-2 text-slate-700">
-    <span class="font-medium">{entry.data.version}</span> ·{" "}
-    <time datetime={isoDate(entry.data.date)}>{formatDate(entry.data.date)}</time>
-  </p>
+const { version, project, date } = entry.data;
 
-  <article class="prose prose-slate mt-8 max-w-none">
-    <Content />
-  </article>
+// Neighbouring releases of the same project
+const sameProject = sortChangelog(await getCollection("changelog")).filter((e) => e.data.project === project);
+const index = sameProject.findIndex((e) => e.slug === entry.slug);
+const newer = index > 0 ? sameProject[index - 1] : undefined;
+const older = index >= 0 ? sameProject[index + 1] : undefined;
+
+const projectSlug = (await getCollection("projects")).find((p) => p.data.title === project)?.slug;
+---
+<SiteLayout
+  title={`${entry.data.title} · Changelog · Xyfos Code`}
+  description={`Versión ${version}${project ? ` de ${project}` : ""}: ${entry.data.title}`}
+>
+  <div class="mx-auto max-w-3xl">
+    <PageHeader back={{ href: "/changelog", label: "Changelog" }} eyebrow={project} title={releaseTitle(entry)}>
+      <p class="font-mono text-sm text-muted">
+        <span class="font-medium text-ink">{version}</span> · <time datetime={isoDate(date)}>{formatDate(date)}</time>
+        {projectSlug && <> · <a class="underline decoration-line-strong underline-offset-4 hover:text-ink hover:decoration-brand" href={`/projects/${projectSlug}/`}>Ver proyecto</a></>}
+      </p>
+    </PageHeader>
+
+    <article class="prose prose-site max-w-none">
+      <Content />
+    </article>
+
+    {(newer || older) && (
+      <nav class="mt-14 grid gap-4 border-t border-line pt-6 sm:grid-cols-2" aria-label="Otras versiones">
+        {older ? (
+          <a class="group rounded-lg border border-line bg-surface p-4 hover:border-ink/30" href={`/changelog/${older.slug}/`}>
+            <span class="font-mono text-xs uppercase tracking-[0.14em] text-muted">← Anterior · {older.data.version}</span>
+            <span class="mt-1 block text-sm font-medium">{releaseTitle(older)}</span>
+          </a>
+        ) : <span />}
+        {newer && (
+          <a class="group rounded-lg border border-line bg-surface p-4 text-right hover:border-ink/30" href={`/changelog/${newer.slug}/`}>
+            <span class="font-mono text-xs uppercase tracking-[0.14em] text-muted">Siguiente · {newer.data.version} →</span>
+            <span class="mt-1 block text-sm font-medium">{releaseTitle(newer)}</span>
+          </a>
+        )}
+      </nav>
+    )}
+  </div>
 </SiteLayout>

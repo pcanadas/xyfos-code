@@ -53,6 +53,53 @@ export default {
         section: "7rem",          // 112px between sections on desktop
         "section-sm": "4rem",     // 64px on mobile
       },
+      // Long-form content (blog posts, project pages, changelog). Use: class="prose prose-site"
+      typography: ({ theme }) => ({
+        site: {
+          css: {
+            "--tw-prose-body": theme("colors.ink"),
+            "--tw-prose-headings": theme("colors.ink"),
+            "--tw-prose-lead": theme("colors.muted"),
+            "--tw-prose-links": theme("colors.brand.text"),
+            "--tw-prose-bold": theme("colors.ink"),
+            "--tw-prose-counters": theme("colors.muted"),
+            "--tw-prose-bullets": theme("colors.line.strong"),
+            "--tw-prose-hr": theme("colors.line.DEFAULT"),
+            "--tw-prose-quotes": theme("colors.ink"),
+            "--tw-prose-quote-borders": theme("colors.brand.DEFAULT"),
+            "--tw-prose-captions": theme("colors.muted"),
+            "--tw-prose-code": theme("colors.ink"),
+            "--tw-prose-th-borders": theme("colors.line.strong"),
+            "--tw-prose-td-borders": theme("colors.line.DEFAULT"),
+            fontSize: "1.0625rem",
+            lineHeight: "1.7",
+            "h1, h2, h3, h4": {
+              fontFamily: theme("fontFamily.display").join(", "),
+              letterSpacing: "-0.02em",
+              fontWeight: "600",
+            },
+            a: {
+              fontWeight: "500",
+              textDecorationColor: theme("colors.brand.DEFAULT"),
+              textUnderlineOffset: "4px",
+            },
+            "a:hover": { color: theme("colors.ink") },
+            code: {
+              fontFamily: theme("fontFamily.mono").join(", "),
+              fontWeight: "500",
+              backgroundColor: theme("colors.surface.warm"),
+              padding: "0.125rem 0.375rem",
+              borderRadius: "0.25rem",
+            },
+            "code::before": { content: "none" },
+            "code::after": { content: "none" },
+            img: {
+              borderRadius: "0.375rem",
+              border: `1px solid ${theme("colors.line.DEFAULT")}`,
+            },
+          },
+        },
+      }),
     }
   },
   plugins: [require("@tailwindcss/typography")]

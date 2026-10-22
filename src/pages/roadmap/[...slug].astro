@@ -1,7 +1,8 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import PageHeader from "../../components/ui/PageHeader.astro";
 import { getCollection } from "astro:content";
-import { formatDate, isoDate, roadmapStatusLabels } from "../../lib/content";
+import { formatDate, isoDate, roadmapStatusLabels, roadmapStatusColors } from "../../lib/content";
 
 export async function getStaticPaths() {
   const items = await getCollection("roadmap");
@@ -10,20 +11,24 @@ export async function getStaticPaths() {
 
 const { item } = Astro.props;
 const { Content } = await item.render();
+const { title, date, status, project } = item.data;
 ---
-<SiteLayout title={`${item.data.title} · Roadmap · Xyfos Code`} description={`Roadmap${item.data.project ? ` de ${item.data.project}` : ""}: ${item.data.title}`}>
-  <div class="flex flex-wrap items-center justify-between gap-3">
-    <div>
-      <h1 class="text-3xl font-semibold">{item.data.title}</h1>
-      <p class="mt-2 text-slate-700"><time datetime={isoDate(item.data.date)}>{formatDate(item.data.date)}</time></p>
-    </div>
+<SiteLayout
+  title={`${title} · Roadmap · Xyfos Code`}
+  description={`Roadmap${project ? ` de ${project}` : ""}: ${title}`}
+>
+  <div class="mx-auto max-w-3xl">
+    <PageHeader back={{ href: "/roadmap", label: "Roadmap" }} eyebrow={project} title={title}>
+      <p class="flex flex-wrap items-center gap-3 font-mono text-sm text-muted">
+        <span class={`rounded px-2 py-0.5 font-sans text-xs font-medium ring-1 ring-inset ${roadmapStatusColors[status]}`}>
+          {roadmapStatusLabels[status]}
+        </span>
+        <time datetime={isoDate(date)}>{formatDate(date)}</time>
+      </p>
+    </PageHeader>
 
-    <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-sm text-slate-700">
-      {roadmapStatusLabels[item.data.status]}
-    </span>
+    <article class="prose prose-site max-w-none">
+      <Content />
+    </article>
   </div>
-
-  <article class="prose prose-slate mt-8 max-w-none">
-    <Content />
-  </article>
 </SiteLayout>

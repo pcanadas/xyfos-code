@@ -1,5 +1,6 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import PageHeader from "../../components/ui/PageHeader.astro";
 import ProjectCard from "../../components/ui/ProjectCard.astro";
 import { getCollection } from "astro:content";
 import { sortProjects, latestReleaseByProject } from "../../lib/content";
@@ -8,12 +9,13 @@ const projects = sortProjects(await getCollection("projects"));
 const latestRelease = latestReleaseByProject(await getCollection("changelog"));
 ---
 <SiteLayout title="Proyectos · Xyfos Code" description="Proyectos desarrollados en Xyfos Code: apps de escritorio y SaaS a medida.">
-  <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Proyectos</h1>
-  <p class="mt-3 max-w-2xl text-slate-700">
-    Herramientas y productos desarrollados en Xyfos Code. Cada uno nace de un problema concreto.
-  </p>
+  <PageHeader
+    eyebrow="Casos"
+    title="Proyectos"
+    intro="Herramientas y productos desarrollados en Xyfos Code. Cada uno nace de un problema concreto."
+  />
 
-  <div class="mt-10 grid gap-6 md:grid-cols-2">
+  <div class="grid gap-6 md:grid-cols-2">
     {projects.map((p) => (
       <ProjectCard project={p} release={latestRelease.get(p.data.title)} />
     ))}

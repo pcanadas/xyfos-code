@@ -1,40 +1,38 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import PageHeader from "../../components/ui/PageHeader.astro";
 import { getCollection } from "astro:content";
-import { sortChangelog, formatDate, isoDate } from "../../lib/content";
+import { sortChangelog, releaseTitle, formatDate, isoDate } from "../../lib/content";
 
 const entries = sortChangelog(await getCollection("changelog"));
 ---
-<SiteLayout title="Changelog · Xyfos Code" description="Cambios y releases de todos los proyectos">
-  <h1 class="text-3xl font-semibold">Changelog</h1>
-  <p class="mt-2 text-slate-700">Nuevas versiones, correcciones y mejoras de todos los proyectos.</p>
+<SiteLayout title="Changelog · Xyfos Code" description="Nuevas versiones y cambios de todos los proyectos de Xyfos Code.">
+  <PageHeader
+    eyebrow="Desarrollo en abierto"
+    title="Changelog"
+    intro="Nuevas versiones, correcciones y mejoras de todos los proyectos, en orden cronológico."
+  >
+    <a class="font-mono text-xs uppercase tracking-[0.14em] text-muted hover:text-ink" href="/changelog/rss.xml">Suscribirse por RSS</a>
+  </PageHeader>
 
-  <div class="mt-8 space-y-6">
-    {entries.map((e) => (
-      <div class="relative rounded-xl border border-slate-200 p-5">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <a class="text-lg font-semibold underline" href={`/changelog/${e.slug}/`}>
-              {e.data.title}
-            </a>
-            <div class="mt-1 flex flex-wrap items-center gap-2 text-sm text-slate-600">
-              <span class="font-medium">{e.data.version}</span>
-              <span>·</span>
-              <time datetime={isoDate(e.data.date)}>{formatDate(e.data.date)}</time>
-              {e.data.project && (
-                <span class="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs">{e.data.project}</span>
-              )}
-            </div>
-          </div>
-
-          <a
-            class="text-sm text-slate-600 hover:text-slate-900"
-            href={`/changelog/${e.slug}/`}
-          >
-            Detalles →
+  <div class="overflow-hidden rounded-lg border border-line bg-surface">
+    <div class="hidden grid-cols-[8rem_5rem_8rem_1fr] gap-4 border-b border-line bg-bg px-6 py-3 font-mono text-xs uppercase tracking-[0.14em] text-muted md:grid" aria-hidden="true">
+      <span>Fecha</span><span>Versión</span><span>Proyecto</span><span>Cambios</span>
+    </div>
+    <ul class="divide-y divide-line">
+      {entries.map((e) => (
+        <li>
+          <a class="group grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 px-6 py-4 hover:bg-bg md:grid-cols-[8rem_5rem_8rem_1fr]" href={`/changelog/${e.slug}/`}>
+            <time class="font-mono text-xs text-muted md:pt-0.5" datetime={isoDate(e.data.date)}>{formatDate(e.data.date)}</time>
+            <span class="font-mono text-sm font-medium">{e.data.version}</span>
+            <span class="col-span-2 text-sm text-muted md:col-span-1">{e.data.project ?? "—"}</span>
+            <span class="col-span-2 text-[0.9375rem] group-hover:underline group-hover:decoration-brand group-hover:underline-offset-4 md:col-span-1">
+              {releaseTitle(e)}
+            </span>
           </a>
-        </div>
-      </div>
-    ))}
+        </li>
+      ))}
+      {entries.length === 0 && <li class="px-6 py-4 text-muted">Sin versiones publicadas aún.</li>}
+    </ul>
   </div>
 </SiteLayout>

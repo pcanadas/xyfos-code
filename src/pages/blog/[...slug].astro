@@ -1,6 +1,9 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import PageHeader from "../../components/ui/PageHeader.astro";
+import Button from "../../components/ui/Button.astro";
 import { getCollection } from "astro:content";
+import { site } from "../../config/site";
 import { formatDate, isoDate } from "../../lib/content";
 
 export async function getStaticPaths() {
@@ -12,9 +15,30 @@ const { post } = Astro.props;
 const { Content } = await post.render();
 ---
 <SiteLayout title={`${post.data.title} · Xyfos Code`} description={post.data.description} type="article">
-  <article class="prose prose-slate max-w-none">
-    <h1>{post.data.title}</h1>
-    <p class="text-sm text-slate-600"><time datetime={isoDate(post.data.date)}>{formatDate(post.data.date)}</time></p>
-    <Content />
-  </article>
+  <div class="mx-auto max-w-3xl">
+    <PageHeader back={{ href: "/blog", label: "Blog" }} title={post.data.title} intro={post.data.description}>
+      <p class="font-mono text-xs text-muted">
+        <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date)}</time> · {site.author}
+      </p>
+    </PageHeader>
+
+    <article class="prose prose-site max-w-none">
+      <Content />
+    </article>
+
+    <aside class="mt-14 flex flex-col gap-5 rounded-lg bg-surface-warm p-6 sm:flex-row sm:items-center sm:justify-between" aria-label="Sobre la autora">
+      <div class="flex items-center gap-4">
+        {site.photo ? (
+          <img src={site.photo} alt={site.author} width="56" height="56" class="h-14 w-14 rounded-full object-cover" loading="lazy" />
+        ) : (
+          <span class="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand font-display text-lg font-semibold text-ink" aria-hidden="true">PC</span>
+        )}
+        <div>
+          <p class="font-display font-semibold">{site.author}</p>
+          <p class="text-sm text-muted">Software a medida: backend, integración y datos.</p>
+        </div>
+      </div>
+      <Button href="/#contacto" variant="secondary">Hablemos</Button>
+    </aside>
+  </div>
 </SiteLayout>
