@@ -5,9 +5,9 @@ const focus = "rounded-md focus-visible:outline-none focus-visible:ring-2 focus-
 ---
 <header class="relative border-b border-line bg-bg">
   <div class="container-site flex items-center justify-between gap-4 py-4">
-    <a href="/" class={`flex items-center gap-3 ${focus}`}>
-      <img src="/brand/logo-mark.svg" alt="" width="34" height="34" class="h-8 w-8" loading="eager" decoding="async" />
-      <img src="/brand/logo-wordmark.svg" alt="Xyfos Code" height="26" class="h-7 w-auto" />
+    <a href="/" class={`flex min-w-0 items-center gap-2 sm:gap-3 ${focus}`}>
+      <img src="/brand/logo-mark.svg" alt="" width="34" height="34" class="h-7 w-7 shrink-0 sm:h-8 sm:w-8" loading="eager" decoding="async" />
+      <img src="/brand/logo-wordmark.svg" alt="Xyfos Code" height="26" class="h-4 w-auto min-w-0 sm:h-6 lg:h-7" />
     </a>
 
     <nav class="hidden items-center gap-6 text-sm md:flex" aria-label="Principal">
