@@ -1,6 +1,6 @@
 ---
 title: "Cuadra"
-description: "App de escritorio para gestión de finanzas personales del hogar."
+description: "App de escritorio para gestión de finanzas personales."
 url: "https://github.com/pcanadas/cuadra-finances"
 status: "beta"
 order: 1
