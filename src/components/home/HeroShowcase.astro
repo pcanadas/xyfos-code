@@ -1,0 +1,54 @@
+---
+/**
+ * Desktop window + phone frame overlapping its bottom-right corner (no tilt: direction A).
+ * Both images carry width/height so the layout is reserved before they load.
+ */
+interface Shot {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+interface Props {
+  desktop: Shot;
+  phone: Shot;
+  /** Above the fold: load eagerly with high priority. */
+  priority?: boolean;
+  class?: string;
+}
+
+const { desktop, phone, priority = false, class: className = "" } = Astro.props;
+const loading = priority ? "eager" : "lazy";
+---
+<div class={`relative pb-8 pr-[11%] sm:pb-10 ${className}`}>
+  <div class="overflow-hidden rounded-md border border-line-strong bg-surface">
+    <div class="flex items-center gap-1.5 border-b border-line px-3 py-2" aria-hidden="true">
+      <span class="h-2 w-2 rounded-full bg-line-strong"></span>
+      <span class="h-2 w-2 rounded-full bg-line-strong"></span>
+      <span class="h-2 w-2 rounded-full bg-line-strong"></span>
+    </div>
+    <img
+      src={desktop.src}
+      alt={desktop.alt}
+      width={desktop.width}
+      height={desktop.height}
+      class="block w-full"
+      loading={loading}
+      decoding="async"
+      fetchpriority={priority ? "high" : undefined}
+    />
+  </div>
+
+  <div class="absolute bottom-0 right-0 w-[24%] rounded-[1.25rem] bg-ink p-[3px] sm:rounded-[1.6rem] sm:p-1">
+    <img
+      src={phone.src}
+      alt={phone.alt}
+      width={phone.width}
+      height={phone.height}
+      class="block w-full rounded-[1.05rem] sm:rounded-[1.35rem]"
+      loading={loading}
+      decoding="async"
+    />
+  </div>
+</div>

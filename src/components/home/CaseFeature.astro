@@ -1,0 +1,70 @@
+---
+/** Featured case: screenshots + problem / solution + facts computed from the changelog. */
+import type { CollectionEntry } from "astro:content";
+import HeroShowcase from "./HeroShowcase.astro";
+import { sortChangelog, formatDate, isoDate } from "../../lib/content";
+
+type Shot = { src: string; alt: string; width: number; height: number };
+
+interface Props {
+  project: CollectionEntry<"projects">;
+  releases: CollectionEntry<"changelog">[];
+  desktop: Shot;
+  phone: Shot;
+  /** Third fact next to platforms and versions: a verifiable property of this product. */
+  highlight: { label: string; value: string; note: string };
+}
+
+const { project, releases, desktop, phone, highlight } = Astro.props;
+const { title, problem, description, editions, stack } = project.data;
+const own = sortChangelog(releases.filter((r) => r.data.project === title));
+const first = own.at(-1);
+const platforms = editions.length ? editions.map((ed) => ed.platform === "Google Play" ? "Android" : ed.platform) : [project.data.platform];
+---
+<article class="grid gap-10 rounded-lg border border-line bg-surface p-5 sm:p-8 lg:grid-cols-12 lg:gap-12 lg:p-10" aria-labelledby={`caso-${project.slug}`}>
+  <div class="rounded-md bg-surface-warm p-4 sm:p-6 lg:col-span-7 lg:self-start">
+    <HeroShowcase desktop={desktop} phone={phone} />
+  </div>
+
+  <div class="flex flex-col lg:col-span-5">
+    <p class="eyebrow">Caso destacado · Producto propio</p>
+    <h3 id={`caso-${project.slug}`} class="mt-3 text-3xl font-semibold">{title}</h3>
+
+    <dl class="mt-6 space-y-5 text-[0.9375rem] leading-relaxed">
+      {problem && (
+        <div>
+          <dt class="text-sm font-semibold">El problema</dt>
+          <dd class="mt-1 text-muted">{problem}</dd>
+        </div>
+      )}
+      <div>
+        <dt class="text-sm font-semibold">La solución</dt>
+        <dd class="mt-1 text-muted">{description} {stack.length > 0 && <>Construida con {stack.join(", ")}.</>}</dd>
+      </div>
+    </dl>
+
+    <dl class="mt-8 grid grid-cols-3 border-y border-line">
+      <div class="py-4 pr-3">
+        <dt class="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted">Plataformas</dt>
+        <dd class="mt-1 font-display text-2xl font-semibold tabular-nums">{platforms.length}</dd>
+        <dd class="text-xs text-muted">{platforms.join(" · ")}</dd>
+      </div>
+      <div class="border-l border-line px-3 py-4">
+        <dt class="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted">Versiones</dt>
+        <dd class="mt-1 font-display text-2xl font-semibold tabular-nums">{own.length}</dd>
+        <dd class="text-xs text-muted">
+          {first ? <>desde <time class="whitespace-nowrap" datetime={isoDate(first.data.date)}>{formatDate(first.data.date)}</time></> : "publicadas"}
+        </dd>
+      </div>
+      <div class="border-l border-line py-4 pl-3">
+        <dt class="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted">{highlight.label}</dt>
+        <dd class="mt-1 font-display text-2xl font-semibold tabular-nums">{highlight.value}</dd>
+        <dd class="text-xs text-muted">{highlight.note}</dd>
+      </div>
+    </dl>
+
+    <a class="mt-8 inline-flex text-sm font-medium text-ink underline decoration-brand underline-offset-4 hover:text-brand-text" href={`/projects/${project.slug}/`}>
+      Ver el caso completo →
+    </a>
+  </div>
+</article>

@@ -1,88 +1,52 @@
 ---
+// Home: "spec sheet" layout. Guide: docs/rediseno-home-2026-10.md
 import SiteLayout from "../layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
 import { site } from "../config/site";
-import ProjectCard from "../components/ui/ProjectCard.astro";
+import { services } from "../data/services";
 import Button from "../components/ui/Button.astro";
 import Section from "../components/ui/Section.astro";
-import { sortProjects, sortChangelog, latestReleasesByProject, formatDate, isoDate, releaseTitle, releaseLine } from "../lib/content";
-
+import HeroShowcase from "../components/home/HeroShowcase.astro";
+import ProductPanel from "../components/home/ProductPanel.astro";
+import ServiceList from "../components/home/ServiceList.astro";
+import ProcessTimeline from "../components/home/ProcessTimeline.astro";
+import CaseFeature from "../components/home/CaseFeature.astro";
+import TrustSection from "../components/home/TrustSection.astro";
+import ContactBand from "../components/home/ContactBand.astro";
+import { sortProjects, productRows, statusColors, statusLabels } from "../lib/content";
 
 const projects = sortProjects(await getCollection("projects"));
+const releases = await getCollection("changelog");
+const rows = productRows(projects, releases);
 
-const posts = (await getCollection("blog"))
-  .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
-
-const allReleases = await getCollection("changelog");
-const latestReleases = latestReleasesByProject(allReleases);
-const changelog = sortChangelog(allReleases).slice(0, 4);
-// Most recent release of any product (excludes the website's own entries)
-const heroRelease = sortChangelog(allReleases).find((e) => e.data.project && e.data.project !== "Xyfos Code");
-
-// Icon paths: 24x24 stroke icons.
-// Grid: 3 cards per row on desktop; the ones with examples go first.
-const services = [
-  {
-    title: "Apps de escritorio",
-    text: "Aplicaciones para Windows rápidas, fiables y con los datos en tu equipo.",
-    example: { label: "Cuadra para Windows", href: "/projects/cuadra/#escritorio" },
-    icon: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-    span: "lg:col-span-2",
-  },
-  {
-    title: "Apps móviles",
-    text: "Aplicaciones Android para el día a día: rápidas, sencillas y con los datos en el móvil, publicadas en Google Play.",
-    example: { label: "Cuadra para Android", href: "/projects/cuadra/#android" },
-    icon: '<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/>',
-    span: "lg:col-span-2",
-  },
-  {
-    title: "SaaS y aplicaciones web",
-    text: "Plataformas multiusuario, paneles de gestión y CRMs adaptados a cómo trabaja tu equipo.",
-    example: { label: "QuoteDesk", href: "/projects/quotedesk/" },
-    icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>',
-    span: "lg:col-span-2",
-  },
-  {
-    title: "Automatización e integraciones",
-    text: "Python, Selenium y Google APIs (Calendar, Meet, Drive) para conectar herramientas y eliminar tareas repetitivas.",
-    icon: '<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',
-    span: "lg:col-span-2",
-  },
-  {
-    title: "Datos y analítica",
-    text: "Procesos ETL, web scraping y conectores para Power BI con Pandas y MySQL, para decidir con datos fiables.",
-    icon: '<path d="M3 3v18h18"/><path d="M7 16v-4M12 16V8M17 16v-7"/>',
-    span: "lg:col-span-2",
-  },
-  {
-    title: "Infraestructura cloud",
-    text: "Despliegue y operación en AWS: EC2, Auto Scaling, EFS y SSM, con bases de datos MySQL.",
-    icon: '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/>',
-    span: "lg:col-span-2",
-  },
-];
+const featured = projects.find((p) => p.slug === "cuadra");
+const others = projects.filter((p) => p !== featured);
 
 const steps = [
   {
     title: "Conversación",
     text: "Me cuentas el problema, cómo trabajáis hoy y qué resultado necesitas. Sin tecnicismos.",
+    deliverable: "Un diagnóstico claro y si tiene sentido construir algo.",
   },
   {
     title: "Propuesta",
-    text: "Te envío un alcance claro: qué se construye, en qué fases, con qué tecnología y en qué plazos.",
+    text: "Defino qué se construye, en qué fases, con qué tecnología y en qué plazos.",
+    deliverable: "Alcance por fases, plazos y presupuesto por escrito.",
   },
   {
     title: "Desarrollo iterativo",
     text: "Entregas pequeñas y frecuentes que puedes probar desde el principio y ajustar sobre la marcha.",
+    deliverable: "Versiones que pruebas tú, cada una con su changelog.",
   },
   {
     title: "Entrega y soporte",
-    text: "Puesta en producción, documentación y acompañamiento para que la herramienta siga funcionando.",
+    text: "Puesta en producción y acompañamiento para que la herramienta siga funcionando.",
+    deliverable: "Documentación, despliegue y mantenimiento.",
   },
 ];
+
+// Only sectors stated in the bio or covered by own products — see docs/rediseno-home-2026-10.md
+const sectors = ["eCommerce", "Análisis de mercado", "Marketing basado en datos", "Ventas técnicas B2B", "Finanzas personales"];
 ---
 
 <SiteLayout
@@ -90,270 +54,145 @@ const steps = [
   description="Diseño y desarrollo de software a medida: apps de escritorio y móviles, SaaS, automatizaciones y soluciones de datos que resuelven problemas reales."
   bleed
 >
-  <!-- Hero (direction A) -->
+  <!-- 1 · Hero -->
   <section class="border-b border-line" aria-labelledby="hero-title">
-    <div class="container-site grid gap-12 pb-12 pt-12 md:pt-20 lg:grid-cols-12 lg:items-center lg:gap-10 lg:pb-16">
-      <div class="lg:col-span-6">
-        <p class="flex items-center gap-2 font-mono text-xs font-medium uppercase tracking-[0.14em] text-muted">
-          <span class="h-2 w-2 rounded-full bg-emerald-600" aria-hidden="true"></span>
-          Disponible para nuevos proyectos
-        </p>
+    <div class="container-site pb-12 pt-10 md:pb-16 md:pt-16">
+      <div class="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-10">
+        <div class="lg:col-span-6">
+          <p class="reveal flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs font-medium uppercase tracking-[0.14em] text-muted" style="--i: 0">
+            <span class="h-2 w-2 rounded-full bg-emerald-600" aria-hidden="true"></span>
+            <span class="text-ink">{site.author}</span>
+            <span aria-hidden="true">·</span>
+            <span>Ingeniera de software</span>
+            <span aria-hidden="true">·</span>
+            <span>Disponible para proyectos</span>
+          </p>
 
-        <h1 id="hero-title" class="mt-6 text-[2.5rem] font-semibold leading-[1.05] sm:text-5xl lg:text-[3.5rem]">
-          Software a medida, construido con criterio de ingeniería.
-        </h1>
+          <h1 id="hero-title" class="reveal mt-6 text-[2.5rem] font-semibold leading-[1.05] sm:text-5xl lg:text-[3.5rem]" style="--i: 1">
+            Software a medida para tu empresa, de la idea a&nbsp;producción.
+          </h1>
 
-        <p class="mt-6 max-w-prose text-body text-muted sm:text-lg">
-          Diseño y desarrollo aplicaciones, automatizaciones y sistemas de datos para empresas que
-          necesitan herramientas fiables, documentadas y fáciles de mantener.
-        </p>
+          <p class="reveal mt-6 max-w-prose text-body text-muted sm:text-lg" style="--i: 2">
+            Apps de escritorio y móviles, plataformas web, automatizaciones y datos. Más de 20 años de experiencia,
+            con entregas que puedes probar desde el principio y cada versión documentada.
+          </p>
 
-        <div class="mt-8 flex flex-wrap items-center gap-3">
-          <Button href="#contacto" size="lg" class="w-full sm:w-auto">Hablemos de tu proyecto</Button>
-          <Button href="/projects" variant="secondary" size="lg" class="w-full sm:w-auto">Ver casos</Button>
+          <div class="reveal mt-8 flex flex-wrap items-center gap-3" style="--i: 3">
+            <Button href="#contacto" size="lg" class="w-full sm:w-auto">Cuéntame tu proyecto</Button>
+            <Button href="#casos" variant="secondary" size="lg" class="w-full sm:w-auto">Ver casos reales →</Button>
+          </div>
+          <p class="reveal mt-4 text-sm text-muted" style="--i: 3">Primera conversación sin compromiso.</p>
         </div>
-      </div>
 
-      <figure class="lg:col-span-6">
-        <div class="rounded-lg bg-surface-warm p-3 sm:p-5">
-          <div class="overflow-hidden rounded-md border border-line bg-surface">
-            <div class="flex items-center gap-1.5 border-b border-line px-3 py-2" aria-hidden="true">
-              <span class="h-2 w-2 rounded-full bg-line-strong"></span>
-              <span class="h-2 w-2 rounded-full bg-line-strong"></span>
-              <span class="h-2 w-2 rounded-full bg-line-strong"></span>
-            </div>
-            <img
-              src="/images/cuadra/dashboard_light.png"
-              alt="Dashboard de Cuadra con resumen anual de gastos, ingresos, previsión del mes y presupuestos por categoría"
-              width="1293"
-              height="879"
-              class="block w-full"
-              loading="eager"
-              decoding="async"
-              fetchpriority="high"
+        <figure class="reveal lg:col-span-6" style="--i: 4">
+          <div class="rounded-lg bg-surface-warm p-4 sm:p-6">
+            <HeroShowcase
+              priority
+              desktop={{ src: "/images/cuadra/dashboard_light.png", alt: "Cuadra en Windows: dashboard con resumen anual, previsión del mes y presupuestos", width: 1293, height: 879 }}
+              phone={{ src: "/images/cuadra/android-screen-inicio.webp", alt: "Cuadra en Android: gastos, ingresos y previsión del mes", width: 400, height: 796 }}
             />
           </div>
-        </div>
-        <figcaption class="mt-3 text-sm text-muted">
-          <a class="font-medium text-ink underline decoration-brand underline-offset-4 hover:text-brand-text" href="/projects/cuadra/">Cuadra</a>:
-          finanzas personales para Windows y Android. Proyecto propio, en beta.
-        </figcaption>
-      </figure>
-    </div>
+          <figcaption class="mt-3 text-sm text-muted">
+            <a class="font-medium text-ink underline decoration-brand underline-offset-4 hover:text-brand-text" href="/projects/cuadra/">Cuadra</a>:
+            finanzas personales para Windows y Android. Producto propio.
+          </figcaption>
+        </figure>
+      </div>
 
-    <!-- Proof strip -->
-    <div class="container-site">
-      <dl class="grid border-t border-line sm:grid-cols-3 sm:divide-x sm:divide-line">
-        <div class="py-5 sm:pr-6">
-          <dt class="font-mono text-xs uppercase tracking-[0.14em] text-muted">Experiencia</dt>
-          <dd class="mt-1 font-display text-2xl font-semibold tabular-nums">20+ años</dd>
-        </div>
-        <div class="border-t border-line py-5 sm:border-t-0 sm:px-6">
-          <dt class="font-mono text-xs uppercase tracking-[0.14em] text-muted">Áreas técnicas</dt>
-          <dd class="mt-1 text-sm text-muted">
-            <span class="block font-display text-2xl font-semibold text-ink tabular-nums">{services.length}</span>
-            Escritorio, móvil, SaaS, automatización, datos y cloud
-          </dd>
-        </div>
-        {heroRelease && (
-          <div class="border-t border-line py-5 sm:border-t-0 sm:pl-6">
-            <dt class="font-mono text-xs uppercase tracking-[0.14em] text-muted">Última versión publicada</dt>
-            <dd class="mt-1 text-sm text-muted">
-              <a class="block font-mono text-2xl font-medium text-ink hover:text-brand-text" href={`/changelog/${heroRelease.slug}/`}>
-                {heroRelease.data.version}
-              </a>
-              {releaseLine(heroRelease)} · <time datetime={isoDate(heroRelease.data.date)}>{formatDate(heroRelease.data.date)}</time> ·
-              <a class="font-medium text-brand-text underline underline-offset-4" href="/changelog">changelog</a>
-            </dd>
-          </div>
-        )}
-      </dl>
+      <div class="reveal mt-12 md:mt-16" style="--i: 5">
+        <ProductPanel rows={rows} />
+      </div>
     </div>
   </section>
 
-  <!-- Services -->
+  <!-- 2 · §01 Services -->
   <Section
     id="servicios"
+    number={1}
     eyebrow="Servicios"
     title="Qué puedo construir para ti"
     intro="Seis áreas técnicas en las que trabajo a diario. Cada proyecto combina las que haga falta."
   >
-    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
-      {services.map((s, i) => (
-        <li class={`flex flex-col rounded-lg border border-line bg-surface p-6 ${s.span}`}>
-          <div class="flex items-start justify-between">
-            <svg class="text-ink" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={s.icon} />
-            <span class="font-mono text-xs text-muted tabular-nums" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
-          </div>
-          <h3 class="mt-6 text-lg font-semibold">{s.title}</h3>
-          <p class="mt-2 flex-1 text-[0.9375rem] leading-relaxed text-muted">{s.text}</p>
-          {s.example && (
-            <p class="mt-5 border-t border-line pt-4 text-sm text-muted">
-              Ejemplo:
-              <a class="font-medium text-ink underline decoration-brand underline-offset-4 hover:text-brand-text" href={s.example.href}>{s.example.label}</a>
-            </p>
-          )}
-        </li>
-      ))}
-    </ul>
+    <ServiceList services={services} />
+    <p class="mt-8 text-[0.9375rem] text-muted">
+      ¿No encaja en ninguna?
+      <a class="font-medium text-ink underline decoration-brand underline-offset-4 hover:text-brand-text" href="#contacto">Cuéntamelo igualmente&nbsp;→</a>
+    </p>
   </Section>
 
-  <!-- Projects -->
-  <Section id="proyectos" eyebrow="Casos" title="Lo que ya he construido" class="border-t border-line">
+  <!-- 3 · §02 Process (warm block) -->
+  <Section id="como-trabajo" number={2} tone="warm" eyebrow="Método" title="Del problema a la herramienta, sin sorpresas">
+    <div class="pt-6 lg:pt-4">
+      <ProcessTimeline steps={steps} />
+    </div>
+  </Section>
+
+  <!-- 4 · §03 Cases & sectors -->
+  <Section id="casos" number={3} eyebrow="Casos" title="Lo que ya he construido">
     <a slot="actions" class="text-sm font-medium text-ink underline decoration-line-strong underline-offset-4 hover:decoration-brand" href="/projects">
-      Ver todos los proyectos →
+      Todos los proyectos →
     </a>
 
-    <div class="grid gap-6 md:grid-cols-2">
-      {projects.map((p) => (
-        <ProjectCard project={p} releases={latestReleases.get(p.data.title)} />
+    {featured && (
+      <CaseFeature
+        project={featured}
+        releases={releases}
+        desktop={{ src: "/images/cuadra/movimientos.png", alt: "Cuadra en Windows: lista de movimientos con categorías y filtros", width: 1316, height: 689 }}
+        phone={{ src: "/images/cuadra/android-screen-graficos.webp", alt: "Cuadra en Android: distribución de gastos por categoría", width: 400, height: 796 }}
+        highlight={{ label: "Datos", value: "100 %", note: "en el dispositivo" }}
+      />
+    )}
+
+    <div class="mt-6 grid gap-6 md:grid-cols-2">
+      {others.map((p) => (
+        <a
+          href={`/projects/${p.slug}/`}
+          class="group flex flex-col rounded-lg border border-line bg-surface p-6 transition-colors duration-150 hover:border-ink/30 sm:p-8"
+        >
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              {p.data.platform && <p class="font-mono text-xs uppercase tracking-[0.1em] text-muted">{p.data.platform}</p>}
+              <h3 class="mt-2 text-2xl font-semibold decoration-brand underline-offset-4 group-hover:underline">{p.data.title}</h3>
+            </div>
+            <span class={`shrink-0 rounded px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${statusColors[p.data.status]}`}>{statusLabels[p.data.status]}</span>
+          </div>
+          {p.data.problem && <p class="mt-4 text-[0.9375rem] leading-relaxed text-muted">{p.data.problem}</p>}
+          <p class="mt-3 flex-1 text-[0.9375rem] leading-relaxed text-ink">{p.data.description}</p>
+          <div class="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
+            <p class="font-mono text-xs text-muted">{p.data.stack.join(" · ")}</p>
+            <span class="text-sm font-medium text-ink">Ver proyecto <span aria-hidden="true" class="inline-block transition-transform duration-150 group-hover:translate-x-0.5">→</span></span>
+          </div>
+        </a>
       ))}
-    </div>
-  </Section>
 
-  <!-- Process (warm block from direction C) -->
-  <Section id="como-trabajo" tone="warm" eyebrow="Cómo trabajo" title="Del problema a la herramienta, paso a paso">
-    <ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {steps.map((step, i) => (
-        <li class="flex flex-col rounded-lg border border-line bg-surface p-6">
-          <span class="font-mono text-xs font-medium uppercase tracking-[0.14em] text-brand-text">
-            Paso {String(i + 1).padStart(2, "0")}
-          </span>
-          <h3 class="mt-4 text-lg font-semibold">{step.title}</h3>
-          <p class="mt-2 text-[0.9375rem] leading-relaxed text-muted">{step.text}</p>
-        </li>
-      ))}
-    </ol>
-  </Section>
-
-  <!-- Activity -->
-  <Section
-    id="actividad"
-    eyebrow="Desarrollo en abierto"
-    title="Cada versión, documentada"
-    intro="Así trabajo también en mis propios proyectos: cada versión y cada decisión quedan publicadas en el changelog y el roadmap."
-  >
-    <div class="grid gap-6 lg:grid-cols-12">
-      <div class="rounded-lg border border-line bg-surface lg:col-span-7">
-        <div class="flex items-baseline justify-between gap-3 border-b border-line px-6 py-4">
-          <h3 class="text-base font-semibold">Últimos cambios</h3>
-          <a class="text-sm font-medium text-ink underline decoration-line-strong underline-offset-4 hover:decoration-brand" href="/changelog">Changelog completo →</a>
-        </div>
-        <ul class="divide-y divide-line">
-          {changelog.map((e) => (
-            <li>
-              <a class="group grid grid-cols-[5.5rem_1fr] gap-x-4 gap-y-1 px-6 py-4 hover:bg-bg sm:grid-cols-[6.5rem_4.5rem_1fr]" href={`/changelog/${e.slug}/`}>
-                <time class="font-mono text-xs text-muted sm:pt-0.5" datetime={isoDate(e.data.date)}>{formatDate(e.data.date)}</time>
-                <span class="font-mono text-sm font-medium text-ink">{e.data.version}</span>
-                <span class="col-span-2 text-[0.9375rem] text-ink group-hover:underline group-hover:decoration-brand group-hover:underline-offset-4 sm:col-span-1">
-                  {e.data.project && <span class="text-muted">{releaseLine(e)} · </span>}
-                  {releaseTitle(e)}
-                </span>
-              </a>
-            </li>
-          ))}
-          {changelog.length === 0 && <li class="px-6 py-4 text-sm text-muted">Sin versiones publicadas aún.</li>}
-        </ul>
-      </div>
-
-      <div class="rounded-lg border border-line bg-surface lg:col-span-5">
-        <div class="flex items-baseline justify-between gap-3 border-b border-line px-6 py-4">
-          <h3 class="text-base font-semibold">Blog</h3>
-          <a class="text-sm font-medium text-ink underline decoration-line-strong underline-offset-4 hover:decoration-brand" href="/blog">Todos los posts →</a>
-        </div>
-        <ul class="divide-y divide-line">
-          {posts.map((p) => (
-            <li>
-              <a class="group block px-6 py-4 hover:bg-bg" href={`/blog/${p.slug}/`}>
-                <time class="font-mono text-xs text-muted" datetime={isoDate(p.data.date)}>{formatDate(p.data.date)}</time>
-                <span class="mt-1 block font-medium text-ink group-hover:underline group-hover:decoration-brand group-hover:underline-offset-4">{p.data.title}</span>
-                {p.data.description && <span class="mt-1 block text-sm text-muted">{p.data.description}</span>}
-              </a>
-            </li>
-          ))}
-          {posts.length === 0 && <li class="px-6 py-4 text-sm text-muted">Sin publicaciones aún.</li>}
-        </ul>
-      </div>
-    </div>
-  </Section>
-
-  <!-- About (warm block + personal presence from direction C) -->
-  <section id="sobre-mi" class="scroll-mt-6 bg-surface-warm py-section-sm md:py-section" aria-labelledby="sobre-mi-title">
-    <div class="container-site grid gap-10 lg:grid-cols-12 lg:gap-12">
-      <div class="lg:col-span-7">
-        <p class="eyebrow">Sobre mí</p>
-        <h2 id="sobre-mi-title" class="mt-3 text-3xl font-semibold sm:text-4xl">
-          Más de 20 años resolviendo problemas con tecnología
-        </h2>
-        <div class="mt-6 max-w-prose space-y-4 text-body">
-          <p>
-            Soy {site.author}, desarrolladora especializada en backend, integración y análisis de datos.
-            He trabajado en proyectos de eCommerce, análisis de mercado y marketing digital basado en datos.
-          </p>
-          <p>
-            Trabajo sobre todo con Python, PHP y JavaScript: automatizaciones, integraciones de APIs,
-            web scraping, procesos ETL y conectores de datos para herramientas como Power BI.
-          </p>
-          <p>
-            Me gusta resolver problemas complejos con soluciones robustas, eficientes y bien documentadas.
+      <a
+        href="#contacto"
+        class="group flex flex-col justify-between rounded-lg border border-dashed border-line-strong p-6 transition-colors duration-150 hover:border-ink/40 hover:bg-surface sm:p-8"
+      >
+        <div>
+          <p class="font-mono text-xs uppercase tracking-[0.1em] text-muted">Siguiente caso</p>
+          <h3 class="mt-2 text-2xl font-semibold">¿Tu proyecto?</h3>
+          <p class="mt-4 text-[0.9375rem] leading-relaxed text-muted">
+            Una herramienta interna, una app para tus clientes o un proceso que hoy hacéis a mano.
           </p>
         </div>
-      </div>
-
-      <aside class="self-start rounded-lg border border-line bg-surface p-6 lg:col-span-5" aria-label={`Ficha de ${site.author}`}>
-        <div class="flex items-center gap-4">
-          {site.photo ? (
-            <img src={site.photo} alt={site.author} width="80" height="80" class="h-20 w-20 rounded-full object-cover" loading="lazy" />
-          ) : (
-            <span class="inline-flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-brand font-display text-2xl font-semibold text-ink" aria-hidden="true">
-              PC
-            </span>
-          )}
-          <div>
-            <p class="font-display text-lg font-semibold">{site.author}</p>
-            <p class="text-sm text-muted">Backend, integración y datos</p>
-          </div>
-        </div>
-
-        <dl class="mt-6 grid grid-cols-2 gap-4 border-t border-line pt-5">
-          <div>
-            <dt class="font-mono text-xs uppercase tracking-[0.14em] text-muted">Experiencia</dt>
-            <dd class="mt-1 font-display text-2xl font-semibold tabular-nums">20+ años</dd>
-          </div>
-          <div>
-            <dt class="font-mono text-xs uppercase tracking-[0.14em] text-muted">Proyectos propios</dt>
-            <dd class="mt-1 font-display text-2xl font-semibold tabular-nums">{projects.length}</dd>
-          </div>
-        </dl>
-
-        <ul class="mt-5 flex flex-wrap gap-1.5" aria-label="Tecnologías principales">
-          {["Python", "PHP", "JavaScript", "MySQL", "Pandas", "Selenium", "Power BI", "AWS"].map((tech) => (
-            <li class="rounded border border-line px-2 py-0.5 font-mono text-xs text-muted">{tech}</li>
-          ))}
-        </ul>
-
-        <div class="mt-6 flex flex-wrap gap-3">
-          <Button href={site.linkedin} variant="secondary" external>LinkedIn ↗</Button>
-          <Button href={site.github} variant="secondary" external>GitHub ↗</Button>
-        </div>
-      </aside>
+        <span class="mt-6 text-sm font-medium text-ink underline decoration-brand underline-offset-4 group-hover:text-brand-text">Cuéntamelo →</span>
+      </a>
     </div>
-  </section>
 
-  <!-- Contact (dark band, continues into the footer) -->
-  <Section
-    id="contacto"
-    tone="dark"
-    eyebrow="Contacto"
-    title="¿Tienes un problema que el software podría resolver?"
-    intro="Cuéntamelo por email y te digo cómo lo abordaría. Sin compromiso."
-  >
-    <div class="flex flex-wrap items-center gap-3">
-      <Button href={`mailto:${site.email}?subject=${encodeURIComponent("Proyecto desde xyfos.com")}`} size="lg" class="w-full sm:w-auto">
-        Escríbeme a {site.email}
-      </Button>
-      <Button href={site.linkedin} variant="inverse" size="lg" external>LinkedIn ↗</Button>
-      <Button href={site.github} variant="inverse" size="lg" external>GitHub ↗</Button>
+    <div class="mt-10 flex flex-col gap-3 border-t border-line pt-6 sm:flex-row sm:items-baseline sm:gap-6">
+      <h3 class="shrink-0 font-mono text-xs font-medium uppercase tracking-[0.14em] text-muted">Sectores con experiencia</h3>
+      <ul class="flex flex-wrap gap-2">
+        {sectors.map((s) => (
+          <li class="rounded border border-line bg-surface px-2.5 py-1 text-sm text-ink">{s}</li>
+        ))}
+      </ul>
     </div>
   </Section>
+
+  <!-- 5 · §04 Trust (warm block + personal presence) -->
+  <TrustSection projects={projects} releases={releases} />
+
+  <!-- 6 · §05 Contact (dark band, continues into the footer) -->
+  <ContactBand />
 </SiteLayout>

@@ -1,0 +1,114 @@
+---
+/**
+ * §04 Trust (warm block, direction C element 1): the person first, then verifiable
+ * figures and the latest releases. Testimonials render only when real ones exist.
+ */
+import type { CollectionEntry } from "astro:content";
+import Section from "../ui/Section.astro";
+import Button from "../ui/Button.astro";
+import { site } from "../../config/site";
+import { testimonials } from "../../data/testimonials";
+import { sortChangelog, releaseTitle, releaseLine, formatDate, isoDate } from "../../lib/content";
+
+interface Props {
+  projects: CollectionEntry<"projects">[];
+  releases: CollectionEntry<"changelog">[];
+}
+
+const { projects, releases } = Astro.props;
+// Product releases only (the website's own entries are not a proof of work)
+const productReleases = sortChangelog(releases).filter((e) => e.data.project && e.data.project !== site.name);
+const stats = [
+  { value: "20+", label: "años de experiencia" },
+  { value: String(productReleases.length), label: "versiones publicadas" },
+  { value: String(projects.length), label: "productos propios" },
+];
+---
+<Section id="sobre-mi" number={4} tone="warm" eyebrow="Confianza" title="Quién está detrás">
+  <div class="grid gap-10 lg:grid-cols-12 lg:gap-12">
+    <div class="lg:col-span-6">
+      <div class="flex items-center gap-5">
+        {site.photo ? (
+          <img src={site.photo} alt={site.author} width="112" height="112" class="h-24 w-24 shrink-0 rounded-full object-cover sm:h-28 sm:w-28" loading="lazy" decoding="async" />
+        ) : (
+          <span class="inline-flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-brand font-display text-3xl font-semibold text-ink sm:h-28 sm:w-28" aria-hidden="true">PC</span>
+        )}
+        <div>
+          <p class="font-display text-2xl font-semibold">{site.author}</p>
+          <p class="mt-1 text-muted">Ingeniera de software · Backend, integración y datos</p>
+        </div>
+      </div>
+
+      <div class="mt-8 max-w-prose space-y-4 text-body">
+        <p>
+          Llevo más de 20 años desarrollando software, especializada en backend, integración y análisis de datos.
+          He trabajado en proyectos de eCommerce, análisis de mercado y marketing digital basado en datos.
+        </p>
+        <p>
+          Trabajo sobre todo con Python, PHP y JavaScript: automatizaciones, integraciones de APIs,
+          web scraping, procesos ETL y conectores de datos para herramientas como Power BI.
+        </p>
+        <p>
+          Hablarás conmigo de principio a fin: quien escucha el problema es quien diseña y programa la solución.
+        </p>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <Button href={site.linkedin} variant="secondary" external>LinkedIn ↗</Button>
+        <Button href={site.github} variant="secondary" external>GitHub ↗</Button>
+      </div>
+    </div>
+
+    <div class="space-y-6 lg:col-span-6">
+      <dl class="grid grid-cols-3 rounded-lg border border-line bg-surface">
+        {stats.map((s, i) => (
+          <div class={`flex flex-col-reverse justify-end px-4 py-5 sm:px-6 ${i > 0 ? "border-l border-line" : ""}`}>
+            <dt class="mt-1 text-sm text-muted">{s.label}</dt>
+            <dd class="font-display text-3xl font-semibold tabular-nums sm:text-4xl">{s.value}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <div class="rounded-lg border border-line bg-surface">
+        <div class="flex items-baseline justify-between gap-3 border-b border-line px-5 py-3 sm:px-6">
+          <h3 class="font-mono text-xs font-medium uppercase tracking-[0.14em] text-ink">Desarrollo en abierto</h3>
+          <a class="text-sm font-medium text-ink underline decoration-line-strong underline-offset-4 hover:decoration-brand" href="/changelog">Changelog →</a>
+        </div>
+        <ul class="divide-y divide-line">
+          {productReleases.slice(0, 4).map((e) => (
+            <li>
+              <a class="group grid grid-cols-[4rem_1fr] gap-x-4 px-5 py-3 hover:bg-bg sm:px-6" href={`/changelog/${e.slug}/`}>
+                <span class="font-mono text-sm font-medium text-ink">{e.data.version}</span>
+                <span class="min-w-0 text-sm">
+                  <span class="block text-ink group-hover:underline group-hover:decoration-brand group-hover:underline-offset-4">{releaseTitle(e)}</span>
+                  <span class="mt-0.5 block font-mono text-xs text-muted">
+                    {releaseLine(e)} · <time class="whitespace-nowrap" datetime={isoDate(e.data.date)}>{formatDate(e.data.date)}</time>
+                  </span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {testimonials.length > 0 && (
+    <ul class="mt-12 grid gap-6 md:grid-cols-2">
+      {testimonials.map((t) => (
+        <li>
+          <figure class="h-full rounded-lg border border-line bg-surface p-6">
+            <blockquote class="text-body">«{t.quote}»</blockquote>
+            <figcaption class="mt-5 flex items-center gap-3 text-sm">
+              {t.photo && <img src={t.photo} alt="" width="40" height="40" class="h-10 w-10 rounded-full object-cover" loading="lazy" />}
+              <span>
+                <span class="block font-semibold">{t.name}</span>
+                <span class="text-muted">{t.role}{t.company && `, ${t.company}`}</span>
+              </span>
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  )}
+</Section>

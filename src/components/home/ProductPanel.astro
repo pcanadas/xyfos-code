@@ -1,0 +1,49 @@
+---
+/**
+ * "Products right now": every product and edition with its latest release.
+ * Built from the content collections, so it updates itself with each changelog entry.
+ */
+import type { ProductRow } from "../../lib/content";
+import { editionColors, formatDate, isoDate } from "../../lib/content";
+
+interface Props {
+  rows: ProductRow[];
+}
+
+const { rows } = Astro.props;
+const cols = "md:grid-cols-[1fr_1.3fr_5.5rem_8.5rem_7.5rem]";
+---
+<div class="rounded-lg border border-line bg-surface">
+  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-line px-5 py-3 sm:px-6">
+    <h2 class="font-mono text-xs font-medium uppercase tracking-[0.14em] text-ink">Productos propios, ahora mismo</h2>
+    <a class="font-mono text-xs text-muted underline decoration-line-strong underline-offset-4 hover:text-ink hover:decoration-brand" href="/changelog">
+      Datos del changelog →
+    </a>
+  </div>
+
+  <div class={`hidden gap-4 border-b border-line px-6 py-2 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted md:grid ${cols}`} aria-hidden="true">
+    <span>Producto</span><span>Plataforma</span><span>Versión</span><span>Estado</span><span>Publicada</span>
+  </div>
+
+  <ul class="divide-y divide-line">
+    {rows.map((r) => (
+      <li class={`grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 px-5 py-3 text-sm sm:px-6 ${cols}`}>
+        <a class="font-semibold text-ink underline decoration-transparent underline-offset-4 hover:decoration-brand" href={`/projects/${r.slug}/`}>
+          {r.product}
+        </a>
+        <span class="order-3 col-span-2 text-muted md:order-none md:col-span-1">{r.platform}</span>
+        {r.release ? (
+          <a class="order-2 font-mono font-medium text-ink hover:text-brand-text md:order-none" href={`/changelog/${r.release.slug}/`}>
+            {r.release.data.version}
+          </a>
+        ) : <span class="order-2 font-mono text-muted md:order-none">—</span>}
+        <span class="order-4 md:order-none">
+          <span class={`inline-block rounded px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${editionColors[r.tone]}`}>{r.status}</span>
+        </span>
+        <span class="order-5 text-right font-mono text-xs text-muted md:order-none md:text-left">
+          {r.release && <time datetime={isoDate(r.release.data.date)}>{formatDate(r.release.data.date)}</time>}
+        </span>
+      </li>
+    ))}
+  </ul>
+</div>

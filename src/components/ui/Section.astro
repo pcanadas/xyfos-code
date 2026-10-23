@@ -9,13 +9,16 @@
 interface Props {
   id?: string;
   eyebrow?: string;
+  /** Section number shown before the eyebrow as "§01" (home "spec sheet" layout). */
+  number?: number;
   title?: string;
   intro?: string;
   tone?: "default" | "warm" | "dark";
   class?: string;
 }
 
-const { id, eyebrow, title, intro, tone = "default", class: className = "" } = Astro.props;
+const { id, eyebrow, number, title, intro, tone = "default", class: className = "" } = Astro.props;
+const sectionNumber = number ? `§${String(number).padStart(2, "0")}` : undefined;
 const headingId = id ? `${id}-title` : undefined;
 
 const tones = {
@@ -34,7 +37,12 @@ const hasActions = Astro.slots.has("actions");
     {(title || eyebrow) && (
       <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
         <div class="max-w-2xl">
-          {eyebrow && <p class={tone === "dark" ? "eyebrow text-brand" : "eyebrow"}>{eyebrow}</p>}
+          {eyebrow && (
+            <p class={tone === "dark" ? "eyebrow text-brand" : "eyebrow"}>
+              {sectionNumber && <span class={tone === "dark" ? "text-white/70" : "text-muted"}>{sectionNumber} · </span>}
+              {eyebrow}
+            </p>
+          )}
           {title && (
             <h2 id={headingId} class={`mt-3 text-3xl font-semibold sm:text-4xl ${tone === "dark" ? "text-white" : ""}`}>
               {title}

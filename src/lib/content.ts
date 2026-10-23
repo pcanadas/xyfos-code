@@ -73,6 +73,44 @@ export function releaseLine(entry: CollectionEntry<"changelog">) {
   return platform ? `${project} · ${platform}` : project;
 }
 
+export interface ProductRow {
+  product: string;
+  slug: string;
+  platform?: string;
+  status: string;
+  tone: "live" | "testing";
+  release?: CollectionEntry<"changelog">;
+}
+
+/** One row per product and edition, with its latest release: the home "products right now" panel. */
+export function productRows(
+  projects: CollectionEntry<"projects">[],
+  releases: CollectionEntry<"changelog">[]
+): ProductRow[] {
+  const latest = latestReleasesByProject(releases);
+  return sortProjects(projects).flatMap((p) => {
+    const own = latest.get(p.data.title) ?? [];
+    if (p.data.editions.length) {
+      return p.data.editions.map((ed) => ({
+        product: p.data.title,
+        slug: p.slug,
+        platform: `${ed.name} · ${ed.platform}`,
+        status: ed.availability,
+        tone: ed.tone,
+        release: own.find((r) => r.data.platform === ed.name),
+      }));
+    }
+    return [{
+      product: p.data.title,
+      slug: p.slug,
+      platform: p.data.platform,
+      status: statusLabels[p.data.status],
+      tone: p.data.status === "live" ? ("live" as const) : ("testing" as const),
+      release: own[0],
+    }];
+  });
+}
+
 /** Newest release per project and per edition (one entry for single-edition projects). */
 export function latestReleasesByProject(entries: CollectionEntry<"changelog">[]) {
   const latest = new Map<string, CollectionEntry<"changelog">[]>();

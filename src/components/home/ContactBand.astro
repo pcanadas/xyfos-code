@@ -1,0 +1,75 @@
+---
+/** §05 Final CTA on the ink band, which continues into the footer. */
+import Section from "../ui/Section.astro";
+import Button from "../ui/Button.astro";
+import { site } from "../../config/site";
+
+const next = [
+  { title: "Me escribes", text: "Con el problema tal como lo veas. No hace falta un documento técnico." },
+  { title: "Te respondo yo", text: "Personalmente, con preguntas concretas o una primera idea de cómo abordarlo." },
+  { title: "Hablamos", text: "Una conversación para entender el contexto y ver si encaja. Sin compromiso." },
+];
+const mailto = `mailto:${site.email}?subject=${encodeURIComponent("Proyecto desde xyfos.com")}`;
+---
+<Section id="contacto" number={5} tone="dark" eyebrow="Contacto">
+  <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+    <div class="lg:col-span-7">
+      <h2 id="contacto-title" class="text-4xl font-semibold text-white sm:text-5xl">Cuéntame qué necesitas resolver.</h2>
+      <p class="mt-5 max-w-prose text-body text-white/75">
+        Un problema, una idea o una herramienta que se te ha quedado pequeña: escríbeme y te digo cómo lo abordaría.
+      </p>
+
+      <div class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
+        <a class="break-all font-mono text-xl text-white underline decoration-brand underline-offset-[6px] hover:text-brand sm:text-2xl" href={mailto}>{site.email}</a>
+        <button
+          type="button"
+          class="hidden min-h-11 items-center rounded-md border border-white/25 px-3 font-mono text-xs uppercase tracking-[0.14em] text-white/80 hover:border-white/60 hover:text-white focus-visible:ring-offset-ink"
+          data-copy-email={site.email}
+        >
+          Copiar
+        </button>
+        <span class="font-mono text-xs text-brand" role="status" aria-live="polite" data-copy-status></span>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <Button href={mailto} size="lg" class="w-full sm:w-auto">Escríbeme</Button>
+        <Button href={site.linkedin} variant="inverse" size="lg" external>LinkedIn ↗</Button>
+        <Button href={site.github} variant="inverse" size="lg" external>GitHub ↗</Button>
+      </div>
+    </div>
+
+    <div class="lg:col-span-5">
+      <h3 class="font-mono text-xs font-medium uppercase tracking-[0.14em] text-white/70">Qué pasa después</h3>
+      <ol class="mt-5 divide-y divide-white/10 border-y border-white/10">
+        {next.map((n, i) => (
+          <li class="grid grid-cols-[2.5rem_1fr] py-5">
+            <span class="font-mono text-sm text-brand" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+            <span>
+              <span class="block font-semibold text-white">{n.title}</span>
+              <span class="mt-1 block text-[0.9375rem] text-white/75">{n.text}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</Section>
+
+<script>
+  // Progressive enhancement: the button only appears where the Clipboard API exists
+  for (const button of document.querySelectorAll<HTMLButtonElement>("[data-copy-email]")) {
+    if (!navigator.clipboard) continue;
+    const status = button.parentElement?.querySelector<HTMLElement>("[data-copy-status]");
+    button.classList.remove("hidden");
+    button.classList.add("inline-flex");
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copyEmail ?? "");
+        if (status) status.textContent = "Copiado";
+      } catch {
+        if (status) status.textContent = "No se ha podido copiar";
+      }
+      setTimeout(() => { if (status) status.textContent = ""; }, 2500);
+    });
+  }
+</script>

@@ -1,12 +1,13 @@
 ---
 import { nav, site } from "../../config/site";
+import { services } from "../../data/services";
 
 const link = "rounded-sm text-white/70 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-ink";
 const heading = "font-mono text-xs font-medium uppercase tracking-[0.14em] text-white/70";
 ---
 <footer class="border-t border-white/10 bg-ink text-white">
-  <div class="container-site grid gap-10 py-14 text-sm sm:grid-cols-2 md:grid-cols-12">
-    <div class="md:col-span-6">
+  <div class="container-site grid gap-10 py-14 text-sm sm:grid-cols-2 lg:grid-cols-12">
+    <div class="sm:col-span-2 lg:col-span-4">
       <!-- Mono logo turned white: the colour lockup's brown text doesn't read on ink -->
       <img src="/brand/logo-lockup-mono.svg" alt="Xyfos Code" width="221" height="28" class="h-6 w-auto invert" loading="lazy" />
       <p class="mt-4 max-w-xs text-white/70">
@@ -14,7 +15,16 @@ const heading = "font-mono text-xs font-medium uppercase tracking-[0.14em] text-
       </p>
     </div>
 
-    <nav class="md:col-span-3" aria-label="Sitio">
+    <nav class="lg:col-span-3" aria-label="Servicios">
+      <h2 class={heading}>Servicios</h2>
+      <ul class="mt-4 space-y-2">
+        {services.map((s) => (
+          <li><a class={link} href="/#servicios">{s.title}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <nav class="lg:col-span-2" aria-label="Sitio">
       <h2 class={heading}>Sitio</h2>
       <ul class="mt-4 space-y-2">
         {nav.map((item) => (
@@ -23,7 +33,7 @@ const heading = "font-mono text-xs font-medium uppercase tracking-[0.14em] text-
       </ul>
     </nav>
 
-    <div class="md:col-span-3">
+    <div class="lg:col-span-3">
       <h2 class={heading}>Contacto</h2>
       <ul class="mt-4 space-y-2">
         <li><a class={link} href={`mailto:${site.email}`}>{site.email}</a></li>
@@ -35,8 +45,14 @@ const heading = "font-mono text-xs font-medium uppercase tracking-[0.14em] text-
   </div>
 
   <div class="border-t border-white/10">
-    <p class="container-site py-5 font-mono text-xs text-white/70">
-      © {new Date().getFullYear()} {site.author} · {site.name}
-    </p>
+    <div class="container-site flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-5 font-mono text-xs text-white/70">
+      <p>© {new Date().getFullYear()} {site.author} · {site.name}</p>
+      <nav aria-label="Legal">
+        <ul class="flex flex-wrap gap-x-5 gap-y-2">
+          <li><a class={link} href="/cuadra/privacidad/">Privacidad de Cuadra</a></li>
+          <li><a class={link} href="/cuadra/eliminar-datos/">Eliminar datos de Cuadra</a></li>
+        </ul>
+      </nav>
+    </div>
   </div>
 </footer>
