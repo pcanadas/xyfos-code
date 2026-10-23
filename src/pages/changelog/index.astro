@@ -25,7 +25,10 @@ const entries = sortChangelog(await getCollection("changelog"));
           <a class="group grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 px-6 py-4 hover:bg-bg md:grid-cols-[8rem_5rem_8rem_1fr]" href={`/changelog/${e.slug}/`}>
             <time class="font-mono text-xs text-muted md:pt-0.5" datetime={isoDate(e.data.date)}>{formatDate(e.data.date)}</time>
             <span class="font-mono text-sm font-medium">{e.data.version}</span>
-            <span class="col-span-2 text-sm text-muted md:col-span-1">{e.data.project ?? "—"}</span>
+            <span class="col-span-2 text-sm text-muted md:col-span-1">
+              {e.data.project ?? "—"}
+              {e.data.platform && <span class="ml-1 rounded border border-line px-1.5 py-px font-mono text-xs md:ml-0 md:mt-1 md:block md:w-fit">{e.data.platform}</span>}
+            </span>
             <span class="col-span-2 text-[0.9375rem] group-hover:underline group-hover:decoration-brand group-hover:underline-offset-4 md:col-span-1">
               {releaseTitle(e)}
             </span>

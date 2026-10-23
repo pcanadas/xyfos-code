@@ -1,11 +1,12 @@
 ---
-title: "Cuadra — versión Android en prueba cerrada"
+title: "Cuadra — primera versión para Android, en prueba cerrada"
 date: 2026-10-23
 version: "v1.1.2"
 project: "Cuadra"
+platform: "Android"
 ---
 
-Primera versión de Cuadra para Android en **prueba cerrada en Google Play**. Las versiones de Android se numeran aparte de las de escritorio.
+Primera versión de Cuadra para Android en **prueba cerrada en Google Play**. La app móvil tiene su propia numeración, independiente de la de escritorio.
 
 ### Añadido
 

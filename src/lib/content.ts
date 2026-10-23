@@ -62,10 +62,26 @@ export function sortChangelog(entries: CollectionEntry<"changelog">[]) {
   );
 }
 
-export function latestReleaseByProject(entries: CollectionEntry<"changelog">[]) {
-  const latest = new Map<string, CollectionEntry<"changelog">>();
+export const editionColors: Record<string, string> = {
+  live:    "bg-emerald-100 text-emerald-800 ring-emerald-200",
+  testing: "bg-amber-100 text-amber-800 ring-amber-200",
+};
+
+/** Release line of an entry: "Cuadra · Android", or just the project. */
+export function releaseLine(entry: CollectionEntry<"changelog">) {
+  const { project, platform } = entry.data;
+  return platform ? `${project} · ${platform}` : project;
+}
+
+/** Newest release per project and per edition (one entry for single-edition projects). */
+export function latestReleasesByProject(entries: CollectionEntry<"changelog">[]) {
+  const latest = new Map<string, CollectionEntry<"changelog">[]>();
   for (const e of sortChangelog(entries)) {
-    if (e.data.project && !latest.has(e.data.project)) latest.set(e.data.project, e);
+    const { project, platform } = e.data;
+    if (!project) continue;
+    const list = latest.get(project) ?? [];
+    if (!list.some((r) => r.data.platform === platform)) list.push(e);
+    latest.set(project, list);
   }
   return latest;
 }

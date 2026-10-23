@@ -5,7 +5,7 @@ import { site } from "../config/site";
 import ProjectCard from "../components/ui/ProjectCard.astro";
 import Button from "../components/ui/Button.astro";
 import Section from "../components/ui/Section.astro";
-import { sortProjects, sortChangelog, latestReleaseByProject, formatDate, isoDate, releaseTitle } from "../lib/content";
+import { sortProjects, sortChangelog, latestReleasesByProject, formatDate, isoDate, releaseTitle, releaseLine } from "../lib/content";
 
 
 const projects = sortProjects(await getCollection("projects"));
@@ -16,7 +16,7 @@ const posts = (await getCollection("blog"))
   .slice(0, 3);
 
 const allReleases = await getCollection("changelog");
-const latestRelease = latestReleaseByProject(allReleases);
+const latestReleases = latestReleasesByProject(allReleases);
 const changelog = sortChangelog(allReleases).slice(0, 4);
 // Most recent release of any product (excludes the website's own entries)
 const heroRelease = sortChangelog(allReleases).find((e) => e.data.project && e.data.project !== "Xyfos Code");
@@ -155,7 +155,7 @@ const steps = [
               <a class="block font-mono text-2xl font-medium text-ink hover:text-brand-text" href={`/changelog/${heroRelease.slug}/`}>
                 {heroRelease.data.version}
               </a>
-              {heroRelease.data.project} · <time datetime={isoDate(heroRelease.data.date)}>{formatDate(heroRelease.data.date)}</time> ·
+              {releaseLine(heroRelease)} · <time datetime={isoDate(heroRelease.data.date)}>{formatDate(heroRelease.data.date)}</time> ·
               <a class="font-medium text-brand-text underline underline-offset-4" href="/changelog">changelog</a>
             </dd>
           </div>
@@ -199,7 +199,7 @@ const steps = [
 
     <div class="grid gap-6 md:grid-cols-2">
       {projects.map((p) => (
-        <ProjectCard project={p} release={latestRelease.get(p.data.title)} />
+        <ProjectCard project={p} releases={latestReleases.get(p.data.title)} />
       ))}
     </div>
   </Section>
@@ -239,7 +239,7 @@ const steps = [
                 <time class="font-mono text-xs text-muted sm:pt-0.5" datetime={isoDate(e.data.date)}>{formatDate(e.data.date)}</time>
                 <span class="font-mono text-sm font-medium text-ink">{e.data.version}</span>
                 <span class="col-span-2 text-[0.9375rem] text-ink group-hover:underline group-hover:decoration-brand group-hover:underline-offset-4 sm:col-span-1">
-                  {e.data.project && <span class="text-muted">{e.data.project} · </span>}
+                  {e.data.project && <span class="text-muted">{releaseLine(e)} · </span>}
                   {releaseTitle(e)}
                 </span>
               </a>

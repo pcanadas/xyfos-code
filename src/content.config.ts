@@ -18,6 +18,8 @@ const changelog = defineCollection({
     date: z.date(),
     version: z.string(),
     project: z.string().optional(),
+    /** For projects with several editions (Cuadra: Escritorio / Android). Must match an edition name. */
+    platform: z.string().optional(),
   }),
 });
 
@@ -44,6 +46,19 @@ const projects = defineCollection({
     stack: z.array(z.string()).default([]),
     cover: z.string().optional(),
     coverAlt: z.string().optional(),
+    /** Separate editions of the same product, each with its own release line. */
+    editions: z
+      .array(
+        z.object({
+          name: z.string(),
+          platform: z.string(),
+          availability: z.string(),
+          tone: z.enum(["live", "testing"]).default("live"),
+          summary: z.string(),
+          link: z.object({ href: z.string(), label: z.string() }).optional(),
+        })
+      )
+      .default([]),
   }),
 });
 

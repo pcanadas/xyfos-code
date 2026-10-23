@@ -11,7 +11,7 @@ export async function GET(context: { site: URL }) {
     customData: "<language>es-es</language>",
     site: context.site,
     items: entries.map((e) => ({
-      title: `${e.data.version} — ${e.data.title}`,
+      title: `${e.data.version}${e.data.platform ? ` (${e.data.platform})` : ""} — ${e.data.title}`,
       pubDate: e.data.date,
       link: `/changelog/${e.slug}/`,
     })),

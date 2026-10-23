@@ -2,7 +2,7 @@
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import PageHeader from "../../components/ui/PageHeader.astro";
 import { getCollection } from "astro:content";
-import { sortChangelog, releaseTitle, formatDate, isoDate } from "../../lib/content";
+import { sortChangelog, releaseTitle, releaseLine, formatDate, isoDate } from "../../lib/content";
 
 export async function getStaticPaths() {
   const items = await getCollection("changelog");
@@ -11,10 +11,12 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
-const { version, project, date } = entry.data;
+const { version, project, platform, date } = entry.data;
 
-// Neighbouring releases of the same project
-const sameProject = sortChangelog(await getCollection("changelog")).filter((e) => e.data.project === project);
+// Neighbouring releases of the same project and edition (desktop and Android are numbered separately)
+const sameProject = sortChangelog(await getCollection("changelog")).filter(
+  (e) => e.data.project === project && e.data.platform === platform
+);
 const index = sameProject.findIndex((e) => e.slug === entry.slug);
 const newer = index > 0 ? sameProject[index - 1] : undefined;
 const older = index >= 0 ? sameProject[index + 1] : undefined;
@@ -23,10 +25,10 @@ const projectSlug = (await getCollection("projects")).find((p) => p.data.title =
 ---
 <SiteLayout
   title={`${entry.data.title} · Changelog · Xyfos Code`}
-  description={`Versión ${version}${project ? ` de ${project}` : ""}: ${entry.data.title}`}
+  description={`Versión ${version}${project ? ` de ${releaseLine(entry)}` : ""}: ${entry.data.title}`}
 >
   <div class="mx-auto max-w-3xl">
-    <PageHeader back={{ href: "/changelog", label: "Changelog" }} eyebrow={project} title={releaseTitle(entry)}>
+    <PageHeader back={{ href: "/changelog", label: "Changelog" }} eyebrow={releaseLine(entry)} title={releaseTitle(entry)}>
       <p class="font-mono text-sm text-muted">
         <span class="font-medium text-ink">{version}</span> · <time datetime={isoDate(date)}>{formatDate(date)}</time>
         {projectSlug && <> · <a class="underline decoration-line-strong underline-offset-4 hover:text-ink hover:decoration-brand" href={`/projects/${projectSlug}/`}>Ver proyecto</a></>}

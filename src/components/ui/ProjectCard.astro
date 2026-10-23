@@ -4,11 +4,16 @@ import { statusColors, statusLabels, formatDate } from "../../lib/content";
 
 interface Props {
   project: CollectionEntry<"projects">;
-  release?: CollectionEntry<"changelog">;
+  /** Latest release per edition (see latestReleasesByProject). */
+  releases?: CollectionEntry<"changelog">[];
 }
 
-const { project, release } = Astro.props;
-const { title, description, status, problem, platform, stack, cover, coverAlt } = project.data;
+const { project } = Astro.props;
+const { title, description, status, problem, platform, stack, cover, coverAlt, editions } = project.data;
+const availability = new Map(editions.map((ed) => [ed.name, ed.availability]));
+// Same order as the editions in the project file
+const editionIndex = (r: CollectionEntry<"changelog">) => editions.findIndex((ed) => ed.name === r.data.platform);
+const releases = [...(Astro.props.releases ?? [])].sort((a, b) => editionIndex(a) - editionIndex(b));
 ---
 <a
   href={`/projects/${project.slug}/`}
@@ -68,10 +73,24 @@ const { title, description, status, problem, platform, stack, cover, coverAlt } 
       )}
     </div>
 
-    <div class="flex items-center justify-between gap-3 border-t border-line pt-4 text-sm">
-      <span class="text-muted">
-        {release ? <>Última versión <span class="font-mono font-medium text-ink">{release.data.version}</span> · <span class="whitespace-nowrap">{formatDate(release.data.date)}</span></> : "En desarrollo"}
-      </span>
+    <div class="flex items-end justify-between gap-3 border-t border-line pt-4 text-sm">
+      {releases.length === 0 ? (
+        <span class="text-muted">En desarrollo</span>
+      ) : releases.length === 1 && !releases[0].data.platform ? (
+        <span class="text-muted">
+          Última versión <span class="font-mono font-medium text-ink">{releases[0].data.version}</span> · <span class="whitespace-nowrap">{formatDate(releases[0].data.date)}</span>
+        </span>
+      ) : (
+        <ul class="space-y-1 text-muted" aria-label="Última versión de cada plataforma">
+          {releases.map((r) => (
+            <li>
+              <span class="font-medium text-ink">{r.data.platform}</span>
+              <span class="font-mono font-medium text-ink">{r.data.version}</span>
+              {availability.get(r.data.platform ?? "") && <> · <span class="whitespace-nowrap">{availability.get(r.data.platform ?? "")}</span></>}
+            </li>
+          ))}
+        </ul>
+      )}
       <span class="shrink-0 whitespace-nowrap font-medium text-ink">Ver proyecto <span aria-hidden="true" class="inline-block transition-transform duration-150 group-hover:translate-x-0.5">→</span></span>
     </div>
   </div>
