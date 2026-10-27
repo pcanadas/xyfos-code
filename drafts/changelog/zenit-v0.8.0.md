@@ -1,0 +1,26 @@
+---
+title: "Zenit — nuevo nombre, importaciones sin duplicados y saldos que cuadran"
+date: 2026-10-28
+version: "v0.8.0"
+project: "Zenit"
+platform: "Escritorio"
+---
+
+**Cuadra pasa a llamarse Zenit.** Misma app y tus datos de siempre: al actualizar, el instalador sustituye la instalación de Cuadra y conserva todo.
+
+### Corregido
+
+- **Duplicados al importar extractos que se solapan** — el mismo movimiento ya no entra dos veces aunque el banco lo dé con otro saldo el día de la descarga. Cuentas muestra los duplicados que ya se hubieran importado para borrarlos
+- **Movimientos pendientes del banco** — se completan con su saldo en la siguiente importación, sin duplicarse
+- **Comprobación de saldos en Cuentas** — solo avisa de lo que de verdad no cuadra con el banco (antes marcaba saltos falsos)
+- Resaltado de filas en modo claro y oscuro
+
+### Añadido
+
+- **Cuenta destino en categorías de traspaso, también hacia atrás** — p. ej. Cajero → Efectivo: cada retirada aparece como entrada en Efectivo, sin contar como gasto ni ingreso
+- Versión para **Microsoft Store**
+
+### Cambiado
+
+- En escritorio desaparece el alta rápida («+ Nuevo»): los movimientos a mano se añaden desde Movimientos
+- Ajustes muestra solo el tamaño de letra; el tema se cambia en la barra superior
