@@ -1,35 +1,5 @@
 ---
-// Página de eliminación de datos exigida por Google Play (Seguridad de los datos).
-// URL estable: https://www.xyfos.com/cuadra/eliminar-datos
-import SiteLayout from "../../layouts/SiteLayout.astro";
-import PageHeader from "../../components/ui/PageHeader.astro";
-
-const email = "cuadra@xyfos.com";
-const subject = encodeURIComponent("Eliminar mis datos de Cuadra");
+// URL antigua (registrada en Google Play): mismo contenido que /zenit/eliminar-datos
+import DataDeletion from "../../components/zenit/DataDeletion.astro";
 ---
-<SiteLayout title="Eliminar tus datos · Cuadra" description="Cómo borrar tus datos de Cuadra, la app de finanzas personales de Patricia Cañadas (Xyfos Code).">
-  <div class="py-6 md:py-12">
-    <PageHeader eyebrow="Cuadra" title="Eliminar tus datos" intro="Cuadra es una app de finanzas personales de Patricia Cañadas (Xyfos Code)." />
-
-    <article class="prose prose-site max-w-none">
-      <h2>Datos guardados en tu móvil</h2>
-      <p>Tus movimientos, cuentas, categorías, presupuestos y ajustes se guardan <strong>solo en tu dispositivo</strong>; nosotros no tenemos copia. Para borrarlos:</p>
-      <ol>
-        <li>En la app, ve a <strong>Más → Importar extracto → Borrar todos los datos</strong> y confirma, o</li>
-        <li>desinstala Cuadra (se borran todos sus datos del dispositivo).</li>
-      </ol>
-      <p>El borrado es inmediato y definitivo. Si has exportado copias de seguridad o archivos de Excel, están donde tú los guardaste y debes borrarlos tú.</p>
-
-      <h2>Comentarios que nos hayas enviado</h2>
-      <p>Si nos has enviado comentarios desde la app o por correo, conservamos el texto y, si lo indicaste, tu email, durante un máximo de 12 meses desde el último contacto. Para que los borremos antes:</p>
-      <ol>
-        <li>Escribe a <a href={`mailto:${email}?subject=${subject}`}>{email}</a> con el asunto «Eliminar mis datos de Cuadra».</li>
-        <li>Indica el email con el que nos escribiste (o el texto aproximado del comentario si lo enviaste sin email).</li>
-        <li>Borraremos los mensajes y tu dirección en un plazo máximo de 30 días y te lo confirmaremos por correo.</li>
-      </ol>
-      <p>No conservamos ningún otro dato: el contador anti-abuso del servidor de comentarios se borra solo al cabo de una hora.</p>
-
-      <p>Más información en la <a href="/cuadra/privacidad">política de privacidad</a>.</p>
-    </article>
-  </div>
-</SiteLayout>
+<DataDeletion />
