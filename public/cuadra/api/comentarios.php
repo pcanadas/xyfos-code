@@ -1,6 +1,7 @@
 <?php
 /**
- * Cuadra — recepción de comentarios desde la app.
+ * Zenit (antes Cuadra) — recepción de comentarios desde la app.
+ * La ruta /cuadra/api/ y cuadra-config.php se mantienen: la app instalada envía aquí.
  *
  * Se publica con la web (public/ → dist/ → public_html) en /cuadra/api/comentarios.php.
  * Recibe un JSON por POST y lo reenvía por correo a FEEDBACK_TO.
@@ -41,7 +42,7 @@ if (in_array($origin, ALLOWED_ORIGINS, true)) {
 /** Cliente SMTP mínimo (SSL implícito + AUTH LOGIN). Devuelve true si el servidor acepta el mensaje. */
 function smtp_send(string $to, string $subject, string $body, array $headers, string $password): bool {
     $fp = @stream_socket_client(SMTP_HOST . ':' . SMTP_PORT, $errno, $errstr, 15);
-    if (!$fp) { error_log("Cuadra comentarios: SMTP sin conexión: $errstr"); return false; }
+    if (!$fp) { error_log("Zenit comentarios: SMTP sin conexión: $errstr"); return false; }
     stream_set_timeout($fp, 15);
 
     $read = function () use ($fp) {
@@ -78,7 +79,7 @@ function smtp_send(string $to, string $subject, string $body, array $headers, st
         fwrite($fp, "QUIT\r\n");
         return true;
     } catch (Throwable $e) {
-        error_log('Cuadra comentarios: SMTP ha fallado: ' . $e->getMessage());
+        error_log('Zenit comentarios: SMTP ha fallado: ' . $e->getMessage());
         return false;
     } finally {
         fclose($fp);
@@ -118,12 +119,12 @@ $hits = array_values(array_filter($hits, fn($t) => $t > $now - 3600));
 if (count($hits) >= MAX_PER_HOUR) reply(429, ['ok' => false, 'error' => 'rate']);
 
 // Correo
-$subject = '=?UTF-8?B?' . base64_encode('Comentario sobre Cuadra' . ($version ? " $version" : '')) . '?=';
+$subject = '=?UTF-8?B?' . base64_encode('Comentario sobre Zenit' . ($version ? " $version" : '')) . '?=';
 $body = $message . "\n\n—\n"
-      . 'Cuadra ' . ($version ?: '?') . ' · ' . ($platform ?: '?') . "\n"
+      . 'Zenit ' . ($version ?: '?') . ' · ' . ($platform ?: '?') . "\n"
       . 'Respuesta a: ' . ($email ?: '(no indicado)') . "\n";
 $headers = [
-    'From: Cuadra <' . MAIL_FROM . '>',
+    'From: Zenit <' . MAIL_FROM . '>',
     'Content-Type: text/plain; charset=UTF-8',
     'Content-Transfer-Encoding: 8bit',
 ];
@@ -135,7 +136,7 @@ if (!empty($config['smtp_password'])) {
 } else {
     // -f: remitente del sobre; Hostinger rechaza el envío si no es un buzón del dominio
     $sent = mail(FEEDBACK_TO, $subject, $body, implode("\r\n", $headers), '-f' . MAIL_FROM);
-    if (!$sent) error_log('Cuadra comentarios: mail() ha fallado: ' . (error_get_last()['message'] ?? 'sin detalle'));
+    if (!$sent) error_log('Zenit comentarios: mail() ha fallado: ' . (error_get_last()['message'] ?? 'sin detalle'));
 }
 if (!$sent) reply(502, ['ok' => false]);
 

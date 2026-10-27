@@ -1,8 +1,8 @@
 ---
-title: "Cuadra para Android en Google Play"
+title: "Zenit para Android en Google Play"
 date: 2026-10-23
 status: "in-progress"
-project: "Cuadra"
+project: "Zenit"
 ---
 
 - Prueba cerrada en Google Play (versión 1.1.2) — en curso

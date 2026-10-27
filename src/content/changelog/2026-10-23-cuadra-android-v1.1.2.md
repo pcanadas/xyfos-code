@@ -1,8 +1,8 @@
 ---
-title: "Cuadra — primera versión para Android, en prueba cerrada"
+title: "Zenit — primera versión para Android, en prueba cerrada"
 date: 2026-10-23
 version: "v1.1.2"
-project: "Cuadra"
+project: "Zenit"
 platform: "Android"
 ---
 

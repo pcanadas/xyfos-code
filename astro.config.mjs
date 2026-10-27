@@ -5,4 +5,6 @@ import sitemap from "@astrojs/sitemap";
 export default defineConfig({
   site: "https://www.xyfos.com",
   integrations: [tailwind(), sitemap()],
+  // Cuadra pasó a llamarse Zenit
+  redirects: { "/projects/cuadra": "/projects/zenit" },
 });

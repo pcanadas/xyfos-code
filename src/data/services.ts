@@ -13,14 +13,14 @@ export const services: Service[] = [
     title: "Apps de escritorio",
     text: "Aplicaciones para Windows rápidas, fiables y con los datos en tu equipo.",
     tech: ["Tauri", "Rust", "React"],
-    example: { label: "Cuadra para Windows", href: "/projects/cuadra/#escritorio" },
+    example: { label: "Zenit para Windows", href: "/projects/zenit/#escritorio" },
     icon: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
   },
   {
     title: "Apps móviles",
     text: "Aplicaciones Android para el día a día: rápidas, sencillas y con los datos en el móvil, publicadas en Google Play.",
     tech: ["Android", "Tauri", "React"],
-    example: { label: "Cuadra para Android", href: "/projects/cuadra/#android" },
+    example: { label: "Zenit para Android", href: "/projects/zenit/#android" },
     icon: '<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/>',
   },
   {

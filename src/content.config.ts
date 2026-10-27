@@ -18,7 +18,7 @@ const changelog = defineCollection({
     date: z.date(),
     version: z.string(),
     project: z.string().optional(),
-    /** For projects with several editions (Cuadra: Escritorio / Android). Must match an edition name. */
+    /** For projects with several editions (Zenit: Escritorio / Android). Must match an edition name. */
     platform: z.string().optional(),
   }),
 });

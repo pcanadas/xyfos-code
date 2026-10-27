@@ -19,7 +19,7 @@ const projects = sortProjects(await getCollection("projects"));
 const releases = await getCollection("changelog");
 const rows = productRows(projects, releases);
 
-const featured = projects.find((p) => p.slug === "cuadra");
+const featured = projects.find((p) => p.slug === "zenit");
 const others = projects.filter((p) => p !== featured);
 
 const steps = [
@@ -88,12 +88,12 @@ const sectors = ["eCommerce", "Análisis de mercado", "Marketing basado en datos
           <div class="rounded-lg bg-surface-warm p-4 sm:p-6">
             <HeroShowcase
               priority
-              desktop={{ src: "/images/cuadra/dashboard_light.png", alt: "Cuadra en Windows: dashboard con resumen anual, previsión del mes y presupuestos", width: 1293, height: 879 }}
-              phone={{ src: "/images/cuadra/android-screen-inicio.webp", alt: "Cuadra en Android: gastos, ingresos y previsión del mes", width: 400, height: 796 }}
+              desktop={{ src: "/images/zenit/dashboard_light.png", alt: "Zenit en Windows: dashboard con el resumen del mes, la previsión y los presupuestos", width: 1293, height: 879 }}
+              phone={{ src: "/images/cuadra/android-screen-inicio.webp", alt: "Zenit en Android: gastos, ingresos y previsión del mes", width: 400, height: 796 }}
             />
           </div>
           <figcaption class="mt-3 text-sm text-muted">
-            <a class="font-medium text-ink underline decoration-brand underline-offset-4 hover:text-brand-text" href="/projects/cuadra/">Cuadra</a>:
+            <a class="font-medium text-ink underline decoration-brand underline-offset-4 hover:text-brand-text" href="/projects/zenit/">Zenit</a>:
             finanzas personales para Windows y Android. Producto propio.
           </figcaption>
         </figure>
@@ -137,8 +137,8 @@ const sectors = ["eCommerce", "Análisis de mercado", "Marketing basado en datos
       <CaseFeature
         project={featured}
         releases={releases}
-        desktop={{ src: "/images/cuadra/movimientos.png", alt: "Cuadra en Windows: lista de movimientos con categorías y filtros", width: 1316, height: 689 }}
-        phone={{ src: "/images/cuadra/android-screen-graficos.webp", alt: "Cuadra en Android: distribución de gastos por categoría", width: 400, height: 796 }}
+        desktop={{ src: "/images/zenit/movimientos.png", alt: "Zenit en Windows: lista de movimientos con categorías y filtros", width: 1316, height: 689 }}
+        phone={{ src: "/images/cuadra/android-screen-graficos.webp", alt: "Zenit en Android: distribución de gastos por categoría", width: 400, height: 796 }}
         highlight={{ label: "Datos", value: "100 %", note: "en el dispositivo" }}
       />
     )}

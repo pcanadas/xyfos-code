@@ -28,7 +28,7 @@ export const roadmapStatusColors: Record<string, string> = {
   done:          "bg-emerald-100 text-emerald-800 ring-emerald-200",
 };
 
-/** "Cuadra — gastos fijos…" -> "gastos fijos…" when the project name is shown separately. */
+/** "Zenit — gastos fijos…" -> "gastos fijos…" when the project name is shown separately. */
 export function releaseTitle(entry: CollectionEntry<"changelog">) {
   const { project, title } = entry.data;
   const prefix = `${project} — `;
@@ -67,7 +67,7 @@ export const editionColors: Record<string, string> = {
   testing: "bg-amber-100 text-amber-800 ring-amber-200",
 };
 
-/** Release line of an entry: "Cuadra · Android", or just the project. */
+/** Release line of an entry: "Zenit · Android", or just the project. */
 export function releaseLine(entry: CollectionEntry<"changelog">) {
   const { project, platform } = entry.data;
   return platform ? `${project} · ${platform}` : project;

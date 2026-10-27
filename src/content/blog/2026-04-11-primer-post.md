@@ -23,7 +23,7 @@ Llevo más de 20 años trabajando en tecnología, sobre todo en desarrollo backe
 Además del trabajo a medida, desarrollo productos propios que me sirven para poner a prueba ideas y tecnologías:
 
 - **[QuoteDesk](/projects/quotedesk/)**: un CRM pensado alrededor de la oferta, que es como trabajan realmente los equipos de venta técnica.
-- **[Cuadra](/projects/cuadra/)**: una app de escritorio para llevar las finanzas personales a partir de los extractos del banco, con los datos guardados solo en tu equipo.
+- **[Zenit](/projects/zenit/)** (entonces llamada Cuadra): una app de escritorio para llevar las finanzas personales a partir de los extractos del banco, con los datos guardados solo en tu equipo.
 
 ## Desarrollo en abierto
 
