@@ -71,7 +71,7 @@ Hay **dos versiones independientes**, cada una con su propia numeración de vers
 
 **Google Play · Prueba cerrada.** La app móvil está en prueba cerrada en Google Play y todavía no está disponible públicamente. Es una adaptación al móvil, centrada en apuntar gastos al momento y consultar el mes de un vistazo.
 
-<img src="/images/cuadra/android-banner.webp" alt="Zenit para Android: tus finanzas personales, claras y en tu móvil. Gratis, sin anuncios y con tus datos solo en tu móvil" width="1024" height="500" loading="lazy" decoding="async" />
+<img src="/images/zenit/android-banner.webp" alt="Zenit para Android: tus finanzas personales, claras y en tu móvil. Gratis, sin anuncios y con tus datos solo en tu móvil" width="1024" height="500" loading="lazy" decoding="async" />
 
 ### Funcionalidades
 
@@ -86,12 +86,12 @@ Hay **dos versiones independientes**, cada una con su propia numeración de vers
 ### Capturas
 
 <div class="not-prose grid grid-cols-2 gap-4 sm:grid-cols-3">
-  <img src="/images/cuadra/android-inicio.webp" alt="Inicio: gastos, ingresos, balance y previsión del mes" width="540" height="960" loading="lazy" decoding="async" class="rounded-lg border border-line" />
-  <img src="/images/cuadra/android-alta-rapida.webp" alt="Alta rápida de un gasto con categorías, importe y día" width="540" height="960" loading="lazy" decoding="async" class="rounded-lg border border-line" />
-  <img src="/images/cuadra/android-movimientos.webp" alt="Movimientos ordenados por día, con buscador y filtros" width="540" height="960" loading="lazy" decoding="async" class="rounded-lg border border-line" />
-  <img src="/images/cuadra/android-graficos.webp" alt="Gráficos de distribución de gastos y gastos mensuales por categoría" width="540" height="960" loading="lazy" decoding="async" class="rounded-lg border border-line" />
-  <img src="/images/cuadra/android-modo-oscuro.webp" alt="Pantalla de inicio en modo oscuro" width="540" height="960" loading="lazy" decoding="async" class="rounded-lg border border-line" />
-  <img src="/images/cuadra/android-ajustes.webp" alt="Ajustes: tema, tamaño de letra e iconos de categorías" width="540" height="960" loading="lazy" decoding="async" class="rounded-lg border border-line" />
+  <img src="/images/zenit/android-inicio.webp" alt="Inicio: gastos, ingresos, balance y previsión del mes" width="540" height="960" loading="lazy" decoding="async" class="rounded-lg border border-line" />
+  <img src="/images/zenit/android-alta-rapida.webp" alt="Alta rápida de un gasto con categorías, importe y día" width="540" height="960" loading="lazy" decoding="async" class="rounded-lg border border-line" />
+  <img src="/images/zenit/android-movimientos.webp" alt="Movimientos ordenados por día, con buscador y filtros" width="540" height="960" loading="lazy" decoding="async" class="rounded-lg border border-line" />
+  <img src="/images/zenit/android-graficos.webp" alt="Gráficos de distribución de gastos y gastos mensuales por categoría" width="540" height="960" loading="lazy" decoding="async" class="rounded-lg border border-line" />
+  <img src="/images/zenit/android-modo-oscuro.webp" alt="Pantalla de inicio en modo oscuro" width="540" height="960" loading="lazy" decoding="async" class="rounded-lg border border-line" />
+  <img src="/images/zenit/android-ajustes.webp" alt="Ajustes: tema, tamaño de letra e iconos de categorías" width="540" height="960" loading="lazy" decoding="async" class="rounded-lg border border-line" />
 </div>
 
 ### ¿Quieres probarla?
