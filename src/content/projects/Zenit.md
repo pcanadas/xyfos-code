@@ -38,7 +38,9 @@ Hay **dos versiones independientes**, cada una con su propia numeración de vers
 - **Sin duplicados** al importar extractos que se solapan, y los pendientes del banco se completan en la siguiente importación
 - **Categorización automática** por palabras clave con excepciones y subcategorías
 - **Dashboard por mes o por año** — gastos, ingresos, balance, gráficos por categoría, comparativa interanual y previsión del mes
-- **Gastos fijos y presupuestos** — gastos e ingresos recurrentes con periodicidad configurable, sugerencias automáticas y cierre de meses anteriores
+- **Gastos fijos y presupuestos** — gastos e ingresos recurrentes con periodicidad configurable, sugerencias automáticas, lo pagado o cobrado en cada mes y aviso al superar un presupuesto
+- **Disponible para gastar** — cuánto te queda hasta fin de mes y cuánto al día
+- **Ahorro y metas** — una cantidad al mes o una cantidad para una fecha, con seguimiento mes a mes
 - **Varias cuentas** con la evolución del saldo y la comprobación de que cada movimiento cuadra con el banco
 - **Transferencias internas** — al elegir la cuenta destino de una categoría (p. ej. Cajero → Efectivo), cada movimiento aparece también en esa cuenta sin contar como gasto ni ingreso
 - **Exportar a Excel** y **copias de seguridad**, con historial de copias automáticas antes de operaciones destructivas
@@ -77,7 +79,9 @@ Hay **dos versiones independientes**, cada una con su propia numeración de vers
 
 - **Alta rápida** con el botón ＋: gasto, ingreso o transferencia en segundos
 - **Importación de extractos** en PDF, CSV o Excel
-- **Previsión del mes**, presupuestos y cierre de meses anteriores
+- **Disponible para gastar**, previsión del mes, presupuestos y cierre de meses anteriores
+- **Ahorro y metas** con seguimiento mes a mes
+- **Bloqueo con huella o PIN** del móvil (opcional)
 - **Gráficos** por categoría, mes y año
 - **Exportar** a Excel y copia de seguridad completa
 - **Tema claro y oscuro**, iconos de categorías y tamaño de letra a tu gusto
