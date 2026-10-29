@@ -11,7 +11,7 @@ export interface Service {
 export const services: Service[] = [
   {
     title: "Apps de escritorio",
-    text: "Aplicaciones para Windows rápidas, fiables y con los datos en tu equipo.",
+    text: "Aplicaciones para Windows rápidas, fiables y con los datos en tu equipo, publicadas en Microsoft Store.",
     tech: ["Tauri", "Rust", "React"],
     example: { label: "Zenit para Windows", href: "/projects/zenit/#escritorio" },
     icon: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',

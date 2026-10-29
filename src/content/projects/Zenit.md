@@ -1,6 +1,6 @@
 ---
 title: "Zenit"
-description: "App de finanzas personales en dos versiones: escritorio para Windows y Android, en prueba cerrada en Google Play."
+description: "App de finanzas personales en dos versiones: escritorio para Windows, en Microsoft Store y GitHub, y Android, en prueba cerrada en Google Play."
 url: "https://github.com/pcanadas/cuadra-finances"
 status: "beta"
 order: 1
@@ -11,11 +11,11 @@ cover: "/images/zenit/dashboard_light.png"
 coverAlt: "Dashboard de Zenit con el resumen del mes, la previsión y los presupuestos"
 editions:
   - name: "Escritorio"
-    platform: "Windows"
+    platform: "Windows · Microsoft Store"
     availability: "Disponible"
     tone: "live"
     summary: "Para analizar a fondo: importación de extractos, categorización automática, dashboard por mes o año y planificación."
-    link: { href: "https://github.com/pcanadas/cuadra-finances/releases/latest", label: "Descargar para Windows" }
+    link: { href: "https://apps.microsoft.com/detail/9NLLQLF0SRTX", label: "Descargar en Microsoft Store" }
   - name: "Android"
     platform: "Google Play"
     availability: "Prueba cerrada"
@@ -30,7 +30,12 @@ Hay **dos versiones independientes**, cada una con su propia numeración de vers
 
 ## Escritorio
 
-**Windows · Disponible.** Se instala con un instalador para Windows y se actualiza automáticamente. Es la versión más completa, pensada para revisar extractos y planificar con calma.
+**Windows · Disponible.** Es la versión más completa, pensada para revisar extractos y planificar con calma. Gratis, se puede instalar de dos formas:
+
+- **[Microsoft Store](https://apps.microsoft.com/detail/9NLLQLF0SRTX)** como «Zenit Finanzas» — la forma más sencilla: la Store la instala y la mantiene actualizada.
+- **[Instalador de GitHub](https://github.com/pcanadas/cuadra-finances/releases/latest)** — se actualiza sola desde la propia app.
+
+Ambas son la misma app; los datos no se comparten entre ellas.
 
 ### Funcionalidades
 
@@ -45,7 +50,7 @@ Hay **dos versiones independientes**, cada una con su propia numeración de vers
 - **Transferencias internas** — al elegir la cuenta destino de una categoría (p. ej. Cajero → Efectivo), cada movimiento aparece también en esa cuenta sin contar como gasto ni ingreso
 - **Exportar a Excel** y **copias de seguridad**, con historial de copias automáticas antes de operaciones destructivas
 - **Tema oscuro/claro**
-- **Actualizaciones automáticas** firmadas con minisign
+- **Actualizaciones automáticas** — desde Microsoft Store o, con el instalador de GitHub, firmadas con minisign
 
 ### Capturas
 
