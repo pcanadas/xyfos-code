@@ -40,9 +40,10 @@ Ambas son la misma app; los datos no se comparten entre ellas.
 ### Funcionalidades
 
 - **Importación de extractos** en PDF, CSV o Excel — Bankinter probado, columnas en inglés, cargo/abono separados y extractos con varias cuentas
-- **Sin duplicados** al importar extractos que se solapan, y los pendientes del banco se completan en la siguiente importación
+- **Sin duplicados** al importar extractos que se solapan; los pendientes del banco se completan en la siguiente importación y los movimientos de cada día siguen el orden del banco
 - **Categorización automática** por palabras clave con excepciones y subcategorías
-- **Dashboard por mes o por año** — gastos, ingresos, balance, gráficos por categoría, comparativa interanual y previsión del mes
+- **Desglose y notas** — reparte un cargo (Amazon, PayPal, la tarjeta…) en varias partidas con su categoría, y añade notas a cualquier movimiento
+- **Dashboard por mes o por año** — gastos, ingresos, balance, gráficos por categoría, comparativa interanual y previsión del mes, con la opción de separar los impuestos de los gastos
 - **Gastos fijos y presupuestos** — gastos e ingresos recurrentes con periodicidad configurable, sugerencias automáticas, lo pagado o cobrado en cada mes y aviso al superar un presupuesto
 - **Disponible para gastar** — cuánto te queda hasta fin de mes y cuánto al día
 - **Ahorro y metas** — una cantidad al mes o una cantidad para una fecha, con seguimiento mes a mes
@@ -84,12 +85,14 @@ Ambas son la misma app; los datos no se comparten entre ellas.
 
 - **Alta rápida** con el botón ＋: gasto, ingreso o transferencia en segundos
 - **Importación de extractos** en PDF, CSV o Excel
+- **Desglose y notas** — reparte un cargo en varias categorías y añade notas a tus movimientos
 - **Disponible para gastar**, previsión del mes, presupuestos y cierre de meses anteriores
 - **Ahorro y metas** con seguimiento mes a mes
 - **Bloqueo con huella o PIN** del móvil (opcional)
 - **Gráficos** por categoría, mes y año
 - **Exportar** a Excel y copia de seguridad completa
 - **Tema claro y oscuro**, iconos de categorías y tamaño de letra a tu gusto
+- **Aviso de nueva versión** y actualización desde la propia app con Google Play
 - Gratis, sin anuncios, sin cuentas y con los datos solo en el móvil
 
 ### Capturas
