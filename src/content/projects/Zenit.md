@@ -43,10 +43,12 @@ Ambas son la misma app; los datos no se comparten entre ellas.
 - **Sin duplicados** al importar extractos que se solapan; los pendientes del banco se completan en la siguiente importación y los movimientos de cada día siguen el orden del banco
 - **Categorización automática** por palabras clave con excepciones y subcategorías
 - **Desglose y notas** — reparte un cargo (Amazon, PayPal, la tarjeta…) en varias partidas con su categoría, y añade notas a cualquier movimiento
-- **Dashboard por mes o por año** — gastos, ingresos, balance, gráficos por categoría, comparativa interanual y previsión del mes, con la opción de separar los impuestos de los gastos
-- **Gastos fijos y presupuestos** — gastos e ingresos recurrentes con periodicidad configurable, sugerencias automáticas, lo pagado o cobrado en cada mes y aviso al superar un presupuesto
+- **Dashboard por mes o por año** — gastos, ingresos, balance y tasa de ahorro, gráficos por categoría, comparativa interanual y previsión del mes, con la opción de separar los impuestos de los gastos; las tarjetas se pueden ordenar
+- **Predicción** — cuánto ahorrarás al terminar el mes o el año si sigues gastando al mismo ritmo, contando lo que falta por cobrar y pagar de tus fijos
+- **Gastos fijos y presupuestos** — gastos e ingresos recurrentes con periodicidad configurable, sugerencias automáticas, lo pagado o cobrado en cualquier mes y aviso al superar un presupuesto
 - **Disponible para gastar** — cuánto te queda hasta fin de mes y cuánto al día
 - **Ahorro y metas** — una cantidad al mes o una cantidad para una fecha, con seguimiento mes a mes
+- **Gastos compartidos** — las cuentas con cada persona (pareja, piso, un viaje…): reparte gastos entre varias personas, apunta lo que pagaron por ti y los pagos entre vosotros, por partidas; Zenit cuenta solo tu parte
 - **Varias cuentas** con la evolución del saldo y la comprobación de que cada movimiento cuadra con el banco
 - **Transferencias internas** — al elegir la cuenta destino de una categoría (p. ej. Cajero → Efectivo), cada movimiento aparece también en esa cuenta sin contar como gasto ni ingreso
 - **Exportar a Excel** y **copias de seguridad**, con historial de copias automáticas antes de operaciones destructivas
@@ -86,8 +88,10 @@ Ambas son la misma app; los datos no se comparten entre ellas.
 - **Alta rápida** con el botón ＋: gasto, ingreso o transferencia en segundos
 - **Importación de extractos** en PDF, CSV o Excel
 - **Desglose y notas** — reparte un cargo en varias categorías y añade notas a tus movimientos
+- **Resumen del mes en una tarjeta** con tasa de ahorro y predicción de cómo terminarás el mes
 - **Disponible para gastar**, previsión del mes, presupuestos y cierre de meses anteriores
 - **Ahorro y metas** con seguimiento mes a mes
+- **Gastos compartidos** — quién debe a quién con cada persona, por partidas, y solo tu parte en tus gastos
 - **Bloqueo con huella o PIN** del móvil (opcional)
 - **Gráficos** por categoría, mes y año
 - **Exportar** a Excel y copia de seguridad completa
