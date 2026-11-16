@@ -15,6 +15,11 @@ QuoteDesk es el primer producto de Xyfos Code. Un CRM diseñado alrededor de la 
 
 ### Módulos disponibles (alpha)
 
+- **Panel de inicio** — Cartera abierta, ganado, tasa de éxito y próximas tareas
+- **Calendario de actividades** — Visitas, llamadas, reuniones y tareas enlazadas a clientes y ofertas
+- **Alertas de seguimiento** — Aviso en la app y email diario con las ofertas que necesitan atención
+- **Ofertas en PDF** — Documento listo para enviar al cliente
+- **Roles** — Administrador, responsable y comercial
 - **Auth + Onboarding** — Registro crea tenant + primer usuario admin
 - **Empresas** — Listado y detalle de distribuidores/empresas
 - **Clientes** — CRUD completo con jerarquía de 3 niveles
@@ -24,8 +29,9 @@ QuoteDesk es el primer producto de Xyfos Code. Un CRM diseñado alrededor de la 
 - **Ofertas inminentes** — Vista de ofertas próximas a vencer
 - **Marcas y Productos** — Catálogo por tenant con autocomplete AJAX
 - **Grupos de marketing** — Gestión de campañas
-- **Usuarios/Comerciales** — Gestión admin con roles
+- **Usuarios/Comerciales** — Gestión de usuarios del equipo
 - **Informes y estadísticas** — Vistas de reporting
+- **Español e inglés** — Cada usuario elige su idioma
 - **Export Excel** — Descarga de ofertas y contactos
 
 ### Stack

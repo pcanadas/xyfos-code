@@ -1,7 +1,7 @@
 ---
 title: "QuoteDesk MVP"
 date: 2026-04-11
-status: "in-progress"
+status: "done"
 project: "QuoteDesk"
 ---
 
