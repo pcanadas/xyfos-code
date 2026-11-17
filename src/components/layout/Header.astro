@@ -23,9 +23,6 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
           {item.label}
         </a>
       ))}
-      <a class={`text-muted hover:text-ink ${focus}`} href="/rss.xml" aria-label="RSS">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>
-      </a>
       <Button href="/#contacto">Contacto</Button>
     </nav>
 
@@ -54,7 +51,6 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
           {item.label}
         </a>
       ))}
-      <a class={`px-2 py-2.5 text-muted hover:bg-surface hover:text-ink ${focus}`} href="/rss.xml">RSS</a>
       <Button href="/#contacto" class="mt-2 w-full">Contacto</Button>
     </div>
   </nav>
