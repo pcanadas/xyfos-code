@@ -13,6 +13,10 @@ RewriteRule ^ https://www.xyfos.com%{REQUEST_URI} [L,R=301]
 # Cuadra app API: real PHP endpoints, keep them out of the legacy redirects below
 RewriteRule ^cuadra/api/ - [L]
 
+# Error page: ErrorDocument serves it internally; without this the .html rule
+# below turns every missing URL into a 301 to the home (soft 404)
+RewriteRule ^404\.html$ - [L]
+
 # PHP files (index.php, product_info.php, stock.php, specials.php, etc.)
 RewriteRule ^(.+)\.php(/.*)?$ / [L,R=301]
 
