@@ -2,7 +2,7 @@
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import PageHeader from "../../components/ui/PageHeader.astro";
 import Button from "../../components/ui/Button.astro";
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import { site } from "../../config/site";
 import { statusColors, statusLabels, editionColors, sortChangelog, releaseTitle, formatDate, isoDate } from "../../lib/content";
 
@@ -10,6 +10,8 @@ export async function getStaticPaths() {
   const items = await getCollection("projects");
   return items.map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
 }
+
+type Props = { project: CollectionEntry<"projects"> };
 
 const { project } = Astro.props;
 const { Content } = await project.render();
@@ -22,7 +24,9 @@ const allReleases = sortChangelog(await getCollection("changelog")).filter((e) =
 const releaseGroups = editions.length
   ? editions.map((ed) => ({ name: ed.name, items: allReleases.filter((e) => e.data.platform === ed.name).slice(0, 3) }))
   : [{ name: undefined, items: allReleases.slice(0, 5) }];
-const latestByEdition = new Map(releaseGroups.map((g) => [g.name, g.items[0]]));
+const latestByEdition = new Map<string | undefined, CollectionEntry<"changelog"> | undefined>(
+  releaseGroups.map((g) => [g.name, g.items[0]])
+);
 ---
 <SiteLayout title={`${title} · Proyectos · Xyfos Code`} description={description}>
   <PageHeader back={{ href: "/projects", label: "Proyectos" }} eyebrow={platform} title={title} intro={description}>

@@ -1,0 +1,37 @@
+---
+// Aviso legal exigido por la LSSI (art. 10): identificación del titular de la web.
+import SiteLayout from "../layouts/SiteLayout.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import { site } from "../config/site";
+---
+<SiteLayout title="Aviso legal" description="Datos del titular de xyfos.com y condiciones de uso de la web." canonical="https://www.xyfos.com/aviso-legal">
+  <div class="py-6 md:py-12">
+    <PageHeader eyebrow="Legal" title="Aviso legal" intro="Última actualización: 17 de noviembre de 2026" />
+
+    <article class="prose prose-site max-w-none">
+      <h2>Titular</h2>
+      <p>En cumplimiento del artículo 10 de la Ley 34/2002, de servicios de la sociedad de la información y de comercio electrónico (LSSI), estos son los datos del titular de www.xyfos.com:</p>
+      <ul>
+        <li><strong>Titular:</strong> Patricia Cañadas ({site.name})</li>
+        <li><strong>NIF:</strong> 51081432L</li>
+        <li><strong>Domicilio:</strong> Calle Maldonado 54, 28006 Madrid, España</li>
+        <li><strong>Email:</strong> <a href={`mailto:${site.email}`}>{site.email}</a></li>
+      </ul>
+
+      <h2>Objeto</h2>
+      <p>Esta web presenta los servicios de desarrollo de software de {site.name}, sus proyectos y productos, un blog, un changelog y un roadmap. Usarla implica aceptar este aviso legal.</p>
+
+      <h2>Propiedad intelectual</h2>
+      <p>Los textos, imágenes, capturas, logotipos y demás contenidos de la web son de Patricia Cañadas, que se reserva todos los derechos. No se pueden reproducir, distribuir ni transformar sin autorización, salvo citas breves indicando la fuente. El código fuente de la web se publica con licencia MIT en <a href={site.github} target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+
+      <h2>Responsabilidad</h2>
+      <p>La información de la web se ofrece con fines informativos y se revisa con cuidado, pero puede contener errores o quedar desactualizada. El titular no responde de los daños derivados de su uso ni del contenido de las webs externas enlazadas, sobre las que no tiene control.</p>
+
+      <h2>Datos personales y cookies</h2>
+      <p>Cómo se tratan tus datos se explica en la <a href="/privacidad">política de privacidad</a>. Esta web no usa cookies.</p>
+
+      <h2>Legislación aplicable</h2>
+      <p>Este aviso legal se rige por la legislación española. Para cualquier controversia, las partes se someten a los juzgados y tribunales que correspondan conforme a la ley; si quien reclama es un consumidor, los de su domicilio.</p>
+    </article>
+  </div>
+</SiteLayout>

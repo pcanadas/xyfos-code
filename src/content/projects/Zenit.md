@@ -7,7 +7,7 @@ order: 1
 problem: "Controlar los gastos del hogar a partir de los extractos del banco, sin hojas de cálculo y sin entregar tus datos a terceros."
 platform: "Windows · Android"
 stack: ["Tauri", "React", "Rust", "IndexedDB"]
-cover: "/images/zenit/dashboard_light.png"
+cover: "/images/zenit/dashboard_light.webp"
 coverAlt: "Dashboard de Zenit con el resumen del mes, la previsión y los presupuestos"
 editions:
   - name: "Escritorio"
@@ -59,23 +59,23 @@ Ambas son la misma app; los datos no se comparten entre ellas.
 
 #### Dashboard (modo oscuro)
 
-![Dashboard oscuro](/images/zenit/dashboard_dark.png)
+![Dashboard oscuro](/images/zenit/dashboard_dark.webp)
 
 #### Dashboard (modo claro)
 
-![Dashboard claro](/images/zenit/dashboard_light.png)
+![Dashboard claro](/images/zenit/dashboard_light.webp)
 
 #### Movimientos
 
-![Movimientos](/images/zenit/movimientos.png)
+![Movimientos](/images/zenit/movimientos.webp)
 
 #### Evolución del saldo
 
-![Cuentas](/images/zenit/cuentas.png)
+![Cuentas](/images/zenit/cuentas.webp)
 
 #### Categorías
 
-![Categorías](/images/zenit/categorias.png)
+![Categorías](/images/zenit/categorias.webp)
 
 ## Android
 

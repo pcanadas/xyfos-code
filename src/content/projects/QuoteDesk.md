@@ -7,7 +7,7 @@ order: 2
 problem: "Los CRM genéricos giran en torno al contacto o al deal, pero los equipos de venta técnica trabajan alrededor de la oferta."
 platform: "SaaS · Web multi-tenant"
 stack: ["Laravel", "Vue", "Inertia", "MySQL"]
-cover: "/images/quotedesk/dashboard.png"
+cover: "/images/quotedesk/dashboard.webp"
 coverAlt: "Panel de inicio de QuoteDesk con la cartera abierta, lo ganado este año, la tasa de éxito y las próximas actividades"
 ---
 
@@ -43,19 +43,19 @@ Capturas de una empresa de demostración con datos ficticios.
 
 #### Panel de inicio
 
-![Panel de inicio con la cartera abierta, lo ganado, la tasa de éxito, el gráfico de los últimos 12 meses y las próximas actividades](/images/quotedesk/dashboard.png)
+![Panel de inicio con la cartera abierta, lo ganado, la tasa de éxito, el gráfico de los últimos 12 meses y las próximas actividades](/images/quotedesk/dashboard.webp)
 
 #### Ficha de oferta
 
-![Ficha de una oferta con el cliente, el producto, el estado y los botones para programar una actividad y descargar el PDF](/images/quotedesk/oferta.png)
+![Ficha de una oferta con el cliente, el producto, el estado y los botones para programar una actividad y descargar el PDF](/images/quotedesk/oferta.webp)
 
 #### Calendario de actividades
 
-![Calendario mensual con visitas, llamadas y reuniones, y la lista de los próximos 7 días](/images/quotedesk/calendario.png)
+![Calendario mensual con visitas, llamadas y reuniones, y la lista de los próximos 7 días](/images/quotedesk/calendario.webp)
 
 #### Seguimiento
 
-![Ofertas que requieren atención: con el seguimiento vencido o sin actividad reciente](/images/quotedesk/seguimiento.png)
+![Ofertas que requieren atención: con el seguimiento vencido o sin actividad reciente](/images/quotedesk/seguimiento.webp)
 
 #### En el móvil
 

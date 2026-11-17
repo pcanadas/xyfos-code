@@ -1,13 +1,15 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import PageHeader from "../../components/ui/PageHeader.astro";
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import { sortChangelog, releaseTitle, releaseLine, formatDate, isoDate } from "../../lib/content";
 
 export async function getStaticPaths() {
   const items = await getCollection("changelog");
   return items.map((e) => ({ params: { slug: e.slug }, props: { entry: e } }));
 }
+
+type Props = { entry: CollectionEntry<"changelog"> };
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
