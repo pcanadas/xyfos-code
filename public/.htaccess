@@ -36,3 +36,18 @@ RewriteRule ^(.+)\.html$ / [L,R=301]
 
 # Custom error page
 ErrorDocument 404 /404.html
+
+# --------------------------------------------------
+# Security headers
+# HSTS sin includeSubDomains: los subdominios (apps, ftp...) se gestionan aparte.
+# La CSP no limita scripts ni estilos (Astro inyecta algunos en línea); solo
+# impide incrustar la web en otros sitios y cierra base/object/form.
+# --------------------------------------------------
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Content-Security-Policy "frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'self'"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>

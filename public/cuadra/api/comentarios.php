@@ -6,7 +6,7 @@
  * Se publica con la web (public/ → dist/ → public_html) en /cuadra/api/comentarios.php.
  * Recibe un JSON por POST y lo reenvía por correo a FEEDBACK_TO.
  * No guarda los mensajes: solo un contador temporal por IP (cifrada con hash)
- * para limitar envíos, que se borra solo al pasar una hora.
+ * más uno global para limitar envíos; las marcas caducan al pasar una hora.
  *
  * Envío por SMTP autenticado. La contraseña NO está en el repositorio: se lee de
  * domains/xyfos.com/cuadra-config.php (fuera de public_html), que solo existe en el servidor:
@@ -24,6 +24,9 @@ const FEEDBACK_TO   = 'cuadra@xyfos.com';
 const MAIL_FROM     = 'no-reply@xyfos.com';   // debe ser del dominio (SPF/DKIM)
 const MAX_MESSAGE   = 3000;                   // caracteres
 const MAX_PER_HOUR  = 5;                      // envíos por IP y hora
+const MAX_GLOBAL_PER_HOUR = 50;               // envíos totales por hora (frena IPs rotativas)
+const MAX_BODY      = 16384;                  // bytes del JSON recibido
+const RATE_DIR      = __DIR__ . '/../../../cuadra-ratelimit'; // fuera de public_html; si no se puede crear, se usa el temporal
 const ALLOWED_ORIGINS = [
     'http://tauri.localhost',                 // app Android y Windows
     'https://tauri.localhost',
@@ -74,7 +77,7 @@ function smtp_send(string $to, string $subject, string $body, array $headers, st
             'Date: ' . date('r'),
             'Message-ID: <' . bin2hex(random_bytes(12)) . '@xyfos.com>',
             'MIME-Version: 1.0',
-        ])) . "\r\n\r\n" . preg_replace('/^\./m', '..', str_replace(["\r\n", "\n"], "\r\n", $body));
+        ])) . "\r\n\r\n" . preg_replace('/^\./m', '..', preg_replace('/\r\n|\r|\n/', "\r\n", $body));
         $cmd($msg . "\r\n.", 250);
         fwrite($fp, "QUIT\r\n");
         return true;
@@ -96,13 +99,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') reply(204, []);
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') reply(405, ['ok' => false, 'error' => 'method']);
 if (!in_array($origin, ALLOWED_ORIGINS, true)) reply(403, ['ok' => false, 'error' => 'origin']);
 
-$data = json_decode(file_get_contents('php://input') ?: '', true);
+if ((int)($_SERVER['CONTENT_LENGTH'] ?? 0) > MAX_BODY) reply(413, ['ok' => false, 'error' => 'size']);
+$raw = file_get_contents('php://input', false, null, 0, MAX_BODY + 1) ?: '';
+if (strlen($raw) > MAX_BODY) reply(413, ['ok' => false, 'error' => 'size']);
+$data = json_decode($raw, true);
 if (!is_array($data)) reply(400, ['ok' => false, 'error' => 'json']);
 
 // Trampa para bots: campo oculto que una persona nunca rellena
 if (!empty($data['website'])) reply(200, ['ok' => true]);
 
-$message  = trim((string)($data['message'] ?? ''));
+// Saltos de línea normalizados a \n y fuera el resto de caracteres de control (evita trucos con \r sueltos en SMTP)
+$message  = (string)($data['message'] ?? '');
+if (!mb_check_encoding($message, 'UTF-8')) reply(400, ['ok' => false, 'error' => 'message']);
+$message  = trim(preg_replace('/[^\P{C}\n\t]/u', '', preg_replace('/\r\n|\r/', "\n", $message)));
 $email    = trim((string)($data['email'] ?? ''));
 $version  = substr(preg_replace('/[^\w.\- ]/u', '', (string)($data['version'] ?? '')), 0, 40);
 $platform = substr(preg_replace('/[^\w.\- ]/u', '', (string)($data['platform'] ?? '')), 0, 40);
@@ -110,13 +119,25 @@ $platform = substr(preg_replace('/[^\w.\- ]/u', '', (string)($data['platform'] ?
 if ($message === '' || mb_strlen($message) > MAX_MESSAGE) reply(400, ['ok' => false, 'error' => 'message']);
 if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) reply(400, ['ok' => false, 'error' => 'email']);
 
-// Límite de envíos por IP (hash, sin guardar la IP en claro)
-$ip   = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-$file = sys_get_temp_dir() . '/cuadra-fb2-' . hash('sha256', $ip . __FILE__) . '.json';
-$now  = time();
-$hits = is_file($file) ? (json_decode((string)@file_get_contents($file), true) ?: []) : [];
-$hits = array_values(array_filter($hits, fn($t) => $t > $now - 3600));
-if (count($hits) >= MAX_PER_HOUR) reply(429, ['ok' => false, 'error' => 'rate']);
+// Límite de envíos por IP (hash, sin guardar la IP en claro) y global.
+// IPv6 se cuenta por prefijo /64: un mismo usuario controla el bloque entero.
+$ip  = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+$bin = @inet_pton($ip);
+$key = hash('sha256', ($bin !== false && strlen($bin) === 16 ? substr($bin, 0, 8) : $ip) . __FILE__);
+
+$dir = (is_dir(RATE_DIR) || @mkdir(RATE_DIR, 0700)) && is_writable(RATE_DIR) ? RATE_DIR : sys_get_temp_dir();
+// Un solo archivo con bloqueo exclusivo hasta el final: las peticiones simultáneas
+// esperan su turno en vez de pasar todas la comprobación a la vez.
+$lock = @fopen($dir . '/cuadra-fb3.json', 'c+');
+if (!$lock || !flock($lock, LOCK_EX)) reply(503, ['ok' => false]);
+$now   = time();
+$state = json_decode((string)stream_get_contents($lock), true) ?: [];
+foreach ($state as $k => $times) {
+    $state[$k] = array_values(array_filter((array)$times, fn($t) => $t > $now - 3600));
+    if (!$state[$k]) unset($state[$k]);
+}
+if (count($state['global'] ?? []) >= MAX_GLOBAL_PER_HOUR
+    || count($state[$key] ?? []) >= MAX_PER_HOUR) reply(429, ['ok' => false, 'error' => 'rate']);
 
 // Correo
 $subject = '=?UTF-8?B?' . base64_encode('Comentario sobre Zenit' . ($version ? " $version" : '')) . '?=';
@@ -141,6 +162,10 @@ if (!empty($config['smtp_password'])) {
 if (!$sent) reply(502, ['ok' => false]);
 
 // Solo cuentan para el límite los envíos que salen bien
-$hits[] = $now;
-@file_put_contents($file, json_encode($hits), LOCK_EX);
-reply(200, ['ok' => true]);
+$state[$key][]     = $now;
+$state['global'][] = $now;
+ftruncate($lock, 0);
+rewind($lock);
+fwrite($lock, json_encode($state));
+fflush($lock);
+reply(200, ['ok' => true]); // exit libera el bloqueo
