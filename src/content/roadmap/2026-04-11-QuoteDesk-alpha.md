@@ -5,15 +5,13 @@ status: "done"
 project: "QuoteDesk"
 ---
 
-- Multi-tenant por ruta + BelongsToTenant en todos los modelos
-- Auth + onboarding (tenant + primer admin)
-- Empresas, Clientes y Contactos de cliente
-- Ofertas (CRUD completo — entidad central)
-- Seguimientos de oferta y vista "Ofertas inminentes"
-- Catálogo Marcas + Productos (autocomplete AJAX)
-- Grupos de marketing
-- Gestión de usuarios/comerciales
-- Informes, estadísticas y export Excel
-- Internacionalización ES/EN (vue-i18n + laravel-lang + selector de idioma)
-- CI/CD: tests en GitHub Actions + deploy automático a Hostinger vía rsync
-- Rebranding de Xyfos Sales a QuoteDesk (quotedesk.xyfos.com)
+Primera versión operativa, con la oferta como centro del CRM.
+
+- Varias empresas en la misma aplicación, cada una con sus datos separados
+- Registro que crea la empresa y su primer usuario administrador
+- Empresas, clientes con jerarquía de tres niveles y personas de contacto
+- Ofertas completas, con sus seguimientos y la vista de ofertas inminentes
+- Catálogo propio de marcas y productos con autocompletado
+- Grupos de marketing y gestión de comerciales
+- Informes, estadísticas y exportación a Excel
+- Español e inglés, a elección de cada usuario

@@ -5,7 +5,9 @@ status: "in-progress"
 project: "Zenit"
 ---
 
-- Prueba cerrada en Google Play (versión 1.5.0) — en curso
-- Botones «+ Gasto» / «+ Ingreso» en la barra de notificaciones
-- Accesos directos del icono: «Nuevo gasto» y «Nuevo ingreso»
-- Publicación abierta en Google Play
+La versión Android está en prueba cerrada en Google Play. [¿Quieres probarla?](/projects/zenit/#android)
+
+- Prueba cerrada en Google Play, ya en la versión 1.5.0 — hecho
+- Alta rápida desde la barra de notificaciones y desde los accesos directos del icono — hecho
+- Bloqueo con huella o PIN y aviso de nueva versión — hecho
+- Publicación abierta en Google Play — pendiente
