@@ -19,7 +19,6 @@ Completa el MVP: QuoteDesk ya avisa de qué ofertas necesitan atención y organi
   - Un email cada mañana laborable a cada comercial con las suyas
 - **Ofertas en PDF** — descarga la oferta lista para enviar al cliente, en español o en inglés
 - **Roles** — administrador, responsable y comercial: cada comercial ve sus ofertas, el responsable ve las de todo el equipo y solo el administrador gestiona usuarios y catálogo
-- **Español e inglés** — cada usuario elige su idioma
 - **Nueva navegación** — menú lateral con todos los módulos, también en el móvil
 
 ### Corregido
