@@ -48,7 +48,8 @@ Capturas con un catálogo, una empresa y un cliente ficticios.
 
 #### El PDF generado
 
-<div class="not-prose grid gap-4 sm:grid-cols-2">
+<div class="not-prose grid gap-4 sm:grid-cols-3">
+  <img src="/images/presupuestos-equipos-cientificos/pdf-portada.webp" alt="Primera página del PDF con el logo y los datos de la empresa, el número de presupuesto, el cliente y la imagen del equipo" width="900" height="1271" loading="lazy" decoding="async" class="rounded-lg border border-line" />
   <img src="/images/presupuestos-equipos-cientificos/pdf-opciones.webp" alt="Página del PDF con la descripción del equipo, sus características, aplicaciones, opciones y accesorios con precio" width="900" height="1273" loading="lazy" decoding="async" class="rounded-lg border border-line" />
   <img src="/images/presupuestos-equipos-cientificos/pdf-precios.webp" alt="Página del PDF con el resumen de precios, las condiciones generales y los requisitos de instalación" width="900" height="1273" loading="lazy" decoding="async" class="rounded-lg border border-line" />
 </div>
