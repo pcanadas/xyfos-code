@@ -33,9 +33,17 @@ QuoteDesk es el primer producto de Xyfos Code. Un CRM diseñado alrededor de la 
 - **Grupos de marketing** — Gestión de campañas
 - **Usuarios/Comerciales** — Gestión de usuarios del equipo
 - **Informes y estadísticas** — Resultados por marca y comercial, cumplimiento de seguimientos y efectividad hasta la respuesta del cliente
+- **Empresas emisoras** — Las empresas propias desde las que se envían las ofertas
 - **Demo pública** — Pruébalo sin registro en una empresa ficticia
+- **Ayuda** — Preguntas frecuentes con buscador dentro de la aplicación
 - **Español e inglés** — Cada usuario elige su idioma
 - **Export Excel** — Descarga de ofertas y contactos
+
+### Tus datos
+
+- **Separados** — Cada empresa solo ve sus datos
+- **Copiados cada día** — Copia de seguridad diaria verificada y cifrada, también fuera del servidor, en la Unión Europea
+- **Bajo tu control** — Encargo del tratamiento (RGPD) al crear la empresa, exportación a Excel y baja de la empresa con todos sus datos desde el perfil
 
 ### Capturas
 
