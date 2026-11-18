@@ -21,7 +21,7 @@ const productReleases = sortChangelog(releases).filter((e) => e.data.project && 
 const stats = [
   { value: "20+", label: "años de experiencia" },
   { value: String(productReleases.length), label: "versiones publicadas" },
-  { value: String(projects.length), label: "productos propios" },
+  { value: String(projects.filter((p) => p.data.kind === "product").length), label: "productos propios" },
 ];
 ---
 <Section id="sobre-mi" number={4} tone="warm" eyebrow="Confianza" title="Quién está detrás">

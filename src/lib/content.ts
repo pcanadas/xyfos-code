@@ -6,6 +6,7 @@ export const statusLabels: Record<string, string> = {
   live:    "Disponible",
   public:  "Público",
   private: "Privado",
+  production: "En producción",
 };
 
 export const statusColors: Record<string, string> = {
@@ -14,6 +15,7 @@ export const statusColors: Record<string, string> = {
   live:    "bg-emerald-100 text-emerald-800 ring-emerald-200",
   public:  "bg-slate-100 text-slate-700 ring-slate-200",
   private: "bg-slate-100 text-slate-500 ring-slate-200",
+  production: "bg-emerald-100 text-emerald-800 ring-emerald-200",
 };
 
 export const roadmapStatusLabels: Record<string, string> = {
@@ -82,13 +84,13 @@ export interface ProductRow {
   release?: CollectionEntry<"changelog">;
 }
 
-/** One row per product and edition, with its latest release: the home "products right now" panel. */
+/** One row per own product and edition, with its latest release: the home "products right now" panel. */
 export function productRows(
   projects: CollectionEntry<"projects">[],
   releases: CollectionEntry<"changelog">[]
 ): ProductRow[] {
   const latest = latestReleasesByProject(releases);
-  return sortProjects(projects).flatMap((p) => {
+  return sortProjects(projects).filter((p) => p.data.kind === "product").flatMap((p) => {
     const own = latest.get(p.data.title) ?? [];
     if (p.data.editions.length) {
       return p.data.editions.map((ed) => ({

@@ -38,8 +38,11 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    url: z.string().url(),
-    status: z.enum(["private", "public", "alpha", "beta", "live"]).default("alpha"),
+    /** Client work is usually internal software with no public URL. */
+    url: z.string().url().optional(),
+    /** "product": own product. "client": built for a client (anonymous, no changelog). */
+    kind: z.enum(["product", "client"]).default("product"),
+    status: z.enum(["private", "public", "alpha", "beta", "live", "production"]).default("alpha"),
     order: z.number().default(99),
     problem: z.string().optional(),
     platform: z.string().optional(),

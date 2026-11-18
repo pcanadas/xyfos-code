@@ -15,8 +15,8 @@ type Props = { project: CollectionEntry<"projects"> };
 
 const { project } = Astro.props;
 const { Content } = await project.render();
-const { title, description, status, problem, platform, stack, url, editions } = project.data;
-const isGithub = url.includes("github.com");
+const { title, description, status, problem, platform, stack, url, editions, kind } = project.data;
+const isGithub = url?.includes("github.com");
 
 const allReleases = sortChangelog(await getCollection("changelog")).filter((e) => e.data.project === title);
 
@@ -31,10 +31,11 @@ const latestByEdition = new Map<string | undefined, CollectionEntry<"changelog">
 <SiteLayout title={`${title} · Proyectos · Xyfos Code`} description={description}>
   <PageHeader back={{ href: "/projects", label: "Proyectos" }} eyebrow={platform} title={title} intro={description}>
     <div class="flex flex-wrap items-center gap-3">
-      <Button href={url} external>{isGithub ? "Ver en GitHub ↗" : "Abrir aplicación ↗"}</Button>
+      {url && <Button href={url} external>{isGithub ? "Ver en GitHub ↗" : "Abrir aplicación ↗"}</Button>}
       <span class={`rounded px-2.5 py-1 text-sm font-medium ring-1 ring-inset ${statusColors[status]}`}>
         {statusLabels[status]}
       </span>
+      {kind === "client" && <span class="text-sm text-muted">Proyecto para un cliente · uso interno</span>}
     </div>
   </PageHeader>
 

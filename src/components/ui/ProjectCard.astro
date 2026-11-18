@@ -74,7 +74,9 @@ const releases = [...(Astro.props.releases ?? [])].sort((a, b) => editionIndex(a
     </div>
 
     <div class="flex items-end justify-between gap-3 border-t border-line pt-4 text-sm">
-      {releases.length === 0 ? (
+      {project.data.kind === "client" ? (
+        <span class="text-muted">Proyecto para cliente</span>
+      ) : releases.length === 0 ? (
         <span class="text-muted">En desarrollo</span>
       ) : releases.length === 1 && !releases[0].data.platform ? (
         <span class="text-muted">
