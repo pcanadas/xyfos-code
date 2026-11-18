@@ -10,6 +10,9 @@ RewriteRule ^ https://www.xyfos.com%{REQUEST_URI} [L,R=301]
 # All old store URLs → homepage with 301
 # --------------------------------------------------
 
+# Moved blog posts (the date is part of the URL)
+RewriteRule ^blog/2026-06-11-quotedesk-crm-oferta/?$ /blog/2026-06-20-quotedesk-crm-oferta/ [L,R=301]
+
 # Cuadra app API: real PHP endpoints, keep them out of the legacy redirects below
 RewriteRule ^cuadra/api/ - [L]
 

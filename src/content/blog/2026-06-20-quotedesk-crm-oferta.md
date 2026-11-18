@@ -1,6 +1,6 @@
 ---
 title: "QuoteDesk: por qué diseñé un CRM alrededor de la oferta"
-date: 2026-06-11
+date: 2026-06-20
 description: "Los CRM genéricos giran en torno al contacto o a la oportunidad. Los equipos de venta técnica trabajan alrededor de la oferta. Así nació QuoteDesk y estas son las decisiones que hay detrás."
 tags: ["quotedesk", "caso práctico", "crm", "laravel"]
 draft: false
