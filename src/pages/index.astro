@@ -19,8 +19,9 @@ const projects = sortProjects(await getCollection("projects"));
 const releases = await getCollection("changelog");
 const rows = productRows(projects, releases);
 
+const clientCase = projects.find((p) => p.slug === "presupuestos-equipos-cientificos");
 const featured = projects.find((p) => p.slug === "zenit");
-const others = projects.filter((p) => p !== featured);
+const others = projects.filter((p) => p !== featured && p !== clientCase);
 
 const steps = [
   {
@@ -133,8 +134,25 @@ const sectors = ["eCommerce", "Análisis de mercado", "Marketing basado en datos
       Todos los proyectos →
     </a>
 
+    {clientCase && (
+      <CaseFeature
+        project={clientCase}
+        releases={releases}
+        desktop={{ src: "/images/presupuestos-equipos-cientificos/app.webp", alt: "La aplicación con un equipo seleccionado, sus opciones y el resumen del presupuesto (datos ficticios)", width: 1440, height: 810 }}
+        phone={{ src: "/images/presupuestos-equipos-cientificos/pdf-precios.webp", alt: "Página del PDF generado con el resumen de precios y las condiciones (datos ficticios)", width: 900, height: 1273 }}
+        secondary="document"
+        facts={[
+          { label: "Ediciones", value: "2", note: "España · Portugal" },
+          { label: "En uso", value: "2026", note: "desde la versión 1.0" },
+        ]}
+        highlight={{ label: "Catálogo", value: "Excel", note: "lo mantiene el cliente" }}
+      />
+    )}
+
     {featured && (
       <CaseFeature
+        class="mt-6"
+        reverse
         project={featured}
         releases={releases}
         desktop={{ src: "/images/zenit/movimientos.webp", alt: "Zenit en Windows: lista de movimientos con categorías y filtros", width: 1316, height: 689 }}

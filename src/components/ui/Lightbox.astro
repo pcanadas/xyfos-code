@@ -1,0 +1,87 @@
+---
+/**
+ * Site-wide screenshot viewer. Zoomable: every image in long-form content (.prose)
+ * and any image marked with data-zoom, except images inside links (those navigate).
+ */
+---
+<dialog
+  id="lightbox"
+  class="fixed inset-0 m-0 h-full max-h-none w-full max-w-none bg-ink/95 p-0 backdrop:bg-transparent"
+  aria-label="Imagen ampliada"
+>
+  <div class="flex h-full w-full flex-col items-center justify-center gap-3 px-4 py-14 sm:px-20" data-lightbox-frame>
+    <img data-lightbox-img alt="" class="max-h-full min-h-0 max-w-full rounded-md bg-white object-contain shadow-2xl" />
+    <p data-lightbox-caption class="max-w-prose shrink-0 text-center text-sm text-white/80"></p>
+  </div>
+
+  <button type="button" data-lightbox-close class="absolute right-3 top-3 grid h-11 w-11 place-items-center rounded-full text-white/80 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand" aria-label="Cerrar">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+  </button>
+  <button type="button" data-lightbox-prev class="absolute left-2 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full text-white/80 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:left-4" aria-label="Imagen anterior">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+  </button>
+  <button type="button" data-lightbox-next class="absolute right-2 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full text-white/80 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:right-4" aria-label="Imagen siguiente">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+  </button>
+</dialog>
+
+<script>
+  const dialog = document.getElementById("lightbox") as HTMLDialogElement | null;
+  const images = [...document.querySelectorAll<HTMLImageElement>(".prose img, img[data-zoom]")].filter((img) => !img.closest("a"));
+
+  if (dialog && images.length) {
+    const view = dialog.querySelector<HTMLImageElement>("[data-lightbox-img]")!;
+    const caption = dialog.querySelector<HTMLElement>("[data-lightbox-caption]")!;
+    const prev = dialog.querySelector<HTMLButtonElement>("[data-lightbox-prev]")!;
+    const next = dialog.querySelector<HTMLButtonElement>("[data-lightbox-next]")!;
+    let current = 0;
+    let opener: HTMLElement | null = null;
+
+    const show = (index: number) => {
+      current = (index + images.length) % images.length;
+      const img = images[current];
+      view.src = img.currentSrc || img.src;
+      view.alt = img.alt;
+      caption.textContent = img.alt;
+    };
+
+    const open = (index: number) => {
+      opener = images[index];
+      show(index);
+      prev.hidden = next.hidden = images.length < 2;
+      document.documentElement.classList.add("overflow-hidden");
+      dialog.showModal();
+    };
+
+    images.forEach((img, i) => {
+      img.classList.add("cursor-zoom-in");
+      img.tabIndex = 0;
+      img.setAttribute("role", "button");
+      img.setAttribute("aria-label", `Ampliar imagen${img.alt ? `: ${img.alt}` : ""}`);
+      img.addEventListener("click", () => open(i));
+      img.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          open(i);
+        }
+      });
+    });
+
+    dialog.addEventListener("close", () => {
+      document.documentElement.classList.remove("overflow-hidden");
+      opener?.focus();
+    });
+    dialog.querySelector("[data-lightbox-close]")!.addEventListener("click", () => dialog.close());
+    prev.addEventListener("click", () => show(current - 1));
+    next.addEventListener("click", () => show(current + 1));
+    // Click outside the image closes it
+    dialog.querySelector("[data-lightbox-frame]")!.addEventListener("click", (e) => {
+      if (e.target !== view) dialog.close();
+    });
+    dialog.addEventListener("keydown", (e) => {
+      if (images.length < 2) return;
+      if (e.key === "ArrowLeft") show(current - 1);
+      if (e.key === "ArrowRight") show(current + 1);
+    });
+  }
+</script>

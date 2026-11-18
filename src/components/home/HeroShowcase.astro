@@ -1,6 +1,6 @@
 ---
 /**
- * Desktop window + phone frame overlapping its bottom-right corner (no tilt: direction A).
+ * Desktop window + phone frame (or a document page) overlapping its bottom-right corner (no tilt: direction A).
  * Both images carry width/height so the layout is reserved before they load.
  */
 interface Shot {
@@ -13,12 +13,14 @@ interface Shot {
 interface Props {
   desktop: Shot;
   phone: Shot;
+  /** "document": the second shot is a printed page (e.g. a generated PDF) instead of a phone screen. */
+  secondary?: "phone" | "document";
   /** Above the fold: load eagerly with high priority. */
   priority?: boolean;
   class?: string;
 }
 
-const { desktop, phone, priority = false, class: className = "" } = Astro.props;
+const { desktop, phone, secondary = "phone", priority = false, class: className = "" } = Astro.props;
 const loading = priority ? "eager" : "lazy";
 ---
 <div class={`relative pb-8 pr-[11%] sm:pb-10 ${className}`}>
@@ -34,21 +36,38 @@ const loading = priority ? "eager" : "lazy";
       width={desktop.width}
       height={desktop.height}
       class="block w-full"
+      data-zoom
       loading={loading}
       decoding="async"
       fetchpriority={priority ? "high" : undefined}
     />
   </div>
 
-  <div class="absolute bottom-0 right-0 w-[24%] rounded-[1.25rem] bg-ink p-[3px] sm:rounded-[1.6rem] sm:p-1">
-    <img
-      src={phone.src}
-      alt={phone.alt}
-      width={phone.width}
-      height={phone.height}
-      class="block w-full rounded-[1.05rem] sm:rounded-[1.35rem]"
-      loading={loading}
-      decoding="async"
-    />
-  </div>
+  {secondary === "document" ? (
+    <div class="absolute bottom-0 right-0 w-[30%] rounded-sm border border-line-strong bg-white shadow-lg">
+      <img
+        src={phone.src}
+        alt={phone.alt}
+        width={phone.width}
+        height={phone.height}
+        class="block w-full rounded-sm"
+        data-zoom
+        loading={loading}
+        decoding="async"
+      />
+    </div>
+  ) : (
+    <div class="absolute bottom-0 right-0 w-[24%] rounded-[1.25rem] bg-ink p-[3px] sm:rounded-[1.6rem] sm:p-1">
+      <img
+        src={phone.src}
+        alt={phone.alt}
+        width={phone.width}
+        height={phone.height}
+        class="block w-full rounded-[1.05rem] sm:rounded-[1.35rem]"
+        data-zoom
+        loading={loading}
+        decoding="async"
+      />
+    </div>
+  )}
 </div>
