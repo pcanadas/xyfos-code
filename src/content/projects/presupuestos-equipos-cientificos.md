@@ -15,6 +15,8 @@ Una distribuidora de equipamiento científico y de laboratorio, con clientes en 
 
 La solución es una aplicación de escritorio para Windows. El equipo la usa **desde la primera versión, en febrero de 2026**, y es su herramienta definitiva desde la **versión 1.7, en junio de 2026**. Por confidencialidad, no se muestran su nombre ni sus datos.
 
+Para la misma empresa hice también un [CRM de ofertas](/projects/crm-ventas-equipos-cientificos/) con el que el equipo comercial sigue cada oferta hasta que el cliente decide.
+
 ### Cómo funciona
 
 1. **Se elige el equipo** del catálogo.

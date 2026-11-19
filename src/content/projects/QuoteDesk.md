@@ -13,6 +13,8 @@ coverAlt: "Panel de inicio de QuoteDesk con la cartera abierta, lo ganado este a
 
 QuoteDesk es el primer producto de Xyfos Code. Un CRM diseñado alrededor de la oferta/presupuesto como entidad central — no del contacto ni del deal genérico — porque así trabajan realmente los equipos de venta técnica.
 
+Hay una [versión a medida en producción](/projects/crm-ventas-equipos-cientificos/) que usa a diario el equipo comercial de una distribuidora de equipamiento científico.
+
 **Multi-tenant por ruta** (`quotedesk.xyfos.com/t/{tenant}/...`), base de datos única con `tenant_id` en todas las tablas de negocio. Sin Redis, preparado para Hostinger.
 
 ### Módulos disponibles (alpha)
